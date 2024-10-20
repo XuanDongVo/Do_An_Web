@@ -34,6 +34,7 @@ public class EmailController extends HttpServlet {
 		}
 	}
 
+	// xác thực email người dùng
 	private void verifyEmail(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		String token = req.getParameter("code");
 		String email = req.getParameter("to");
@@ -51,6 +52,7 @@ public class EmailController extends HttpServlet {
 		}
 	}
 
+	// gửi email cho người dùng 
 	private void sendEmail(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		String emailTo = req.getParameter("to");
 		

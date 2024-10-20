@@ -170,4 +170,43 @@ public class UserRepository {
 		}
 	}
 
+	// kiểm tra tài khoản người dùng tồn tại chưa
+	public User isAccountExist(String email, String phone) {
+		connection = DBConnection.getConection();
+		String sql = "SELECT * FROM user WHERE email = ? OR phone = ? ";
+		try {
+			pst = connection.prepareStatement(sql);
+			pst.setString(1, email);
+			pst.setString(2, phone);
+			ResultSet rs = pst.executeQuery();
+			if (rs.next()) {
+				User user = new User();
+				user.setId(rs.getLong(1));
+				user.setEmail(rs.getString(2));
+				user.setPhone(rs.getString(3));
+				user.setAddress(rs.getString(4));
+				user.setName(rs.getString(6));
+				return user;
+			}
+		} catch (Exception e) {
+		e.printStackTrace();
+		} finally {
+			if (pst != null) {
+				try {
+					pst.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return null;
+	}
+
 }
