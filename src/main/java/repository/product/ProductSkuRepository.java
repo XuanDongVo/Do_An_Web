@@ -13,6 +13,7 @@ import entity.Product;
 import entity.ProductColorImage;
 import entity.ProductSku;
 import entity.Size;
+import entity.SizeType;
 import entity.SubCategory;
 
 public class ProductSkuRepository {
@@ -27,11 +28,13 @@ public class ProductSkuRepository {
 		List<ProductSku> list = new ArrayList<>();
 		try {
 			sql = "SELECT pu.id, pu.price, pci.image , pci.id, c.name as color_name,p.id as product_id ,p.name as product_name, "
-					+ "sc.name as subcategory_name, s.name as size_name " + "FROM product_sku pu "
+					+ "sc.name as subcategory_name, s.name as size_name, st.name as type_product " + "FROM product_sku pu "
 					+ "INNER JOIN product_color_img pci ON pu.product_color_img_id = pci.id "
 					+ "INNER JOIN product p ON pci.product_id = p.id " + "INNER JOIN color c ON c.id = pci.color_id "
 					+ "INNER JOIN sub_category sc ON sc.id = p.sub_category_id "
-					+ "INNER JOIN size s ON s.id = pu.size_id " + "WHERE p.id = ?";
+					+ "INNER JOIN size s ON s.id = pu.size_id "
+					+ "INNER JOIN size_type st ON s.size_type_id = st.id "
+					+ "WHERE p.id = ? ";
 
 			pst = connection.prepareStatement(sql);
 			pst.setLong(1, id);
@@ -70,6 +73,10 @@ public class ProductSkuRepository {
 				Size size = new Size();
 				size.setName(resultSet.getString("size_name"));
 				productSku.setSize(size);
+				
+				SizeType sizeType = new SizeType();
+				sizeType.setName(resultSet.getString("type_product"));
+				size.setSizeType(sizeType);
 
 				// Add productSku to the list
 				list.add(productSku);

@@ -3,18 +3,17 @@ package entity;
 public class Size {
 	private Long id;
 	private String name;
-	private Long sizeTypeId;
-	
-	
+	private SizeType sizeType;
 
 	public Size() {
 		super();
 	}
 
-	public Size(Long id, String name, Long sizeTypeId) {
+	public Size(Long id, String name, SizeType sizeType) {
+		super();
 		this.id = id;
 		this.name = name;
-		this.sizeTypeId = sizeTypeId;
+		this.sizeType = sizeType;
 	}
 
 	public Long getId() {
@@ -33,12 +32,12 @@ public class Size {
 		this.name = name;
 	}
 
-	public Long getSizeTypeId() {
-		return sizeTypeId;
+	public SizeType getSizeType() {
+		return sizeType;
 	}
 
-	public void setSizeTypeId(Long sizeTypeId) {
-		this.sizeTypeId = sizeTypeId;
+	public void setSizeType(SizeType sizeType) {
+		this.sizeType = sizeType;
 	}
 
 }

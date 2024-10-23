@@ -3,6 +3,12 @@ package entity;
 public class SizeType {
 	private Long id;
 	private String name;
+	
+	
+
+	public SizeType() {
+		super();
+	}
 
 	public SizeType(Long id, String name) {
 		super();

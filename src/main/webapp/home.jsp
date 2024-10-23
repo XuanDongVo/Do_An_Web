@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>	
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -92,39 +93,132 @@
 	<!-- Collections -->
 	<div class="container new-collections mt-5">
 		<h1>NEW COLLECTIONS</h1>
-
 		<hr />
 
-		<div class="collections">
-			<div class="collection-item">
-				<a href="/product/1">
-					<div class="image-container">
-						<img class="image-main" src="img/product_1.png"
-							alt="Product 1 Image" /> <img class="image-hover"
-							src="img/product_1.png" alt="Product 1 Hover Image" /> <img
-							src="img/add.png" alt="" class="plus">
-					</div>
-					<div class="size-container">
-						<div class="size-options">
-							<button class="size-btn">S</button>
-							<button class="size-btn">M</button>
-							<button class="size-btn">L</button>
-							<button class="size-btn">XL</button>
+		<c:forEach items="${listResponses}" var="product">
+			<div class="collections">
+				<div class="collection-item">
+					<a href="/product/${product.productId}">
+						<div class="image-container">
+							<!-- Hiển thị hình ảnh chính của sản phẩm (ảnh đầu tiên trong danh sách productSkus) -->
+							<img id="image-main" class="image-main"
+								src="${product.productSkus[0].img}" alt="${product.name} Image" />
+							<img id="image-hover" class="image-hover"
+								src="${product.productSkus[0].img}"
+								alt="${product.name} Hover Image" /> <img src="img/add.png"
+								alt="" class="plus" />
 						</div>
-					</div>
-				</a>
-				<div class="image-cate">
-					<img src="./img/product_25.png" alt="" onclick="selectImage(this)">
-					<img src="./img/product_26.png" alt="" onclick="selectImage(this)">
-					<img src="./img/product_27.png" alt="" onclick="selectImage(this)">
-				</div>
-				<p>Product 1 Name</p>
-				<div class="item-price-new">$100</div>
-			</div>
+					</a>
+					<!-- Khu vực chọn kích thước -->
+					<div class="size-container">
+						<div class="size-options" id="size-options">
+							<!-- Kích thước sẽ được cập nhật khi chọn màu -->
+							<c:if test="${product.typeProduct == 'áo'}">
+								<c:set var="sizeString" value="s,m,l,xl,xxl" />
+							</c:if>
+							<c:if test="${product.typeProduct == 'quần'}">
+								<c:set var="sizeString" value="28,29,30,31,32" />
+							</c:if>
+							<!-- Tách chuỗi thành một danh sách -->
+							<c:set var="sizeList" value="${fn:split(sizeString, ',')}" />
 
-		</div>
+							<!-- Duyệt qua danh sách kích thước -->
+							<c:forEach items="${sizeList}" var="size">
+								<!-- Kiểm tra số lượng của kích thước trong sizeAndStock -->
+								<c:set var="stock"
+									value="${product.productSkus[0].sizeAndStock[size]}" />
+								<c:choose>
+									<c:when test="${stock != null && stock > 0}">
+										<button class="size-btn"
+											onclick="window.location.href='cartdetail?action=add&id=${product.productSkus[0].productColorImgId}&size=${size}&quantity=1'">
+											${size.toUpperCase()}</button>
+									</c:when>
+									<c:otherwise>
+										<button class="size-btn size-unavailable">
+											${size.toUpperCase()}</button>
+									</c:otherwise>
+								</c:choose>
+							</c:forEach>
+						</div>
+
+					</div>
+					<!-- Khu vực chọn màu sắc, khi click vào sẽ thay đổi ảnh chính và kích thước -->
+					<div class="image-cate">
+						<c:forEach items="${product.productSkus}" var="sku"
+							varStatus="status">
+							<img src="${sku.img}" alt="${sku.color} Image"
+								onclick="selectImage('${sku.productColorImgId}', '${sku.img}', '${fn:escapeXml(sku.sizeAndStock)}', '${product.typeProduct}')" />
+						</c:forEach>
+					</div>
+
+					<!-- Tên sản phẩm và giá -->
+					<p>${product.name}</p>
+					<div class="item-price-new">$${product.price}</div>
+				</div>
+			</div>
+		</c:forEach>
 	</div>
-	  <script>
+
+	<!--  // Hàm thay đổi ảnh và hiển thị size tương ứng khi nhấp vào ảnh màu -->
+	<script type="text/javascript">
+	function selectImage(productColorImgId, imgSrc, sizeAndStockString, typeProduct) {
+    // Cập nhật hình ảnh chính
+    document.getElementById('image-main').src = imgSrc;
+    document.getElementById('image-hover').src = imgSrc;
+
+    // Cập nhật kích thước dựa trên sizeAndStock
+    const sizeOptionsDiv = document.getElementById('size-options');
+    sizeOptionsDiv.innerHTML = ''; // Xóa các tùy chọn kích thước trước đó
+
+    // Chuyển đổi sizeAndStock từ chuỗi sang đối tượng
+    const sizeAndStock = {};
+    try {
+        sizeAndStockString.replace(/{|}/g, '').split(',').forEach(item => {
+            const [size, stock] = item.split('=');
+            if (size && stock) { // Kiểm tra để đảm bảo rằng size và stock có giá trị
+                sizeAndStock[size.trim()] = parseInt(stock.trim(), 10); // Gán số lượng vào đối tượng
+            }
+        });
+    } catch (error) {
+        console.error('Lỗi khi phân tích cú pháp sizeAndStock:', error);
+        return; // Dừng hàm nếu có lỗi
+    }
+
+    // Tạo danh sách kích thước dựa trên loại sản phẩm
+    let sizeList = [];
+    if (typeProduct === 'áo') {
+        sizeList = ['s', 'm', 'l', 'xl', 'xxl'];
+    } else if (typeProduct === 'quần') {
+        sizeList = ['28', '29', '30', '31', '32'];
+    }
+
+    // Duyệt qua danh sách kích thước
+    sizeList.forEach(size => {
+        const stock = sizeAndStock[size] || 0; // Lấy số lượng của từng kích thước
+        const sizeButton = document.createElement('button');
+
+        // Nếu stock > 0, hiển thị nút bình thường, nếu không hiển thị nút không thể click
+        sizeButton.className = stock > 0 ? 'size-btn' : 'size-btn size-unavailable';
+        sizeButton.textContent = size.toUpperCase();
+
+        // Gán sự kiện onclick chỉ khi nút có sẵn
+      if (stock > 0) {
+   		 sizeButton.onclick = () => {
+       		 window.location.href = `cartdetail?action=add&id=${productColorImgId}&size=${size}&quantity=1`;
+    };
+}
+
+
+        // Thêm nút vào div tùy chọn kích thước
+        sizeOptionsDiv.appendChild(sizeButton);
+    });
+}
+	</script>
+
+
+
+
+	<script>
         document.addEventListener('DOMContentLoaded', function () {
             // Chọn tất cả các biểu tượng plus
             const plusIcons = document.querySelectorAll('.collection-item .plus');
@@ -192,18 +286,7 @@
             });
         });
     </script>
-    <script>
-        function selectImage(img) {
-            // Xóa class 'selected' khỏi tất cả các hình ảnh
-            const images = document.querySelectorAll('.image-cate img');
-            images.forEach(image => {
-                image.classList.remove('selected');
-            });
-    
-            // Thêm class 'selected' cho hình ảnh đã được chọn
-            img.classList.add('selected');
-        }
-    </script>
+
 	<style>
 /* Page */
 .pagination {
@@ -248,7 +331,7 @@
 
 
 	<!-- Pagination -->
-	<div class="pagination"> 
+	<div class="pagination">
 		<a href="#">&laquo;</a>
 		<!-- NÃºt trÆ°á»c -->
 		<a href="#" class="active">1</a>

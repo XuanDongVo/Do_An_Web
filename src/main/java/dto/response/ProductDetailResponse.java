@@ -8,20 +8,38 @@ public class ProductDetailResponse {
 	private String name;
 	private String subCategory;
 	private double price;
+	private String typeProduct;
 
 	private List<ProductSkuResponse> productSkus;
 
 	public ProductDetailResponse() {
 	}
 
-	public ProductDetailResponse(Long id, String name, String subCategory, List<ProductSkuResponse> productSkus,
-			double price) {
-		this.productId = id;
+	public ProductDetailResponse(Long productId, String name, String subCategory, double price, String typeProduct,
+			List<ProductSkuResponse> productSkus) {
+		super();
+		this.productId = productId;
 		this.name = name;
 		this.subCategory = subCategory;
 		this.price = price;
+		this.typeProduct = typeProduct;
 		this.productSkus = productSkus;
+	}
 
+	public Long getProductId() {
+		return productId;
+	}
+
+	public void setProductId(Long productId) {
+		this.productId = productId;
+	}
+
+	public String getTypeProduct() {
+		return typeProduct;
+	}
+
+	public void setTypeProduct(String typeProduct) {
+		this.typeProduct = typeProduct;
 	}
 
 	public Long getId() {

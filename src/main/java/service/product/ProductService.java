@@ -162,7 +162,7 @@ public class ProductService {
 
 	// Get random PRODUCT SKU
 	public List<ProductDetailResponse> getRandomProductSku(int numberOfRandom) {
-		List<Product> products = new ArrayList<>();
+		List<Product> products = productRepository.getRandomProduct(numberOfRandom);
 		if(products.isEmpty()) {
 			throw new RuntimeException( "Can not get random product");
 		}
@@ -205,6 +205,7 @@ public class ProductService {
 				productResponse
 						.setSubCategory(productSku.getProductColorImage().getProduct().getSubCategory().getName());
 				productResponse.setPrice(productSku.getPrice());
+				productResponse.setTypeProduct(productSku.getSize().getSizeType().getName());
 				productResponse.setProductSkus(new ArrayList<>());
 				productResponseMap.put(productId, productResponse);
 			}
@@ -245,6 +246,10 @@ public class ProductService {
 			// Thêm SKU mới vào danh sách SKUs của product
 			productResponse.getProductSkus().add(skuResponse);
 		}
+	}
+	
+	public static void main(String[] args) {
+		new ProductService().getRandomProductSku(1);
 	}
 
 }

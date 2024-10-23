@@ -215,7 +215,7 @@
 </script>
 
 
-	<script>
+<!-- 	<script>
     document.addEventListener("DOMContentLoaded", function () {
         const userIcon = document.querySelector('.user-icon');
         const userOptions = document.querySelector('.user-options');
@@ -239,7 +239,7 @@
             }
         });
     });
-</script>
+</script> -->
 
 
 	<script>
