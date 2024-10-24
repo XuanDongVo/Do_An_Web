@@ -3,7 +3,7 @@
     height: 100vh;
     display: flex;
     flex-direction: column;
-    background-image: url('../img/logo_brand1.jpg');
+    background-image: url('../img/logo_brand.jpg');
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -239,7 +239,7 @@
 
 .user-options {
     display: none;
-    /* Giữ lại để ẩn */
+    /* Giá»¯ láº¡i Ä‘á»ƒ áº©n */
     opacity: 0;
     position: absolute;
     right: inherit;
@@ -255,7 +255,7 @@
     transition: opacity 0.3s ease;
     z-index: 10;
     pointer-events: auto;
-    /* Đảm bảo có thể tương tác */
+    /* Ä�áº£m báº£o cĂ³ thá»ƒ tÆ°Æ¡ng tĂ¡c */
 }
 
 .user-menu:hover .user-options {
