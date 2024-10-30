@@ -44,12 +44,13 @@ public class ProductService {
 	}
 
 	// Find Product Sku by sub_category_id
-	public List<ProductDetailResponse> getSkusBySubCategory(Long subCategoryId, MultipleOptionsProductRequest options) {
+	public List<ProductDetailResponse> getSkusBySubCategory(String subCategoryName,
+			MultipleOptionsProductRequest options) {
 		List<Product> products = new ArrayList<>();
 
 		// Lấy thực thể sub-category dựa trên ID
-		SubCategory subCategory = subCategoryRepository.findById(subCategoryId)
-				.orElseThrow(() -> new RuntimeException("Không tìm thấy danh mục con với ID " + subCategoryId));
+		SubCategory subCategory = subCategoryRepository.findByName(subCategoryName)
+				.orElseThrow(() -> new RuntimeException("Không tìm thấy danh mục con với ID " + subCategoryName));
 
 		// lọc với options
 		if (options != null) {
@@ -60,7 +61,7 @@ public class ProductService {
 			products = MultipleOptionsSQLQueryBuilder.findByMultipleOptions(options);
 		} else {
 			// Lấy danh sách sản phẩm theo danh mục con
-			products = productRepository.findBySubCategory(subCategoryId);
+			products = productRepository.findBySubCategory(subCategoryName);
 		}
 
 		// Lấy danh sách ID của sản phẩm từ trang kết quả
@@ -163,10 +164,10 @@ public class ProductService {
 	// Get random PRODUCT SKU
 	public List<ProductDetailResponse> getRandomProductSku(int numberOfRandom) {
 		List<Product> products = productRepository.getRandomProduct(numberOfRandom);
-		if(products.isEmpty()) {
-			throw new RuntimeException( "Can not get random product");
+		if (products.isEmpty()) {
+			throw new RuntimeException("Can not get random product");
 		}
-		
+
 		List<Long> productIds = products.stream().map(Product::getId).toList();
 
 		// Lấy danh sách ProductSku theo danh sách ID sản phẩm
@@ -178,7 +179,7 @@ public class ProductService {
 
 		List<ProductDetailResponse> responses = createProductDetailResponses(productSkuList);
 		return responses;
-		
+
 	}
 
 	// Lấy chi tiết sản phẩm từ ProductSku và ánh xạ vào ProductDetailResponse
@@ -246,10 +247,6 @@ public class ProductService {
 			// Thêm SKU mới vào danh sách SKUs của product
 			productResponse.getProductSkus().add(skuResponse);
 		}
-	}
-	
-	public static void main(String[] args) {
-		new ProductService().getRandomProductSku(1);
 	}
 
 }

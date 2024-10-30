@@ -47,4 +47,7 @@ public class GenderRepository {
 		}
 		return genders;
 	}
+	public static void main(String[] args) {
+		new GenderRepository().getAllGender();
+	}
 }

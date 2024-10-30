@@ -15,6 +15,40 @@ public class CategoryRepository {
 	private Connection connection = null;
 	private PreparedStatement pst = null;
 
+	public List<String> beadCrumb(String category) {
+		List<String> beadCrumbs = new ArrayList<>();
+		connection = DBConnection.getConection();
+		String sql = "SELECT g.name gender ,c.name category FROM category c\r\n"
+				+ "INNER JOIN gender g ON g.id=c.gender_id WHERE c.name = ?";
+		try {
+			pst = connection.prepareStatement(sql);
+			pst.setString(1, category);
+			ResultSet rs = pst.executeQuery();
+			if (rs.next()) {
+				beadCrumbs.add(rs.getString("gender"));
+				beadCrumbs.add(rs.getString("category"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (pst != null) {
+				try {
+					pst.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (Exception e) {
+					e.printStackTrace(); 
+				}
+			}
+		}
+		return beadCrumbs;
+	}
+
 	// Get all category
 	public List<Category> getAllCategoriesByGender(String gender) {
 		List<Category> categories = new ArrayList<>();

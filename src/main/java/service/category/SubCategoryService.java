@@ -41,7 +41,7 @@ public class SubCategoryService {
 
 				// Thêm vào innerMap với tên category và danh sách tên subcategories
 				innerMap.putIfAbsent(category.getName(), nameSubCategories);
-			});
+			});       
 
 			// Thêm vào dropListCategory với tên gender và innerMap
 			dropListCategory.putIfAbsent(gender.getName(), innerMap);
@@ -49,8 +49,12 @@ public class SubCategoryService {
 		return dropListCategory;
 	}
 
-	public static void main(String[] args) {
-		new SubCategoryService().dropListCategory();
+	public List<String> beadCrumb(String subCategory) {
+		List<String> beadCrumb = subCategoryRepository.beadCrumb(subCategory);
+		if (beadCrumb == null) {
+			throw new RuntimeException();
+		}
+		return beadCrumb;
 	}
 
 }

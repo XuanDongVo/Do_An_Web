@@ -26,6 +26,7 @@
     <script src="./adding/bootstrap/boostrap.min.js"></script>  -->
 
 <script src="adding/bootstrap/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="js/product_collection.js"></script>
 
 </head>
 
@@ -34,73 +35,15 @@
 	<jsp:include page="header.jsp"></jsp:include>
 	<!-- END nav -->
 
-
-	<!-- Popular -->
-	<!-- <div class="container-fluid popular mt-5" style="margin-top: 8%;">
-        <h1>POPULAR IN WOMEN</h1>
-        <hr />
-        <div class="popular-item">
-            CÃ¡c item sáº£n pháº©m sáº½ ÄÆ°á»£c láº·p á» ÄÃ¢y
-            <div class="shop-item">
-                <a href="/product/1">
-                    Thay Äá»i `1` thÃ nh ID sáº£n pháº©m thá»±c táº¿
-                    <img src="./img/p1_product_i1.png" alt="Product Image" style="width: 100%;"
-                        onclick="window.scrollTo(0, 0)" />
-                </a>
-                <p>Product Name</p>
-                <div class="item-prices">
-                    <div class="item-price-new">
-                        GiÃ¡ sáº£n pháº©m má»i
-                        $100
-                    </div>
-                </div>
-            </div>
-
-            <div class="shop-item">
-                <a href="/product/1">
-                    Thay Äá»i `1` thÃ nh ID sáº£n pháº©m thá»±c táº¿
-                    <img src="./img/p1_product_i1.png" alt="Product Image" style="width: 100%;"
-                        onclick="window.scrollTo(0, 0)" />
-                </a>
-                <p>Product Name</p>
-                <div class="item-prices">
-                    <div class="item-price-new">
-                        GiÃ¡ sáº£n pháº©m má»i
-                        $100
-                    </div>
-                </div>
-            </div>
-
-            <div class="shop-item">
-                <a href="/product/1">
-                    Thay Äá»i `1` thÃ nh ID sáº£n pháº©m thá»±c táº¿
-                    <img src="./img/p1_product_i1.png" alt="Product Image" style="width: 100%;"
-                        onclick="window.scrollTo(0, 0)" />
-                </a>
-                <p>Product Name</p>
-                <div class="item-prices">
-                    <div class="item-price-new">
-                        GiÃ¡ sáº£n pháº©m má»i
-                        $100
-                    </div>
-                </div>
-            </div>
-            ThÃªm sáº£n pháº©m khÃ¡c náº¿u cÃ³
-        </div>
-    </div> -->
-
-
 	<!-- Collections -->
 	<div class="container new-collections mt-5">
 		<h1>NEW COLLECTIONS</h1>
 		<hr />
-
-		<c:forEach items="${listResponses}" var="product">
-			<div class="collections">
+		<div class="collections">
+			<c:forEach items="${listResponses}" var="product">
 				<div class="collection-item">
 					<a href="/product/${product.productId}">
 						<div class="image-container">
-							<!-- Hiển thị hình ảnh chính của sản phẩm (ảnh đầu tiên trong danh sách productSkus) -->
 							<img id="image-main" class="image-main"
 								src="${product.productSkus[0].img}" alt="${product.name} Image" />
 							<img id="image-hover" class="image-hover"
@@ -109,22 +52,19 @@
 								alt="" class="plus" />
 						</div>
 					</a>
-					<!-- Khu vực chọn kích thước -->
 					<div class="size-container">
 						<div class="size-options" id="size-options">
-							<!-- Kích thước sẽ được cập nhật khi chọn màu -->
-							<c:if test="${product.typeProduct == 'áo'}">
-								<c:set var="sizeString" value="s,m,l,xl,xxl" />
-							</c:if>
-							<c:if test="${product.typeProduct == 'quần'}">
-								<c:set var="sizeString" value="28,29,30,31,32" />
-							</c:if>
-							<!-- Tách chuỗi thành một danh sách -->
+							<c:choose>
+								<c:when test="${product.typeProduct == 'áo'}">
+									<c:set var="sizeString" value="s,m,l,xl,xxl" />
+								</c:when>
+								<c:when test="${product.typeProduct == 'quần'}">
+									<c:set var="sizeString" value="28,29,30,31,32" />
+								</c:when>
+							</c:choose>
 							<c:set var="sizeList" value="${fn:split(sizeString, ',')}" />
 
-							<!-- Duyệt qua danh sách kích thước -->
 							<c:forEach items="${sizeList}" var="size">
-								<!-- Kiểm tra số lượng của kích thước trong sizeAndStock -->
 								<c:set var="stock"
 									value="${product.productSkus[0].sizeAndStock[size]}" />
 								<c:choose>
@@ -140,9 +80,8 @@
 								</c:choose>
 							</c:forEach>
 						</div>
-
 					</div>
-					<!-- Khu vực chọn màu sắc, khi click vào sẽ thay đổi ảnh chính và kích thước -->
+
 					<div class="image-cate">
 						<c:forEach items="${product.productSkus}" var="sku"
 							varStatus="status">
@@ -151,14 +90,12 @@
 						</c:forEach>
 					</div>
 
-					<!-- Tên sản phẩm và giá -->
 					<p>${product.name}</p>
 					<div class="item-price-new">$${product.price}</div>
 				</div>
-			</div>
-		</c:forEach>
+			</c:forEach>
+		</div>
 	</div>
-
 
 
 	<style>
@@ -256,139 +193,6 @@
 			<p>Â© 2023 by Shoppee. Proudly created with Wix.com</p>
 		</div>
 	</div>
-
-
-	<script type="text/javascript">
-    function addProductToCart(productColorImgId, size, quantity) {
-        // Lấy URL hiện tại
-        var currentUrl = window.location.href;
-
-        // Mã hóa URL hiện tại để có thể truyền an toàn qua request
-        var encodedUrl = encodeURIComponent(currentUrl);
-
-        // Tạo URL chuyển hướng đến controller với tham số redirectUrl
-        window.location.href = 'cartdetail?action=add&id=' + productColorImgId + '&size=' + size + '&quantity=' + quantity + '&redirectUrl=' + encodedUrl;
-    }
-</script>
-
-
-	<script type="text/javascript">
-    function selectImage(productColorImgId, imgSrc, sizeAndStockString, typeProduct) {
-        // Cập nhật hình ảnh chính
-        document.getElementById('image-main').src = imgSrc;
-        document.getElementById('image-hover').src = imgSrc;
-
-        // Cập nhật kích thước dựa trên sizeAndStock
-        const sizeOptionsDiv = document.getElementById('size-options');
-        sizeOptionsDiv.innerHTML = ''; // Xóa các tùy chọn kích thước trước đó
-
-        // Chuyển đổi sizeAndStock từ chuỗi sang đối tượng
-        const sizeAndStock = {};
-        try {
-            sizeAndStockString.replace(/{|}/g, '').split(',').forEach(item => {
-                const [size, stock] = item.split('=');
-                if (size && stock) {
-                    sizeAndStock[size.trim()] = parseInt(stock.trim(), 10);
-                }
-            });
-        } catch (error) {
-            console.error('Lỗi khi phân tích cú pháp sizeAndStock:', error);
-            return;
-        }
-
-        // Tạo danh sách kích thước dựa trên loại sản phẩm
-        let sizeList = [];
-        if (typeProduct === 'áo') {
-            sizeList = ['s', 'm', 'l', 'xl', 'xxl'];
-        } else if (typeProduct === 'quần') {
-            sizeList = ['28', '29', '30', '31', '32'];
-        }
-
-        // Duyệt qua danh sách kích thước
-        sizeList.forEach(size => {
-            const stock = sizeAndStock[size] || 0;
-            const sizeButton = document.createElement('button');
-
-            sizeButton.className = stock > 0 ? 'size-btn' : 'size-btn size-unavailable';
-            sizeButton.textContent = size.toUpperCase();
-
-            if (stock > 0) {
-                sizeButton.onclick = () => addProductToCart(productColorImgId, size, '1');
-            }
-
-            sizeOptionsDiv.appendChild(sizeButton);
-        });
-    }
-</script>
-
-	<script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Chọn tất cả các biểu tượng plus
-            const plusIcons = document.querySelectorAll('.collection-item .plus');
-
-            plusIcons.forEach(function (plus) {
-                plus.addEventListener('click', function (event) {
-                    event.preventDefault(); // Ngăn hành động mặc định nếu có
-
-                    // Tìm phần tử cha .collection-item
-                    const collectionItem = plus.closest('.collection-item');
-
-                    // Tìm .size-container trong .collection-item này
-                    const sizeContainer = collectionItem.querySelector('.size-container');
-
-                    // Đóng tất cả các size-container khác
-                    document.querySelectorAll('.size-container.active').forEach(function (container) {
-                        if (container !== sizeContainer) {
-                            container.classList.remove('active');
-                        }
-                    });
-
-                    // Toggle lớp 'active' để hiển thị/ẩn
-                    sizeContainer.classList.toggle('active');
-                });
-            });
-
-            // Đóng size-container khi nhấp ra ngoài
-            document.addEventListener('click', function (event) {
-                plusIcons.forEach(function (plus) {
-                    const collectionItem = plus.closest('.collection-item');
-                    const sizeContainer = collectionItem.querySelector('.size-container');
-
-                    // Nếu click không phải là trong .collection-item, đóng size-container
-                    if (!collectionItem.contains(event.target)) {
-                        sizeContainer.classList.remove('active');
-                    }
-                });
-            });
-
-            // Thêm sự kiện cho nút đóng
-            const closeButtons = document.querySelectorAll('.size-container .close-btn');
-
-            closeButtons.forEach(function (btn) {
-                btn.addEventListener('click', function (event) {
-                    event.stopPropagation(); // Ngăn sự kiện lan truyền
-                    btn.closest('.size-container').classList.remove('active');
-                });
-            });
-
-            // Xử lý chọn size
-            const sizeButtons = document.querySelectorAll('.size-btn');
-
-            sizeButtons.forEach(function (btn) {
-                btn.addEventListener('click', function () {
-                    // Xóa lớp 'selected' khỏi tất cả các nút trong cùng size-container
-                    const sizeContainer = btn.closest('.size-container');
-                    const buttons = sizeContainer.querySelectorAll('.size-btn');
-                    buttons.forEach(function (button) {
-                        button.classList.remove('selected');
-                    });
-
-                    // Thêm lớp 'selected' vào nút được nhấp
-                    btn.classList.add('selected');
-                });
-            });
-        });
-    </script>
 
 </body>
 <!-- ThÃªm jQuery tá»« CDN -->

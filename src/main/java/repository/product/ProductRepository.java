@@ -47,15 +47,15 @@ public class ProductRepository {
 	}
 
 	// Find product by sub_cateogry ID
-	public List<Product> findBySubCategory(Long id) {
+	public List<Product> findBySubCategory(String subCategory) {
 		connection = DBConnection.getConection();
 		List<Product> products = new ArrayList<>();
 		String sql = "";
 		try {
 			sql = "SELECT product.*" + "FROM ecommerce.product " + "INNER JOIN sub_category AS sc "
-					+ "ON sc.id = product.sub_category_id " + "WHERE sc.id = ?";
+					+ "ON sc.id = product.sub_category_id " + "WHERE sc.name = ?";
 			pst = connection.prepareStatement(sql);
-			pst.setLong(1, id);
+			pst.setString(1, subCategory);
 			ResultSet rs = pst.executeQuery();
 			while (rs.next()) {
 				Product product = new Product(rs.getLong(1), rs.getString(2), rs.getString(3), null);
@@ -202,8 +202,5 @@ public class ProductRepository {
 		return result;
 	}
 
-	public static void main(String[] args) {
-		new ProductRepository().findBySearching("áo thun cổ tròn");
-	}
 
 }

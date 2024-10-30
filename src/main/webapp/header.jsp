@@ -8,55 +8,24 @@
 <title>Insert title here</title>
 <link rel="stylesheet" href="css/Navbar.css">
 <link rel="stylesheet" href="css/SearchBar.css">
+<!-- Thêm link jQuery -->
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	 <script src="js/navbar.js"></script> 
+<!-- js  -->
+
 </head>
 <body>
 	<div class="hero" style="display: flex;">
 		<div class="nav-header">
-			<a href="/"
+			<a href="home"
 				style="text-decoration: none; color: inherit; z-index: 3; margin-top: 3.5rem; position: fixed; z-index: 9999;">
 				<p style="color: white;">ECOMMERCE</p>
 			</a>
 		</div>
 		<div class="shop-navbar">
 			<ul class="nav-menu">
-
-				<c:forEach items="${dropListCategory.keySet()}" var="categoryKey">
-					<li class="nav-item">
-						<!-- Category name --> <a href="/product/gender/nam"
-						style="text-decoration: none; color: inherit;">
-							${categoryKey.toUpperCase()} </a>
-						<hr />
-
-						<div class="subcategories" style="margin: 0; width: 30rem;">
-							<!-- Loop through subcategories for this category -->
-							<c:forEach items="${dropListCategory[categoryKey].keySet()}"
-								var="subCategoryKey">
-								<a>
-									<p style="display: inline;">
-										${subCategoryKey.toUpperCase()}</p>
-								</a>
-								<span onclick="toggleSubcategory('${subCategoryKey}')"
-									style="color: red"> + </span>
-
-								<!-- Extra subcategories (list items) -->
-								<div id="subcategory${subCategoryKey}-extra"
-									class="subcategory-extra"
-									style="display: none; margin-left: 8%;">
-									<c:forEach
-										items="${dropListCategory[categoryKey][subCategoryKey]}"
-										var="extraSubCategory">
-										<a href="#" style="text-decoration: none;">
-											<p>${extraSubCategory.toUpperCase()}</p>
-										</a>
-									</c:forEach>
-								</div>
-							</c:forEach>
-						</div>
-					</li>
-
-					<span style="font-size: 2rem; margin-bottom: 2%;">|</span>
-				</c:forEach>
-
+				<!-- render data  -->
 			</ul>
 
 			<div class="nav-login-cart">
@@ -114,94 +83,38 @@
 						<button type="button" class="btn-close"
 							data-bs-dismiss="offcanvas" aria-label="Close"></button>
 					</div>
-					<c:forEach items="${listCartDetail}" var="item">
-						<div class="offcanvas-body">
-							<!-- Cart Item -->
-							<div class="cart-item">
-								<div class="cart-item-image">
-									<img src="${item.image}" alt="Product Image" />
-								</div>
-								<div class="cart-item-details">
-									<p class="cart-item-name">${item.name}</p>
-									<p class="cart-item-description">${item.color},${item.size }</p>
-									<div class="cart-item-actions">
-										<span class="cart-item-quantity">SL: ${item.quantity }</span>
-										<button class="remove-item-btn">
-											<img src="https://via.placeholder.com/20x20"
-												alt="Remove Icon">
-										</button>
-									</div>
-								</div>
-								<div class="cart-item-price">${item.price}</div>
-							</div>
-						</div>
-					</c:forEach>
+
+					<div class="offcanvas-body">
+						<!-- Cart Item -->
+						<!-- Rednder dữ liệu -->
+
+					</div>
+
 					<div class="offcanvas-footer">
 						<button class="view-cart-btn">Xem giỏ hàng</button>
 					</div>
 				</div>
-				<div class="nav-cart-count">${quantityProduct}</div>
+				<div class="nav-cart-count"></div>
 			</div>
 		</div>
 		<!-- Navbar placeholder -->
 	</div>
-
-
 	<script type="text/javascript">
-    // Hàm để toggle (hiện/ẩn) mục con của subcategory 1
-    function toggleSubcategory(subcategoryName) {
-    const subcategory = document.getElementById('subcategory'+subcategoryName+'-extra');
-   
-    // Toggle hiển thị mục con của subcategory
-    if (subcategory.style.display === "none" || subcategory.style.display === "") {
-        subcategory.style.display = "block"; // Hiển thị
-    } else {
-        subcategory.style.display = "none"; // Ẩn
-    }
-    }
-</script>
+		/*sử dụng ajax lấy dữ liệu cho header*/
+		$.ajax({
+			url : "header",
+			method : "GET",
+			success : function(response) {
+				// render dữ liệu
+				renderDataDropListCategoryHeader(response.dropListCategory)
+				renderDataQuantityProductHeader(response.quantityProduct)
+				renderDataListCartDetailHeader(response.listCartDetail)
+			},
+			error : function(xhr, status, error) {
+				console.error("Lỗi: ", error);
+			}
+		});
+	</script>
 
-
-	<script>
-	document.addEventListener("DOMContentLoaded", function () {
-	    const userIcon = document.querySelector('.user-icon');
-	    const userOptions = document.querySelector('.user-options');
-
-	    userIcon.addEventListener('click', function (event) {
-	        event.stopPropagation(); // Ngăn chặn sự kiện click lan ra ngoài
-
-	        // Toggle hiển thị menu
-	        if (userOptions.style.display === 'flex') {
-	            userOptions.style.display = 'none';
-	            userOptions.style.opacity = '0';
-	        } else {
-	            userOptions.style.display = 'flex';
-	            userOptions.style.opacity = '1';
-	        }
-	    });
-
-	    // Đóng menu nếu click ra ngoài
-	    document.addEventListener('click', function (event) {
-	        // Kiểm tra nếu click ra ngoài userIcon và userOptions
-	        if (!userIcon.contains(event.target) && !userOptions.contains(event.target)) {
-	            userOptions.style.display = 'none';
-	            userOptions.style.opacity = '0';
-	        }
-	    });
-	});
-</script>
-
-
-	<script>
-        window.addEventListener('scroll', () => {
-            const navbar = document.querySelector('.shop-navbar');
-            if (window.scrollY > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-        });
-
-    </script>
 </body>
 </html>
