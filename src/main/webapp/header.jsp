@@ -11,7 +11,7 @@
 <!-- Thêm link jQuery -->
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	 <script src="js/navbar.js"></script> 
+<script src="js/navbar.js"></script>
 <!-- js  -->
 
 </head>
@@ -32,10 +32,9 @@
 				<!-- Search bar -->
 				<div class="search-bar"
 					style="margin: 0.5px; border: none; border-bottom: 2px solid white; outline: none; background-color: transparent; display: flex; align-items: center;">
-					<span style="font-size: 1rem; color: white;"><img
-						src="./img/search.png" alt="" style="height: 20px;"></span>
-					<!-- Search icon placeholder -->
-					<input type="text" placeholder="Tìm kiếm"
+					<span style="font-size: 1rem; color: white;"> <img
+						src="./img/search.png" alt="" style="height: 20px;">
+					</span> <input type="text" id="searchInput" placeholder="Tìm kiếm"
 						style="background: transparent; outline: none; border: none; color: white;">
 				</div>
 
@@ -115,6 +114,38 @@
 			}
 		});
 	</script>
+
+
+	<script>
+    // Hàm này sẽ được gọi khi người dùng nhấn Enter
+    function handleSearch() {
+        const searchInput = document.getElementById('searchInput');
+        const searchTerm = searchInput.value; // Lấy giá trị từ input
+        performSearch(searchTerm);
+    }
+
+	// gọi controller tìm kiếm
+    function performSearch(term) {
+      window.location.href= 'search?search='+term;
+    }
+
+    // Thêm sự kiện lắng nghe cho ô input
+    const searchInput = document.getElementById('searchInput');
+
+    searchInput.addEventListener('focus', () => {
+        // Khi ô input được focus, thêm sự kiện cho Enter
+        searchInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') { // Kiểm tra nếu phím nhấn là Enter
+                handleSearch(); // Gọi hàm tìm kiếm
+            }
+        });
+    });
+
+    searchInput.addEventListener('blur', () => {
+        // Khi ô input mất focus, loại bỏ sự kiện cho Enter
+        searchInput.removeEventListener('keydown', handleSearch);
+    });
+</script>
 
 </body>
 </html>

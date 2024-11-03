@@ -14,17 +14,16 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import service.color.ColorService;
 import service.product.ProductService;
 
-@WebServlet("/gender")
-public class ProductByGenderController extends HttpServlet {
+@WebServlet("/search")
+public class ProductBySearchController extends HttpServlet {
 	private ProductService productService = new ProductService();
-	private ColorService colorService = new ColorService();
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String gender = req.getParameter("gender");
+		String search = req.getParameter("search");
+
 		String sizeParam = req.getParameter("size");
 		String colorParam = req.getParameter("color");
 
@@ -38,17 +37,17 @@ public class ProductByGenderController extends HttpServlet {
 
 		if (sizes == null && colors == null) {
 			// Không có bộ lọc, trả về JSP
-			List<ProductDetailResponse> listResponses = productService.getSkusByGender(gender, null);
+			List<ProductDetailResponse> listResponses = productService.getSkusBySearching(search, null);
 			req.setAttribute("listResponses", listResponses);
 
 			// Thiết lập breadcrumb
 			List<String> beadcrumb = new ArrayList<>();
-			beadcrumb.add(gender);
+			beadcrumb.add(search);
 			req.setAttribute("beadcrumb", beadcrumb);
 
 			if (!isAjax) {
 				// Chuyển tiếp đến JSP cho các yêu cầu thông thường
-				req.getRequestDispatcher("product_cate.jsp").forward(req, resp);
+				req.getRequestDispatcher("product_search.jsp").forward(req, resp);
 			} else {
 				// Nếu là yêu cầu AJAX, trả về JSON
 				resp.setContentType("application/json");
@@ -60,11 +59,10 @@ public class ProductByGenderController extends HttpServlet {
 		} else {
 			// Có bộ lọc, trả về phản hồi JSON
 			MultipleOptionsProductRequest mutileOption = new MultipleOptionsProductRequest();
-			mutileOption.setGender(gender);
 			mutileOption.setColors(colors);
 			mutileOption.setSizes(sizes);
 
-			List<ProductDetailResponse> listResponses = productService.getSkusByGender(gender, mutileOption);
+			List<ProductDetailResponse> listResponses = productService.getSkusBySearching(search, mutileOption);
 
 			// Thiết lập phản hồi JSON
 			resp.setContentType("application/json");
@@ -77,6 +75,7 @@ public class ProductByGenderController extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		doGet(req, resp);
+		// TODO Auto-generated method stub
+		super.doPost(req, resp);
 	}
 }

@@ -28,8 +28,7 @@
 /* Filter Panel */
 .filter-panel {
 	position: absolute;
-	/* top: 100px; */
-	right: 50px;
+	right: 100%;
 	background: white;
 	border: 1px solid #e0e0e0;
 	padding: 20px;
@@ -64,7 +63,7 @@
 
 .color-options, .size-options {
 	display: flex;
-	justify-content: space-between;
+/* 	justify-content: space-between; */
 }
 
 .color-box, .size-options label {
@@ -179,9 +178,9 @@
 .cate-left-breadcrumb li {
 	display: flex;
 	align-items: center;
-
 }
-.breadcrumb-link{
+
+.breadcrumb-link {
 	text-decoration: none;
 	color: #797979;
 	font-size: 1 rem;
@@ -195,4 +194,8 @@
 	.cate-left-breadcrumb li:last-child .ant-breadcrumb-link span {
 	font-weight: bold;
 	color: #000;
+}
+
+.filter-icon {
+	position: relative;
 }

@@ -45,8 +45,7 @@
 					class="items-center inline h-full">></span></li>
 				<li><span class="ant-breadcrumb-link"><a
 						aria-label="Thời trang"
-						class="ellipsis-1 text-sm  inline breadcrumb-link">THỜI TRANG</a></span></li>
-
+						class="ellipsis-1 text-sm  inline breadcrumb-link">TÌM KIẾM</a></span></li>
 				<!-- Sử dụng JSTL c:forEach để tạo các mục breadcrumb từ danh sách `beadcrumb` -->
 				<c:forEach items="${beadcrumb}" var="breadcrumbItem">
 					<li class="ant-breadcrumb-separator" aria-hidden="true"><span
@@ -82,10 +81,7 @@
 					<!-- Tab Content: Size -->
 					<div class="tab-content" id="sizeTab" style="display: none;">
 						<div class="size-options">
-							<label><input type="checkbox"> S</label> <label><input
-								type="checkbox"> M</label> <label><input type="checkbox">
-								L</label> <label><input type="checkbox"> XL</label> <label><input
-								type="checkbox"> XXL</label>
+							<!-- render size  -->
 						</div>
 					</div>
 
@@ -105,12 +101,8 @@
 	</div>
 
 
-
-
 	<!-- Collections -->
 	<div class="container new-collections mt-5">
-		<h1>NEW COLLECTIONS</h1>
-		<hr />
 		<div class="collections">
 			<c:forEach items="${listResponses}" var="product">
 				<div class="collection-item">
