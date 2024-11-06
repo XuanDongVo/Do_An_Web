@@ -62,8 +62,8 @@
 			<i class="filter-icon" onclick="toggleFilter()"><img
 				src="img/filter.png" alt="" style="height: 20px; width: 20px;">
 				<!-- Filter Panel -->
-				<div class="filter-panel" id="filterPanel"
-					onclick="event.stopPropagation()">
+				 <div class="filter-panel min-w-[400px] "
+					id="filterPanel" onclick="event.stopPropagation()">
 					<h4>Bộ lọc</h4>
 					<div class="filter-tabs">
 						<button class="tab-btn active" onclick="showTab('colorTab')">Màu</button>
@@ -75,7 +75,64 @@
 					<!-- Tab Content: Color -->
 					<div class="tab-content" id="colorTab">
 						<div class="color-options">
-							<!-- render color -->
+						<!-- 	render color -->
+							<div class="ant-col ant-col-4"
+								style="padding-left: 5px; padding-right: 5px; padding-bottom: 10px;">
+								<div
+									class="border-border p-2.5 py-3 border-[1px] cursor-pointer flex flex-col items-center justify-center">
+									<div class="mb-2 w-7 h-7 "
+										style="background-color: rgb(127, 33, 45);"></div>
+									<div class="ellipsis-t w-full text-xs font-medium text-center">RED</div>
+								</div>
+							</div>
+
+							<div class="ant-col ant-col-4"
+								style="padding-left: 5px; padding-right: 5px; padding-bottom: 10px;">
+								<div
+									class="border-border p-2.5 py-3 border-[1px] cursor-pointer flex flex-col items-center justify-center">
+									<div class="mb-2 w-7 h-7 "
+										style="background-color: rgb(127, 33, 45);"></div>
+									<div class="ellipsis-t w-full text-xs font-medium text-center">RED</div>
+								</div>
+							</div>
+							<div class="ant-col ant-col-4"
+								style="padding-left: 5px; padding-right: 5px; padding-bottom: 10px;">
+								<div
+									class="border-border p-2.5 py-3 border-[1px] cursor-pointer flex flex-col items-center justify-center">
+									<div class="mb-2 w-7 h-7 "
+										style="background-color: rgb(127, 33, 45);"></div>
+									<div class="ellipsis-t w-full text-xs font-medium text-center">RED</div>
+								</div>
+							</div>
+							<div class="ant-col ant-col-4"
+								style="padding-left: 5px; padding-right: 5px; padding-bottom: 10px;">
+								<div
+									class="border-border p-2.5 py-3 border-[1px] cursor-pointer flex flex-col items-center justify-center">
+									<div class="mb-2 w-7 h-7 "
+										style="background-color: rgb(127, 33, 45);"></div>
+									<div class="ellipsis-t w-full text-xs font-medium text-center">RED</div>
+								</div>
+							</div>
+							<div class="ant-col ant-col-4"
+								style="padding-left: 5px; padding-right: 5px; padding-bottom: 10px;">
+								<div
+									class="border-border p-2.5 py-3 border-[1px] cursor-pointer flex flex-col items-center justify-center">
+									<div class="mb-2 w-7 h-7 "
+										style="background-color: rgb(127, 33, 45);"></div>
+									<div class="ellipsis-t w-full text-xs font-medium text-center">RED</div>
+								</div>
+							</div>
+							<div class="ant-col ant-col-4"
+								style="padding-left: 5px; padding-right: 5px; padding-bottom: 10px;">
+								<div
+									class="border-border p-2.5 py-3 border-[1px] cursor-pointer flex flex-col items-center justify-center">
+									<div class="mb-2 w-7 h-7 "
+										style="background-color: rgb(127, 33, 45);"></div>
+									<div class="ellipsis-t w-full text-xs font-medium text-center">RED</div>
+								</div>
+							</div>
+
+
 						</div>
 					</div>
 
@@ -97,11 +154,13 @@
 						</div>
 					</div>
 
+
+
 					<button class="reset-button">Xoá hết</button>
 					<button class="result-button">Xem kết quả (29)</button>
 				</div> </i> <i class="sort-icon">⇅</i> <i class="view-icon">◻</i> <i
-				class="grid-icon">☷</i>
-		</div>
+			class="grid-icon">☷</i>
+	</div>
 	</div>
 
 
@@ -201,18 +260,23 @@
 	</div>
 
 
-	<script type="text/javascript">
+	<!-- <script type="text/javascript">
 		$.ajax({
-			url : "filter",
+			url : "
+					filter",
 			method : "GET",
-			success : function(response) {
+			success :
+					function(response) {
 				renderFilter(response.colors, response.sizes);
 			},
-			error : function(xhr, status, error) {
+			error
+					:function(xhr, status, error) {
 				console.error("Lỗi: ", error);
 			}
 		});
-	</script>
+	
+					</script> -->
+
 </body>
 
 </html>

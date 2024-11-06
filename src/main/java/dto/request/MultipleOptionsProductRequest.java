@@ -3,11 +3,20 @@ package dto.request;
 import java.util.List;
 
 public class MultipleOptionsProductRequest {
+	private String search;
 	private String gender;
 	private String category;
 	private String subCategory;
 	private List<String> colors;
 	private List<String> sizes;
+
+	public String getSearch() {
+		return search;
+	}
+
+	public void setSearch(String search) {
+		this.search = search;
+	}
 
 	public String getGender() {
 		return gender;

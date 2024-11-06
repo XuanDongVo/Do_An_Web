@@ -4,6 +4,16 @@ public class ModifyProductRequest {
 	private Long id;
 	private int quantity;
 
+	public ModifyProductRequest() {
+		super();
+	}
+
+	public ModifyProductRequest(Long id, int quantity) {
+		super();
+		this.id = id;
+		this.quantity = quantity;
+	}
+
 	public Long getId() {
 		return id;
 	}

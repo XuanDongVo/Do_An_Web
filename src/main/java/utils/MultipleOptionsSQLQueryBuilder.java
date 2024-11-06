@@ -12,25 +12,24 @@ import entity.Product;
 
 public class MultipleOptionsSQLQueryBuilder {
 	// Hàm chính để tìm sản phẩm theo các bộ lọc
-	public static List<Product> findByMultipleOptions(MultipleOptionsProductRequest options) {
-		List<Product> products = new ArrayList<>();
-		List<Object> parameters = new ArrayList<>(); // Danh sách các tham số cho PreparedStatement
+    public static List<Product> findByMultipleOptions(MultipleOptionsProductRequest options) {
+        List<Product> products = new ArrayList<>();
+        List<Object> parameters = new ArrayList<>(); // Danh sách các tham số cho PreparedStatement
 
-		// Xây dựng câu truy vấn SQL
-		String sql = buildSQLQuery(options, parameters);
+        // Xây dựng câu truy vấn SQL
+        String sql = buildSQLQuery(options, parameters);
 
-		// Thực hiện truy vấn và trả về kết quả
-		try (Connection connection = DBConnection.getConection();
-				PreparedStatement pst = connection.prepareStatement(sql)) {
+        // Thực hiện truy vấn và trả về kết quả
+        try (Connection connection = DBConnection.getConection();
+             PreparedStatement pst = connection.prepareStatement(sql)) {
+            setQueryParameters(pst, parameters); // Thiết lập các tham số cho câu truy vấn
+            products = executeQuery(pst); // Thực thi câu truy vấn và lấy kết quả
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-			setQueryParameters(pst, parameters); // Thiết lập các tham số cho câu truy vấn
-			products = executeQuery(pst); // Thực thi câu truy vấn và lấy kết quả
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return products;
-	}
+        return products;
+    }
 
 	// Hàm xây dựng câu truy vấn SQL từ các tùy chọn
 	private static String buildSQLQuery(MultipleOptionsProductRequest options, List<Object> parameters) {
@@ -43,6 +42,7 @@ public class MultipleOptionsSQLQueryBuilder {
 																				// dàng
 
 		// Áp dụng từng điều kiện lọc
+		sql = searchProduct(sql, options.getSearch(), parameters);
 		sql = addColorFilter(sql, options.getColors(), parameters);
 		sql = addSizeFilter(sql, options.getSizes(), parameters);
 		sql = addGenderFilter(sql, options.getGender(), parameters);
@@ -111,6 +111,23 @@ public class MultipleOptionsSQLQueryBuilder {
 		return sql;
 	}
 
+	private static String searchProduct(String sql, String search, List<Object> parameters) {
+		if (search != null && !search.isEmpty()) {
+			sql += " AND p.name like ?";
+			parameters.add(appendPercentage(search));
+		}
+		return sql;
+	}
+
+	private static String  appendPercentage(String search) {
+		  String[] words = search.split("\\s+");
+	        StringBuilder result = new StringBuilder("%");
+	        for (String word : words) {
+	            result.append(word).append("% ");
+	        }
+	        return result.toString().trim();
+	}
+
 	// Hàm thiết lập các tham số cho PreparedStatement
 	private static void setQueryParameters(PreparedStatement pst, List<Object> parameters) throws Exception {
 		for (int i = 0; i < parameters.size(); i++) {
@@ -128,10 +145,16 @@ public class MultipleOptionsSQLQueryBuilder {
 			product.setId(rs.getLong("id"));
 			product.setName(rs.getString("name"));
 			product.setDescription(rs.getString("description"));
-			// Gán thêm các thuộc tính khác của Product từ ResultSet
 			products.add(product);
 		}
 
 		return products;
 	}
+
+	public static void main(String[] args) {
+		MultipleOptionsProductRequest request = new MultipleOptionsProductRequest();
+		request.setSearch("ao thun");
+		findByMultipleOptions(request);
+	}
+
 }

@@ -35,10 +35,10 @@ public class CartDetailService {
 		if (user == null) {
 			return getQuantityProductFromCartForAnonymous(request);
 		}
-		// người dùng đã dăng nhập 
+		// người dùng đã dăng nhập
 		Cart cart = getUserCart(user);
-		return  cartDetailRepository.getQuantityProductFromCart(cart);
-		
+		return cartDetailRepository.getQuantityProductFromCart(cart);
+
 	}
 
 	// lấy ra số lượng sản phẩm trong giỏ hàng của người dùng chưa đăng nhập
@@ -79,10 +79,10 @@ public class CartDetailService {
 		Cart cart = getUserCart(user);
 
 		cartResponses.forEach((detail) -> {
-			CartDetail cartDetail = cartDetailRepository.findByProductSkuAndCart(detail.getId(), cart.getId());
+			CartDetail cartDetail = cartDetailRepository.findByProductSkuAndCart(detail.getCartId(), cart.getId());
 			// kiểm tra sản phẩm đó tồn tại trong giỏ hàng chưa
 			if (cartDetail == null) {
-				cartDetailRepository.addProductSkuInCartDetail(detail.getId(), cart, detail.getQuantity());
+				cartDetailRepository.addProductSkuInCartDetail(detail.getCartId(), cart, detail.getQuantity());
 			} else {
 				// cập nhật lại số lượng trong giỏ hàng
 				cartDetailRepository.updateQuantityInCartDetail(cartDetail);
@@ -171,7 +171,7 @@ public class CartDetailService {
 
 		// lọc lấy sản phẩm cần modify
 		Optional<DetailCartResponse> existingDetailCart = detailCarts.stream()
-				.filter(cd -> cd.getId().equals(modifyProductRequest.getId())).findFirst();
+				.filter(cd -> cd.getCartId().equals(modifyProductRequest.getId())).findFirst();
 
 		if (existingDetailCart.isPresent()) {
 			// Nếu tìm thấy sản phẩm, cập nhật số lượng
@@ -197,7 +197,7 @@ public class CartDetailService {
 
 		// lọc lấy sản phẩm cần modify
 		Optional<DetailCartResponse> existingDetailCart = detailCarts.stream()
-				.filter(cd -> cd.getId().equals(productSkuId)).findFirst();
+				.filter(cd -> cd.getCartId().equals(productSkuId)).findFirst();
 
 		if (existingDetailCart.isPresent()) {
 			// xóa sản phẩm
@@ -225,7 +225,7 @@ public class CartDetailService {
 		}
 
 		Optional<DetailCartResponse> existingCartDetail = detailCarts.stream()
-				.filter(cd -> cd.getId().equals(productSku.getId())).findFirst();
+				.filter(cd -> cd.getCartId().equals(productSku.getId())).findFirst();
 
 		if (existingCartDetail.isPresent()) {
 			// Nếu sản phẩm đã tồn tại trong giỏ hàng, cập nhật số lượng
@@ -330,7 +330,6 @@ public class CartDetailService {
 				List<DetailCartResponse> cartDetails = gson.fromJson(decodedCartJson,
 						new TypeToken<List<DetailCartResponse>>() {
 						}.getType());
-
 				// Thêm các chi tiết giỏ hàng từ cookie vào danh sách
 				detailCartResponses.addAll(cartDetails);
 			} catch (Exception e) {

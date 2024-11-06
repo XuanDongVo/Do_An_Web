@@ -1,12 +1,22 @@
 // Hàm để toggle (hiện/ẩn) mục con của subcategory 1
 function toggleSubcategory(subcategoryId) {
 	const subcategory = document.getElementById(`subcategory${subcategoryId}-extra`);
-	if (subcategory.style.display === "none") {
-		subcategory.style.display = "block"; // Hiển thị mục con
-	} else {
-		subcategory.style.display = "none"; // Ẩn mục con
+	if (subcategory) {
+		subcategory.style.display = (subcategory.style.display === "none" ? "block" : "none");
 	}
 }
+
+document.addEventListener("DOMContentLoaded", function() {
+	const searchInput = document.getElementById('searchInput');
+
+	if (searchInput) {
+		searchInput.addEventListener('keydown', (event) => {
+			if (event.key === 'Enter') {
+				handleSearch();
+			}
+		});
+	}
+});
 
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -80,7 +90,7 @@ function renderDataDropListCategoryHeader(dropListCategory) {
 			subcategoriesDiv.className = 'subcategories';
 			subcategoriesDiv.style.margin = '0';
 			subcategoriesDiv.style.width = '30rem';
-			
+
 
 			// Duyệt qua subcategories của category hiện tại
 			const subcategories = dropListCategory[categoryKey];
@@ -93,7 +103,7 @@ function renderDataDropListCategoryHeader(dropListCategory) {
 					subCategoryParagraph.style.display = 'inline';
 					subCategoryParagraph.innerText = subCategoryKey.toUpperCase();
 					subCategoryParagraph.onclick = () => {
-						window.location.href = 'category?category='+subCategoryKey;
+						window.location.href = 'category?category=' + subCategoryKey;
 					}
 					subCategoryLink.appendChild(subCategoryParagraph);
 
@@ -124,7 +134,7 @@ function renderDataDropListCategoryHeader(dropListCategory) {
 						const extraSubCategoryParagraph = document.createElement('p');
 						extraSubCategoryParagraph.innerText = extraSubCategory.toUpperCase();
 						extraSubCategoryParagraph.onclick = () => {
-							window.location.href = 'subcategory?subCategory='+extraSubCategory;
+							window.location.href = 'subcategory?subCategory=' + extraSubCategory;
 						}
 						extraSubCategoryLink.appendChild(extraSubCategoryParagraph);
 
@@ -163,7 +173,9 @@ function renderDataQuantityProductHeader(quantityProduct) {
 
 	// Thêm số lượng sản phẩm mới vào
 	navCartCount.innerText = quantityProduct;
+
 }
+
 
 /*render ListCartDetail*/
 function renderDataListCartDetailHeader(listCartDetail) {
@@ -249,4 +261,53 @@ function renderDataListCartDetailHeader(listCartDetail) {
 		offcanvasBody.appendChild(cartItem);
 	});
 }
+
+
+let modalInstance = null;  // Biến để lưu instance của modal khi mở
+
+function redirectCartDetail() {
+	var cartCountElement = document.querySelector('.nav-cart-count');
+	if (!cartCountElement) {
+		console.error("Không tìm thấy phần tử giỏ hàng!");
+		return; // Ngừng thực thi nếu không tìm thấy phần tử giỏ hàng
+	}
+
+	var cartCount = parseInt(cartCountElement.textContent.trim(), 10);
+
+	// Kiểm tra nếu giỏ hàng có ít nhất 1 sản phẩm
+	if (cartCount > 0) {
+		// Điều hướng đến trang chi tiết giỏ hàng
+		window.location.href = 'cartdetail?action=get';
+	} else {
+		// Nếu giỏ hàng trống, kiểm tra xem modal có đang mở không
+		if (!modalInstance || !modalInstance._isShown) {
+			closeOffcanvas();  // Đóng offcanvas nếu nó đang mở
+			showModal();       // Mở modal thông báo giỏ hàng trống
+		}
+	}
+}
+
+// Hàm đóng offcanvas nếu nó đang mở
+function closeOffcanvas() {
+	var offcanvas = document.getElementById('cartOffcanvas');
+	if (offcanvas) {
+		var offcanvasInstance = bootstrap.Offcanvas.getInstance(offcanvas);
+		if (offcanvasInstance && offcanvasInstance._isShown) {
+			offcanvasInstance.hide();  // Đóng offcanvas nếu nó đang mở
+		}
+	}
+}
+
+// Hàm hiển thị modal khi giỏ hàng trống
+function showModal() {
+	const modal = document.getElementById('exampleModalCenter');
+	if (modal) {
+		modalInstance = new bootstrap.Modal(modal);  // Lưu instance của modal
+		modalInstance.show();  // Hiển thị modal
+	} else {
+		console.error("Không tìm thấy modal!");
+	}
+}
+
+
 

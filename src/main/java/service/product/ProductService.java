@@ -137,15 +137,11 @@ public class ProductService {
 	}
 
 	// Find PRODUCT SKU by searching
-	public List<ProductDetailResponse> getSkusBySearching(String search, MultipleOptionsProductRequest options) {
+	public List<ProductDetailResponse> getSkusBySearching(MultipleOptionsProductRequest options) {
 		List<Product> products = new ArrayList<>();
 		// lọc với options
-		if (options != null) {
-			// Áp dụng lọc bằng Specification nếu có yêu cầu lọc
-			products = MultipleOptionsSQLQueryBuilder.findByMultipleOptions(options);
-		} else {
-			products = productRepository.findBySearching(search);
-		}
+		// Áp dụng lọc bằng Specification nếu có yêu cầu lọc
+		products = MultipleOptionsSQLQueryBuilder.findByMultipleOptions(options);
 		// Lấy danh sách ID của sản phẩm từ trang kết quả
 		List<Long> productIds = products.stream().map(Product::getId).toList();
 

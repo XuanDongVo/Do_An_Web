@@ -32,12 +32,17 @@ public class ProductBySearchController extends HttpServlet {
 		List<String> colors = (colorParam != null && !colorParam.isEmpty()) ? Arrays.asList(colorParam.split(","))
 				: null;
 
+		MultipleOptionsProductRequest mutileOption = new MultipleOptionsProductRequest();
+		mutileOption.setColors(colors);
+		mutileOption.setSizes(sizes);
+		mutileOption.setSearch(search);
+
 		// Kiểm tra xem đây có phải là yêu cầu AJAX hay không
 		boolean isAjax = "XMLHttpRequest".equals(req.getHeader("X-Requested-With"));
 
-		if (sizes == null && colors == null) {
+		if (!isAjax) {
 			// Không có bộ lọc, trả về JSP
-			List<ProductDetailResponse> listResponses = productService.getSkusBySearching(search, null);
+			List<ProductDetailResponse> listResponses = productService.getSkusBySearching(mutileOption);
 			req.setAttribute("listResponses", listResponses);
 
 			// Thiết lập breadcrumb
@@ -45,25 +50,11 @@ public class ProductBySearchController extends HttpServlet {
 			beadcrumb.add(search);
 			req.setAttribute("beadcrumb", beadcrumb);
 
-			if (!isAjax) {
-				// Chuyển tiếp đến JSP cho các yêu cầu thông thường
-				req.getRequestDispatcher("product_search.jsp").forward(req, resp);
-			} else {
-				// Nếu là yêu cầu AJAX, trả về JSON
-				resp.setContentType("application/json");
-				resp.setCharacterEncoding("UTF-8");
-				Gson gson = new Gson();
-				String jsonResponse = gson.toJson(listResponses);
-				resp.getWriter().write(jsonResponse);
-			}
+			// Chuyển tiếp đến JSP cho các yêu cầu thông thường
+			req.getRequestDispatcher("product_search.jsp").forward(req, resp);
+
 		} else {
-			// Có bộ lọc, trả về phản hồi JSON
-			MultipleOptionsProductRequest mutileOption = new MultipleOptionsProductRequest();
-			mutileOption.setColors(colors);
-			mutileOption.setSizes(sizes);
-
-			List<ProductDetailResponse> listResponses = productService.getSkusBySearching(search, mutileOption);
-
+			List<ProductDetailResponse> listResponses = productService.getSkusBySearching(mutileOption);
 			// Thiết lập phản hồi JSON
 			resp.setContentType("application/json");
 			resp.setCharacterEncoding("UTF-8");

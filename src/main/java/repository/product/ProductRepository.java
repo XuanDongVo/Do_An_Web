@@ -157,50 +157,50 @@ public class ProductRepository {
 		return products;
 	}
 
-	public List<Product> findBySearching(String search) {
-		connection = DBConnection.getConection();
-		List<Product> products = new ArrayList<>();
-		StringBuilder builder = appendPercentage(search);
-		String sql = "";
-		try {
-			sql = "SELECT * FROM ecommerce.product where  name like " + builder.toString();
-			pst = connection.prepareStatement(sql);
-			ResultSet rs = pst.executeQuery();
-			while (rs.next()) {
-				Product product = new Product(rs.getLong(1), rs.getString(2), rs.getString(3), null);
-				products.add(product);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (pst != null) {
-				try {
-					pst.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				if (connection != null) {
-					try {
-						connection.close();
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		}
-		return products;
-	}
-
-	private StringBuilder appendPercentage(String search) {
-		String[] words = search.split("\\s+"); // Tách chuỗi theo khoảng trắng
-		StringBuilder result = new StringBuilder();
-
-		for (String word : words) {
-			result.append("'%").append(word).append("%' "); // Thêm % ở trước và sau từng từ
-		}
-
-		return result;
-	}
+//	public List<Product> findBySearching(String search) {
+//		connection = DBConnection.getConection();
+//		List<Product> products = new ArrayList<>();
+//		StringBuilder builder = appendPercentage(search);
+//		String sql = "";
+//		try {
+//			sql = "SELECT * FROM ecommerce.product where  name like " + builder.toString();
+//			pst = connection.prepareStatement(sql);
+//			ResultSet rs = pst.executeQuery();
+//			while (rs.next()) {
+//				Product product = new Product(rs.getLong(1), rs.getString(2), rs.getString(3), null);
+//				products.add(product);
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		} finally {
+//			if (pst != null) {
+//				try {
+//					pst.close();
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//				if (connection != null) {
+//					try {
+//						connection.close();
+//					} catch (Exception e) {
+//						e.printStackTrace();
+//					}
+//				}
+//			}
+//		}
+//		return products;
+//	}
+//
+//	private StringBuilder appendPercentage(String search) {
+//		String[] words = search.split("\\s+"); // Tách chuỗi theo khoảng trắng
+//		StringBuilder result = new StringBuilder();
+//
+//		for (String word : words) {
+//			result.append("'%").append(word).append("%' "); // Thêm % ở trước và sau từng từ
+//		}
+//
+//		return result;
+//	}
 
 
 }

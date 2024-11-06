@@ -43,7 +43,7 @@ function renderFilter(colors, sizes) {
 	colorContainer.innerHTML = ''; // Xóa nội dung cũ
 	colors.forEach(color => {
 		const colorButton = document.createElement('button');
-		colorButton.className = 'color-box';
+		colorButton.className = 'color-box ant-col ant-col-4';
 		colorButton.style.backgroundColor = color.code; // Áp dụng mã màu
 		colorButton.dataset.colorName = color.name; // Lưu tên màu trong thuộc tính data
 		colorButton.onclick = () => updateColorFilter(color.name);

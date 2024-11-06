@@ -8,9 +8,16 @@
 <title>Insert title here</title>
 <link rel="stylesheet" href="css/Navbar.css">
 <link rel="stylesheet" href="css/SearchBar.css">
-<!-- Thêm link jQuery -->
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="adding/bootstrap/boostrap.min.css">
+
+<!-- Thêm link jQuery (phải tải trước Bootstrap JS) -->
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="adding/bootstrap/bootstrap.bundle.min.js"></script>
+<!-- Thêm link jQuery -->
+
 <script src="js/navbar.js"></script>
 <!-- js  -->
 
@@ -90,7 +97,8 @@
 					</div>
 
 					<div class="offcanvas-footer">
-						<button class="view-cart-btn">Xem giỏ hàng</button>
+						<button class="view-cart-btn" onclick="redirectCartDetail()">Xem
+							giỏ hàng</button>
 					</div>
 				</div>
 				<div class="nav-cart-count"></div>
@@ -98,7 +106,35 @@
 		</div>
 		<!-- Navbar placeholder -->
 	</div>
+
+	<!-- Modal -->
+	<div class="modal fade" id="exampleModalCenter" tabindex="-1"
+		role="dialog" aria-labelledby="exampleModalCenterTitle"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">...</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary">Save changes</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
 	<script type="text/javascript">
+		// Biến flag để kiểm tra trạng thái đã load hay chưa
+		let isDataLoaded = false;
+
 		/*sử dụng ajax lấy dữ liệu cho header*/
 		$.ajax({
 			url : "header",
@@ -108,6 +144,8 @@
 				renderDataDropListCategoryHeader(response.dropListCategory)
 				renderDataQuantityProductHeader(response.quantityProduct)
 				renderDataListCartDetailHeader(response.listCartDetail)
+				// Đánh dấu dữ liệu đã được load
+				isDataLoaded = true;
 			},
 			error : function(xhr, status, error) {
 				console.error("Lỗi: ", error);
@@ -117,35 +155,19 @@
 
 
 	<script>
-    // Hàm này sẽ được gọi khi người dùng nhấn Enter
-    function handleSearch() {
-        const searchInput = document.getElementById('searchInput');
-        const searchTerm = searchInput.value; // Lấy giá trị từ input
-        performSearch(searchTerm);
-    }
+		// Hàm này sẽ được gọi khi người dùng nhấn Enter
+		function handleSearch() {
+			const searchInput = document.getElementById('searchInput');
+			const searchTerm = searchInput.value; // Lấy giá trị từ input
+			performSearch(searchTerm);
+		}
 
-	// gọi controller tìm kiếm
-    function performSearch(term) {
-      window.location.href= 'search?search='+term;
-    }
+		// gọi controller tìm kiếm
+		function performSearch(term) {
+			window.location.href = 'search?search=' + term;
+		}
+	</script>
 
-    // Thêm sự kiện lắng nghe cho ô input
-    const searchInput = document.getElementById('searchInput');
-
-    searchInput.addEventListener('focus', () => {
-        // Khi ô input được focus, thêm sự kiện cho Enter
-        searchInput.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter') { // Kiểm tra nếu phím nhấn là Enter
-                handleSearch(); // Gọi hàm tìm kiếm
-            }
-        });
-    });
-
-    searchInput.addEventListener('blur', () => {
-        // Khi ô input mất focus, loại bỏ sự kiện cho Enter
-        searchInput.removeEventListener('keydown', handleSearch);
-    });
-</script>
 
 </body>
 </html>
