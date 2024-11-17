@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -28,6 +29,7 @@
 <script src="adding/bootstrap/bootstrap.bundle.min.js"></script>
 <script type="text/javascript" src="js/product_collection.js"></script>
 
+
 </head>
 
 <body>
@@ -42,7 +44,7 @@
 		<div class="collections">
 			<c:forEach items="${listResponses}" var="product">
 				<div class="collection-item">
-					<a href="/product/${product.productId}">
+					<a href="productDetail?id=${product.productId}">
 						<div class="image-container">
 							<img id="image-main" class="image-main"
 								src="${product.productSkus[0].img}" alt="${product.name} Image" />
@@ -89,70 +91,19 @@
 								onclick="selectImage('${sku.productColorImgId}', '${sku.img}', '${fn:escapeXml(sku.sizeAndStock)}', '${product.typeProduct}')" />
 						</c:forEach>
 					</div>
+					<div class="item-price-new">
+						<fmt:formatNumber value="${product.price}" pattern="#,###" />
+						đ
+					</div>
+					<p class="product-name"><strong><a href="productDetail?id=${product.id}"  > ${product.name}</a></strong></p>
 
-					<p>${product.name}</p>
-					<div class="item-price-new">$${product.price}</div>
 				</div>
 			</c:forEach>
 		</div>
 	</div>
 
 
-	<style>
-/* Page */
-.pagination {
-	display: flex;
-	justify-content: center;
-	/* CÄn giá»¯a thanh phÃ¢n trang */
-	margin-top: 20px;
-	/* Khoáº£ng cÃ¡ch phÃ­a trÃªn */
-}
 
-.pagination a {
-	color: black;
-	/* MÃ u cho cÃ¡c nÃºt */
-	padding: 8px 16px;
-	/* Khoáº£ng cÃ¡ch trong cÃ¡c nÃºt */
-	text-decoration: none;
-	/* Bá» gáº¡ch chÃ¢n */
-	margin: 0 5px;
-	/* Khoáº£ng cÃ¡ch giá»¯a cÃ¡c nÃºt */
-	border: 1px solid black;
-	/* ÄÆ°á»ng viá»n */
-	border-radius: 5px;
-	/* Bo trÃ²n cÃ¡c gÃ³c */
-	transition: background-color 0.3s;
-	/* Hiá»u á»©ng chuyá»n mÃ u */
-}
-
-.pagination a:hover {
-	background-color: #999999;
-	/* MÃ u ná»n khi hover */
-	color: white;
-	/* MÃ u chá»¯ khi hover */
-}
-
-.pagination a.active {
-	background-color: #999999;
-	/* MÃ u ná»n cho trang hiá»n táº¡i */
-	color: white;
-	/* MÃ u chá»¯ cho trang hiá»n táº¡i */
-}
-</style>
-
-
-	<!-- Pagination -->
-	<div class="pagination">
-		<a href="#">&laquo;</a>
-		<!-- NÃºt trÆ°á»c -->
-		<a href="#" class="active">1</a>
-		<!-- Trang hiá»n táº¡i -->
-		<a href="#">2</a> <a href="#">3</a> <a href="#">4</a> <a href="#">5</a>
-		<a href="#">&raquo;</a>
-		<!-- NÃºt tiáº¿p theo -->
-	</div>
-
-	<!-- New Letter -->
 
 	<div class="container newsletter mt-5">
 		<h1>Get Exclusive Ofers On You Email</h1>

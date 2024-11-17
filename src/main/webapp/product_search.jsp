@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -154,8 +155,14 @@
 						</c:forEach>
 					</div>
 
-					<p>${product.name}</p>
-					<div class="item-price-new">$${product.price}</div>
+					<div class="item-price-new">
+						<fmt:formatNumber value="${product.price}" pattern="#,###" />
+						đ
+					</div>
+					<p class="product-name">
+						<strong><a href="productDetail?id=${product.id}">
+								${product.name}</a></strong>
+					</p>
 				</div>
 			</c:forEach>
 		</div>

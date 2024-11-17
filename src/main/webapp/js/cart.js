@@ -1,3 +1,5 @@
+
+
 // Hàm cập nhật tổng tiền
 function updateTotal() {
 	let total = 0;
@@ -11,8 +13,39 @@ function updateTotal() {
 	});
 
 	// Cập nhật tổng tiền vào phần tử HTML
-	document.getElementById('totalPrice').innerText = total.toLocaleString() + 'đ';
+	document.getElementById('totalPrice').innerText = total.toLocaleString() +' đ';
 }
+
+function checkOut() {
+	// Tạo mảng để lưu trữ các cartId đã chọn
+	const selectedCartIds = [];
+
+	// Lấy tất cả các checkbox của các sản phẩm
+	const checkboxes = document.querySelectorAll(".select-item");
+
+	// Lặp qua các checkbox
+	checkboxes.forEach((checkbox) => {
+		// Kiểm tra xem checkbox có được chọn hay không
+		if (checkbox.checked) {
+			// Nếu checkbox được chọn, thêm cartId vào mảng selectedCartIds
+			const cartId = checkbox.closest('.cart-item').getAttribute('data-cart-id');
+			selectedCartIds.push(cartId);
+		}
+	});
+
+	// Kiểm tra xem có sản phẩm nào được chọn không
+	if (selectedCartIds.length === 0) {
+		alert("Vui lòng chọn ít nhất một sản phẩm để đặt hàng.");
+		return;
+	}
+
+	// Mã hóa selectedCartIds dưới dạng JSON và encodeURIComponent
+	const encodedSelectedCartIds = encodeURIComponent(JSON.stringify(selectedCartIds));
+
+	// Chuyển hướng với dữ liệu đã mã hóa
+	window.location.href = 'checkout?selectedCartIds=' + encodedSelectedCartIds;
+}
+
 
 // Hàm để chọn/bỏ chọn tất cả sản phẩm
 function toggleSelectAll(selectAllCheckbox) {
@@ -49,40 +82,70 @@ document.addEventListener('DOMContentLoaded', function() {
 	});
 });
 
+function closeModal() {
+	const modal = document.getElementById('deleteConfirmationModal');
+	const backdrop = document.querySelector('.modal-backdrop'); // Tìm phần nền đen
+
+	// Loại bỏ lớp 'show' của modal và ẩn modal
+	modal.classList.remove('show');
+	modal.style.display = 'none';
+	modal.setAttribute('aria-hidden', 'true');
+	modal.setAttribute('aria-modal', 'false');
+
+	// Xóa phần nền đen (modal-backdrop)
+	if (backdrop) {
+		backdrop.remove(); // Loại bỏ phần nền tối
+	}
+}
+
+function openModal() {
+	const modal = document.getElementById('deleteConfirmationModal');
+
+	// Kiểm tra nếu modal-backdrop chưa tồn tại thì tạo mới
+	let backdrop = document.querySelector('.modal-backdrop');
+	if (!backdrop) {
+		backdrop = document.createElement('div');
+		backdrop.classList.add('modal-backdrop', 'fade', 'show'); // Tạo phần nền tối
+		document.body.appendChild(backdrop); // Thêm nền tối vào body
+	}
+
+	modal.classList.add('show');  // Thêm lớp show vào modal để hiển thị
+	modal.style.display = 'block';  // Đảm bảo modal hiển thị
+	modal.setAttribute('aria-hidden', 'false');  // Modal có thể tương tác
+	modal.setAttribute('aria-modal', 'true');  // Modal đang được mở
+}
 
 function changeQuantity(change, inputId) {
 	var quantityInput = document.getElementById(inputId);
 	var currentQuantity = parseInt(quantityInput.value);
-	// Extract cartId from inputId (e.g., 'quantity_123' => '123')
 	var cartId = inputId.split('_')[1];
+	console.log('quantityInput: ' + currentQuantity);
 
 	if (!isNaN(currentQuantity)) {
 		var newQuantity = currentQuantity + change;
 
-		if (newQuantity == 0) {
-			// Lấy URL hiện tại
-			var currentUrl = window.location.href;
-			// Mã hóa URL hiện tại để có thể truyền an toàn qua request
-			var encodedUrl = encodeURIComponent(currentUrl);
-			window.location.href = 'cartdetail?action=remove&cartId=' + cartId + '&redirectUrl=' + encodedUrl;
-		}
-		// Ensure that the quantity is not less than 1
-		if (newQuantity > 0) {
+		if (newQuantity === 0) {
+			// Lưu trữ cartId để sử dụng khi người dùng xác nhận xóa
+			document.getElementById('confirmDeleteButton').setAttribute('data-cart-id', cartId);
+			// Hiển thị modal xác nhận xóa
+			openModal();
+		} else if (newQuantity > 0) {
 			quantityInput.value = newQuantity;
 			window.location.href = 'cartdetail?action=update&&quantity=' + newQuantity + '&&cartId=' + cartId;
 		}
 	}
 }
 
-// Hàm này được gọi mỗi khi người dùng thay đổi giá trị trong input (input thay cho onchange)
-function validateAndUpdateQuantity(event, cartId) {
-	const inputElement = event.target; // Tham chiếu đến input hiện tại
-	let newQuantity = parseInt(inputElement.value, 10);
+function confirmDelete() {
+	// Lấy cartId từ nút xác nhận xóa
+	var cartId = document.getElementById('confirmDeleteButton').getAttribute('data-cart-id');
 
-	// Nếu giá trị không phải là một số hợp lệ hoặc nhỏ hơn hoặc bằng 0
-	if (isNaN(newQuantity) || newQuantity <= 0) {
-		console.log("error")
-	} else {
-	window.location.href = 'cartdetail?action=update&&quantity=' + newQuantity + '&&cartId=' + cartId;
-	}
+	// Lấy URL hiện tại và mã hóa nó để redirect
+	var currentUrl = window.location.href;
+	var encodedUrl = encodeURIComponent(currentUrl);
+
+	// Thực hiện điều hướng đến hành động xóa
+	window.location.href = 'cartdetail?action=remove&cartId=' + cartId + '&redirectUrl=' + encodedUrl;
 }
+
+

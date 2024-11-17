@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -62,9 +63,10 @@
 			<i class="filter-icon" onclick="toggleFilter()"><img
 				src="img/filter.png" alt="" style="height: 20px; width: 20px;">
 				<!-- Filter Panel -->
-				 <div class="filter-panel min-w-[400px] "
-					id="filterPanel" onclick="event.stopPropagation()">
-					<h4>Bộ lọc</h4>
+				<div class="filter-panel min-w-[400px] " id="filterPanel"
+					onclick="event.stopPropagation()">
+					<h4 class="font-style-normal"
+						style="font-style: normal; color: black;">Bộ lọc</h4>
 					<div class="filter-tabs">
 						<button class="tab-btn active" onclick="showTab('colorTab')">Màu</button>
 						<button class="tab-btn" onclick="showTab('sizeTab')">Kích
@@ -75,9 +77,9 @@
 					<!-- Tab Content: Color -->
 					<div class="tab-content" id="colorTab">
 						<div class="color-options">
-						<!-- 	render color -->
-							<div class="ant-col ant-col-4"
-								style="padding-left: 5px; padding-right: 5px; padding-bottom: 10px;">
+							<!-- 	render color -->
+							<div class="ant-col ant-col-6 item-color"
+								style="padding-left: 5px; padding-right: 5px; padding-bottom: 10px; width: 100px;">
 								<div
 									class="border-border p-2.5 py-3 border-[1px] cursor-pointer flex flex-col items-center justify-center">
 									<div class="mb-2 w-7 h-7 "
@@ -85,54 +87,6 @@
 									<div class="ellipsis-t w-full text-xs font-medium text-center">RED</div>
 								</div>
 							</div>
-
-							<div class="ant-col ant-col-4"
-								style="padding-left: 5px; padding-right: 5px; padding-bottom: 10px;">
-								<div
-									class="border-border p-2.5 py-3 border-[1px] cursor-pointer flex flex-col items-center justify-center">
-									<div class="mb-2 w-7 h-7 "
-										style="background-color: rgb(127, 33, 45);"></div>
-									<div class="ellipsis-t w-full text-xs font-medium text-center">RED</div>
-								</div>
-							</div>
-							<div class="ant-col ant-col-4"
-								style="padding-left: 5px; padding-right: 5px; padding-bottom: 10px;">
-								<div
-									class="border-border p-2.5 py-3 border-[1px] cursor-pointer flex flex-col items-center justify-center">
-									<div class="mb-2 w-7 h-7 "
-										style="background-color: rgb(127, 33, 45);"></div>
-									<div class="ellipsis-t w-full text-xs font-medium text-center">RED</div>
-								</div>
-							</div>
-							<div class="ant-col ant-col-4"
-								style="padding-left: 5px; padding-right: 5px; padding-bottom: 10px;">
-								<div
-									class="border-border p-2.5 py-3 border-[1px] cursor-pointer flex flex-col items-center justify-center">
-									<div class="mb-2 w-7 h-7 "
-										style="background-color: rgb(127, 33, 45);"></div>
-									<div class="ellipsis-t w-full text-xs font-medium text-center">RED</div>
-								</div>
-							</div>
-							<div class="ant-col ant-col-4"
-								style="padding-left: 5px; padding-right: 5px; padding-bottom: 10px;">
-								<div
-									class="border-border p-2.5 py-3 border-[1px] cursor-pointer flex flex-col items-center justify-center">
-									<div class="mb-2 w-7 h-7 "
-										style="background-color: rgb(127, 33, 45);"></div>
-									<div class="ellipsis-t w-full text-xs font-medium text-center">RED</div>
-								</div>
-							</div>
-							<div class="ant-col ant-col-4"
-								style="padding-left: 5px; padding-right: 5px; padding-bottom: 10px;">
-								<div
-									class="border-border p-2.5 py-3 border-[1px] cursor-pointer flex flex-col items-center justify-center">
-									<div class="mb-2 w-7 h-7 "
-										style="background-color: rgb(127, 33, 45);"></div>
-									<div class="ellipsis-t w-full text-xs font-medium text-center">RED</div>
-								</div>
-							</div>
-
-
 						</div>
 					</div>
 
@@ -157,10 +111,10 @@
 
 
 					<button class="reset-button">Xoá hết</button>
-					<button class="result-button">Xem kết quả (29)</button>
+					<!-- 	<button class="result-button">Xem kết quả (29)</button> -->
 				</div> </i> <i class="sort-icon">⇅</i> <i class="view-icon">◻</i> <i
-			class="grid-icon">☷</i>
-	</div>
+				class="grid-icon">☷</i>
+		</div>
 	</div>
 
 
@@ -173,7 +127,7 @@
 		<div class="collections">
 			<c:forEach items="${listResponses}" var="product">
 				<div class="collection-item">
-					<a href="/product/${product.productId}">
+					<a href="productDetail?id=${product.productId}">
 						<div class="image-container">
 							<img id="image-main" class="image-main"
 								src="${product.productSkus[0].img}" alt="${product.name} Image" />
@@ -221,8 +175,14 @@
 						</c:forEach>
 					</div>
 
-					<p>${product.name}</p>
-					<div class="item-price-new">$${product.price}</div>
+					<div class="item-price-new">
+						<fmt:formatNumber value="${product.price}" pattern="#,###" />
+						đ
+					</div>
+					<p class="product-name">
+						<strong><a href="productDetail?id=${product.id}">
+								${product.name}</a></strong>
+					</p>
 				</div>
 			</c:forEach>
 		</div>
@@ -260,22 +220,18 @@
 	</div>
 
 
-	<!-- <script type="text/javascript">
+	<script type="text/javascript">
 		$.ajax({
-			url : "
-					filter",
+			url : "filter",
 			method : "GET",
-			success :
-					function(response) {
+			success : function(response) {
 				renderFilter(response.colors, response.sizes);
 			},
-			error
-					:function(xhr, status, error) {
+			error : function(xhr, status, error) {
 				console.error("Lỗi: ", error);
 			}
 		});
-	
-					</script> -->
+	</script>
 
 </body>
 

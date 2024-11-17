@@ -17,6 +17,64 @@ public class CartDetailRepository {
 	private Connection connection = null;
 	private PreparedStatement pst = null;
 
+	// lấy ra những sản phẩm mà khách hàng chọn để checkout
+	public List<DetailCartResponse> getSelectProductsForCheckout(String[] selectedCartIds) {
+		connection = DBConnection.getConection();
+		List<DetailCartResponse> responses = new ArrayList<>();
+		try {
+			// Xây dựng chuỗi câu hỏi cho số lượng `selectedCartIds` để sử dụng trong câu
+			// lệnh SQL IN
+			StringBuilder placeholders = new StringBuilder();
+			for (int i = 0; i < selectedCartIds.length; i++) {
+				placeholders.append("?");
+				if (i < selectedCartIds.length - 1) {
+					placeholders.append(", ");
+				}
+			}
+
+			// Sử dụng câu truy vấn với IN
+			String sql = "SELECT c.id, p.name, pci.image, color.name AS color, size.name AS size, cd.quantity, sku.price "
+					+ "FROM cart_detail AS cd " + "INNER JOIN cart AS c ON c.id = cd.cart_id "
+					+ "INNER JOIN product_sku AS sku ON sku.id = cd.product_sku_id "
+					+ "INNER JOIN size ON size.id = sku.size_id "
+					+ "INNER JOIN product_color_img AS pci ON pci.id = sku.product_color_img_id "
+					+ "INNER JOIN product AS p ON p.id = pci.product_id "
+					+ "INNER JOIN color ON color.id = pci.color_id " + "WHERE c.id IN (" + placeholders + ")";
+
+			pst = connection.prepareStatement(sql);
+
+			// Thiết lập giá trị cho từng tham số trong câu lệnh SQL
+			for (int i = 0; i < selectedCartIds.length; i++) {
+				pst.setString(i + 1, selectedCartIds[i]);
+			}
+
+			ResultSet rs = pst.executeQuery();
+			while (rs.next()) {
+				DetailCartResponse detailCartResponse = new DetailCartResponse(rs.getLong(1), rs.getString(2),
+						rs.getString(3), rs.getString(4), rs.getString(5), rs.getInt(6), rs.getDouble(7));
+				responses.add(detailCartResponse);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (pst != null) {
+				try {
+					pst.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return responses;
+	}
+
 	// lấy ra số lượng sản phẩm trong giỏ hàng của khách hàng
 	public int getQuantityProductFromCart(Cart cart) {
 		connection = DBConnection.getConection();

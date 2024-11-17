@@ -185,6 +185,15 @@ function renderDataListCartDetailHeader(listCartDetail) {
 	// Xóa nội dung cũ nếu có
 	offcanvasBody.innerHTML = '';
 
+	if (listCartDetail == null || listCartDetail.length === 0) {
+		// Render thông báo khi giỏ hàng trống
+		const noProductsMessage = `
+            <div style="height: 120px; display: flex; align-items: center; justify-content: center; flex-direction: column; padding: 0px 23px; text-align: center;">
+                Bạn chưa có sản phẩm nào trong giỏ hàng
+            </div>
+        `;
+		offcanvasBody.innerHTML = noProductsMessage;
+	}
 
 	// Lặp qua từng item trong listCartDetail và tạo phần tử HTML cho mỗi item
 	listCartDetail.forEach(item => {
@@ -263,51 +272,11 @@ function renderDataListCartDetailHeader(listCartDetail) {
 }
 
 
-let modalInstance = null;  // Biến để lưu instance của modal khi mở
-
 function redirectCartDetail() {
-	var cartCountElement = document.querySelector('.nav-cart-count');
-	if (!cartCountElement) {
-		console.error("Không tìm thấy phần tử giỏ hàng!");
-		return; // Ngừng thực thi nếu không tìm thấy phần tử giỏ hàng
-	}
-
-	var cartCount = parseInt(cartCountElement.textContent.trim(), 10);
-
-	// Kiểm tra nếu giỏ hàng có ít nhất 1 sản phẩm
-	if (cartCount > 0) {
-		// Điều hướng đến trang chi tiết giỏ hàng
-		window.location.href = 'cartdetail?action=get';
-	} else {
-		// Nếu giỏ hàng trống, kiểm tra xem modal có đang mở không
-		if (!modalInstance || !modalInstance._isShown) {
-			closeOffcanvas();  // Đóng offcanvas nếu nó đang mở
-			showModal();       // Mở modal thông báo giỏ hàng trống
-		}
-	}
+	window.location.href = 'cartdetail?action=get';
 }
 
-// Hàm đóng offcanvas nếu nó đang mở
-function closeOffcanvas() {
-	var offcanvas = document.getElementById('cartOffcanvas');
-	if (offcanvas) {
-		var offcanvasInstance = bootstrap.Offcanvas.getInstance(offcanvas);
-		if (offcanvasInstance && offcanvasInstance._isShown) {
-			offcanvasInstance.hide();  // Đóng offcanvas nếu nó đang mở
-		}
-	}
-}
 
-// Hàm hiển thị modal khi giỏ hàng trống
-function showModal() {
-	const modal = document.getElementById('exampleModalCenter');
-	if (modal) {
-		modalInstance = new bootstrap.Modal(modal);  // Lưu instance của modal
-		modalInstance.show();  // Hiển thị modal
-	} else {
-		console.error("Không tìm thấy modal!");
-	}
-}
 
 
 

@@ -31,10 +31,10 @@ public class ProductService {
 	private CategoryRepository categoryRepository = new CategoryRepository();
 
 	// Find Product Sku by id
-	public ProductDetailResponse getSkusById(Long id) {
-		List<ProductSku> productSkus = productSkuRepository.findByProductId(id);
+	public ProductDetailResponse getSkusById(Long productId) {
+		List<ProductSku> productSkus = productSkuRepository.findByProductId(productId);
 		if (productSkus.isEmpty()) {
-			throw new RuntimeException("Product not found by id " + id);
+			throw new RuntimeException("Product not found by id " + productId);
 		}
 
 		Map<Long, ProductDetailResponse> productResponseMap = new HashMap<>();
@@ -219,7 +219,7 @@ public class ProductService {
 				.findFirst();
 
 		// Lấy số lượng tồn kho từ InventoryRepository
-		Inventory inventory = inventoryRepository.findByProductSku(productSku.getId())
+		Inventory inventory = inventoryRepository.findByProductSkuId(productSku.getId())
 				.orElseThrow(() -> new RuntimeException("Not found inventory by id " + productSku.getId()));
 		Integer stock = inventory.getStock();
 

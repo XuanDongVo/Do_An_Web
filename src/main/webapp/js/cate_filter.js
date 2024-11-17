@@ -41,13 +41,36 @@ function renderFilter(colors, sizes) {
 	// Render màu sắc
 	const colorContainer = document.querySelector('.color-options');
 	colorContainer.innerHTML = ''; // Xóa nội dung cũ
+
 	colors.forEach(color => {
-		const colorButton = document.createElement('button');
-		colorButton.className = 'color-box ant-col ant-col-4';
-		colorButton.style.backgroundColor = color.code; // Áp dụng mã màu
-		colorButton.dataset.colorName = color.name; // Lưu tên màu trong thuộc tính data
-		colorButton.onclick = () => updateColorFilter(color.name);
-		colorContainer.appendChild(colorButton);
+		// Tạo phần tử div ngoài cùng với các lớp tương ứng
+		const colorItem = document.createElement('div');
+		colorItem.className = 'ant-col ant-col-6 item-color';
+		colorItem.style = 'padding-left: 5px; padding-right: 5px; padding-bottom: 10px; width: 100px;';
+
+		// Tạo phần tử div bao bọc với các lớp và kiểu đã cho
+		const colorWrapper = document.createElement('div');
+		colorWrapper.className = 'border-border p-2.5 py-3 border-[1px] cursor-pointer flex flex-col items-center justify-center';
+		colorWrapper.onclick = () => updateColorFilter(color.name);
+
+		// Tạo phần tử div cho hình tròn màu sắc
+		const colorCircle = document.createElement('div');
+		colorCircle.className = 'mb-2 w-7 h-7';
+		colorCircle.style.backgroundColor = color.code;
+		colorCircle.style.border = ' 1px solid #808080'
+
+		// Tạo phần tử div cho tên màu sắc
+		const colorName = document.createElement('div');
+		colorName.className = 'ellipsis-t w-full text-xs font-medium text-center';
+		colorName.textContent = color.name;
+
+		// Ghép các phần tử con vào các phần tử cha
+		colorWrapper.appendChild(colorCircle);
+		colorWrapper.appendChild(colorName);
+		colorItem.appendChild(colorWrapper);
+
+		// Thêm phần tử item vào container
+		colorContainer.appendChild(colorItem);
 	});
 
 	// Render kích cỡ
@@ -149,9 +172,9 @@ function renderProducts(response) {
 
 		// Tạo liên kết đến sản phẩm
 		const productLink = document.createElement('a');
-		productLink.href = `/product/${product.productId}`;
+		productLink.href = `productDetail?id=${product.productId}`;
 
-		// Tạo container hình ảnh
+		// Tạo container hình ảnh}
 		const imageContainerDiv = document.createElement('div');
 		imageContainerDiv.classList.add('image-container');
 

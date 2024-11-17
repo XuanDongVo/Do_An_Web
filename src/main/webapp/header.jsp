@@ -84,7 +84,7 @@
 				<div class="offcanvas offcanvas-end" tabindex="-1"
 					id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel">
 					<div class="offcanvas-header">
-						<h5 class="offcanvas-title" id="cartOffcanvasLabel">Giỏ hàng
+						<h5 class="offcanvas-title " id="cartOffcanvasLabel">Giỏ hàng
 							của tôi</h5>
 						<button type="button" class="btn-close"
 							data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -93,7 +93,6 @@
 					<div class="offcanvas-body">
 						<!-- Cart Item -->
 						<!-- Rednder dữ liệu -->
-
 					</div>
 
 					<div class="offcanvas-footer">
@@ -108,27 +107,26 @@
 	</div>
 
 	<!-- Modal -->
-	<div class="modal fade" id="exampleModalCenter" tabindex="-1"
+	<!-- 	<div class="modal fade" id="exampleModalCenter" tabindex="-1"
 		role="dialog" aria-labelledby="exampleModalCenterTitle"
 		aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered" role="document">
 			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
+				<div class="modal-header text-center">
+					<h5 class="modal-title" id="exampleModalLongTitle">Giỏ hàng
+						trống</h5>
+					<button type="button" class="btn-close" data-dismiss="modal"
+						aria-label="Close" onclick="closeModal()"></button>
 				</div>
-				<div class="modal-body">...</div>
+				<div class="modal-body">Bạn chưa có sản phẩm nào trong giỏ
+					hàng. Tiếp tục mua hàng nào!</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary"
-						data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary">Save changes</button>
+					<button type="button" class="btn btn-dark" 
+						data-dismiss="modal" onclick="closeModal()">Mua Hàng</button>
 				</div>
 			</div>
 		</div>
-	</div>
+	</div> -->
 
 
 	<script type="text/javascript">

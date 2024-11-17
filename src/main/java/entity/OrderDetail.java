@@ -3,15 +3,28 @@ package entity;
 public class OrderDetail {
 	private Long id;
 	private Long orderId;
+	private Long productSkuId;
 	private double price;
 	private int quantity;
 
-	public OrderDetail(Long id, Long orderId, double price, int quantity) {
+	public OrderDetail() {
+	}
+
+	public OrderDetail(Long id, Long orderId, Long productSkuId, double price, int quantity) {
 		super();
 		this.id = id;
 		this.orderId = orderId;
+		this.productSkuId = productSkuId;
 		this.price = price;
 		this.quantity = quantity;
+	}
+
+	public Long getProductSkuId() {
+		return productSkuId;
+	}
+
+	public void setProductSkuId(Long productSkuId) {
+		this.productSkuId = productSkuId;
 	}
 
 	public Long getId() {

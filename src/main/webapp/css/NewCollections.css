@@ -165,11 +165,22 @@
 	/* Thay Ä‘á»•i mĂ u vĂ  Ä‘á»™ dĂ y cá»§a border náº¿u cáº§n */
 }
 
-.collection-item p {
-	margin-top: 5%;
-	margin-left: 5%;
-}
-
 .collection-item .item-price-new {
 	margin-left: 5%;
+	margin-top: 3%;
+}
+
+.collection-item .product-name {
+	margin-left: 5%;
+	margin-top: 0;
+	font-size: 1.2rem;
+}
+
+.collection-item .product-name strong a {
+	color: black;
+	text-decoration: none
+}
+
+.collection-item .product-name strong a:hover {
+	text-decoration: underline;
 }

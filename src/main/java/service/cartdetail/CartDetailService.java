@@ -1,5 +1,6 @@
 package service.cartdetail;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -28,6 +29,17 @@ public class CartDetailService {
 	private CartRepository cartRepository = new CartRepository();
 	private CartDetailRepository cartDetailRepository = new CartDetailRepository();
 	private ProductSkuRepository productSkuRepository = new ProductSkuRepository();
+
+	// lấy ra những sản phẩm mà khách hàng chọn để checkout
+	public List<DetailCartResponse> getSelectProductsForCheckout(User user, String[] selectedCartIds,
+			HttpServletRequest request) {
+		if (user == null) {
+			// lấy ra những sản phẩm đã chọn trong cookie
+			return getSelectProductsFromCookiesForCheckout(selectedCartIds, request);
+		}
+		return cartDetailRepository.getSelectProductsForCheckout(selectedCartIds);
+
+	}
 
 	// lấy ra số lượng sản phẩm trong giỏ hàng
 	public int getQuantityProductFromCart(User user, HttpServletRequest request) {
@@ -248,14 +260,14 @@ public class CartDetailService {
 	}
 
 	// giải mã
-	private List<DetailCartResponse> decodeCartDetailsFromCookie(String cartCookieValue) {
+	public List<DetailCartResponse> decodeCartDetailsFromCookie(String cartCookieValue) {
 		Gson gson = new Gson();
 		List<DetailCartResponse> detailCarts = new ArrayList<>();
 
 		try {
 			// Giải mã chuỗi JSON từ cookie (Base64)
 			byte[] decodedBytes = Base64.getDecoder().decode(cartCookieValue);
-			String decodedCartJson = new String(decodedBytes);
+			String decodedCartJson = new String(decodedBytes, StandardCharsets.UTF_8);
 
 			// Chuyển đổi chuỗi JSON thành danh sách DetailCartResponse sử dụng Gson
 			detailCarts = gson.fromJson(decodedCartJson, new TypeToken<List<DetailCartResponse>>() {
@@ -269,13 +281,14 @@ public class CartDetailService {
 	}
 
 	// Phương thức cập nhật giỏ hàng trong cookie
-	private void updateCartCookie(HttpServletResponse response, List<DetailCartResponse> detailCarts) {
+	public void updateCartCookie(HttpServletResponse response, List<DetailCartResponse> detailCarts) {
 		Gson gson = new Gson();
 		try {
 			// Chuyển danh sách CartDetail thành chuỗi JSON
 			String cartDetailsJson = gson.toJson(detailCarts);
 			// Mã hóa chuỗi JSON thành Base64
-			String encodedCartDetails = Base64.getEncoder().encodeToString(cartDetailsJson.getBytes());
+			String encodedCartDetails = Base64.getEncoder()
+					.encodeToString(cartDetailsJson.getBytes(StandardCharsets.UTF_8));
 
 			// Tạo cookie với thời gian sống là 1 tuần (7 ngày)
 			Cookie cartCookie = new Cookie("cart", encodedCartDetails);
@@ -341,8 +354,34 @@ public class CartDetailService {
 		return detailCartResponses;
 	}
 
+	private List<DetailCartResponse> getSelectProductsFromCookiesForCheckout(String[] selectedCartIds,
+			HttpServletRequest request) {
+		List<DetailCartResponse> detailCarts = new ArrayList<>();
+		List<DetailCartResponse> selectProducts = new ArrayList<>();
+
+		// Lấy giá trị của cookie "cart"
+		String cartCookieValue = getCookieValue(request, "cart");
+
+		// Nếu có cookie và không rỗng, giải mã cookie thành danh sách sản phẩm
+		if (cartCookieValue != null && !cartCookieValue.isEmpty()) {
+			detailCarts = decodeCartDetailsFromCookie(cartCookieValue);
+		}
+
+		// Lọc và thêm các sản phẩm cần checkout vào danh sách
+		for (String id : selectedCartIds) {
+			// Tìm sản phẩm từ danh sách đã có từ cookie
+			Optional<DetailCartResponse> existingDetailCart = detailCarts.stream()
+					.filter(cd -> cd.getCartId().equals(Long.parseLong(id))).findFirst();
+
+			// Nếu tìm thấy sản phẩm, thêm vào danh sách
+			existingDetailCart.ifPresent(selectProducts::add);
+		}
+
+		return selectProducts;
+	}
+
 	// Phương thức lấy giá trị từ cookie
-	private String getCookieValue(HttpServletRequest request, String name) {
+	public String getCookieValue(HttpServletRequest request, String name) {
 		Cookie[] cookies = request.getCookies();
 		if (cookies != null) {
 			for (Cookie cookie : cookies) {

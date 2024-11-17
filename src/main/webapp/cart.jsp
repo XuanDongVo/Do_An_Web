@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,35 +20,28 @@
 <link rel="stylesheet" href="css/Footer.css">
 <link rel="stylesheet" href="css/Cate.css">
 <link rel="stylesheet" href="css/Cart.css">
-
-
-<!-- Bootstrap CSS -->
 <link rel="stylesheet" href="adding/bootstrap/boostrap.min.css">
-<!-- <script src="adding/jquery/jquery-3.4.1.min.js"></script>
-    <script src="adding/poper/poper.min.js"></script>
-    <script src="adding/bootstrap/boostrap.min.js"></script>  -->
 
-<script src="adding/bootstrap/bootstrap.bundle.min.js"></script>
-<script type="text/javascript" src="js/cart.js"></script>
 </head>
 
 <body>
 
 	<jsp:include page="header.jsp"></jsp:include>
 
-
 	<div class="cate-container container">
 		<div class="cate-left">
-			<div class="cate-left-breadcrumb"
-				style="margin-left: 20px; margin-top: 12px; text-decoration: none;">
-				<a href="#" style="text-decoration: none;"> <span
-					class="breadcrumb"> Trang chủ > <span
-						class="current-category"
-						style="cursor: default; margin-left: 10px;">Giỏ hàng của
-							tôi</span>
-				</span>
-				</a>
-			</div>
+			<ul class="cate-left-breadcrumb" style="margin-left: 20px;">
+				<li><span class="ant-breadcrumb-link"><a href="home"
+						draggable="false" aria-label="Trang chủ"
+						class="ellipsis-1 text-sm  inline breadcrumb-link">TRANG CHỦ</a></span></li>
+				<li class="ant-breadcrumb-separator" aria-hidden="true"><span
+					class="items-center inline h-full">></span></li>
+				<li><span class="ant-breadcrumb-link"><a
+						aria-label="Thời trang"
+						class="ellipsis-1 text-sm  inline breadcrumb-link">GIỎ HÀNG
+							CỦA TÔI </a></span></li>
+
+			</ul>
 		</div>
 	</div>
 
@@ -83,7 +77,8 @@
 							<c:when test="${not empty cartDetailList}">
 								<c:forEach items="${cartDetailList}" var="detail">
 									<div
-										class="cart-item d-flex justify-content-between align-items-center  border-bottom">
+										class="cart-item d-flex justify-content-between align-items-center  border-bottom"
+										data-cart-id="${detail.cartId}">
 										<!-- Checkbox cho mỗi sản phẩm -->
 										<label class="select-item-wrapper"> <input
 											type="checkbox" class="select-item"
@@ -114,7 +109,11 @@
 										</div>
 
 
-										<div class="cart-item-price font-weight-bold">${detail.price * detail.quantity}đ</div>
+										<div class="cart-item-price font-weight-bold">
+											<fmt:formatNumber value="${detail.quantity * detail.price}"
+												pattern="#,###" />
+											đ
+										</div>
 									</div>
 								</c:forEach>
 							</c:when>
@@ -133,11 +132,36 @@
 			<div class="col-md-4">
 				<div class="total-summary">
 					<p class="mb-2 font-weight-bold">Tổng đơn hàng:</p>
-					<h4 class="total-price mb-2" id="totalPrice">0đ</h4>
+					<h4 class="total-price mb-2" id="totalPrice">0 đ</h4>
 					<button class="btn btn-dark btn-block mt-1"
-						style="margin-right: 0.25rem">ĐẶT HÀNG</button>
+						style="margin-right: 0.25rem" onclick="checkOut()">ĐẶT
+						HÀNG</button>
 					<a href="home" class="btn btn-outline-dark btn-block mt-1">TIẾP
 						TỤC MUA SẮM</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal Xác Nhận Xóa -->
+	<div class="modal fade" id="deleteConfirmationModal" tabindex="-1"
+		role="dialog" aria-labelledby="deleteConfirmationModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="deleteConfirmationModalLabel">Xác
+						nhận xóa</h5>
+					<button type="button" class="btn-close" data-dismiss="modal"
+						aria-label="Close" onclick="closeModal()"></button>
+				</div>
+				<div class="modal-body">Bạn có chắc chắn muốn xóa sản phẩm này
+					khỏi giỏ hàng không?</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal" onclick="closeModal()">Hủy</button>
+					<button type="button" class="btn btn-danger"
+						id="confirmDeleteButton" onclick="confirmDelete()">Xóa</button>
 				</div>
 			</div>
 		</div>
@@ -175,6 +199,15 @@
 			<p>© 2023 by Shoppee. Proudly created with Wix.com</p>
 		</div>
 	</div>
+
+
+
+	<!-- Bootstrap CSS -->
+	<!-- 	<script src="adding/jquery/jquery-3.4.1.min.js"></script> -->
+	<script src="adding/popper/poper.min.js"></script>
+	<script src="adding/bootstrap/bootstrap.min.js"></script>
+	<script src="adding/bootstrap/bootstrap.bundle.min.js"></script>
+	<script type="text/javascript" src="js/cart.js"></script>
 </body>
 
 </html>

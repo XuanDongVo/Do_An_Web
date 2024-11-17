@@ -1,7 +1,4 @@
 /controller/
-/dbConnection/
-/dto/
-/entity/
-/repository/
 /service/
-/utils/
+/productDetail/
+/repository/
