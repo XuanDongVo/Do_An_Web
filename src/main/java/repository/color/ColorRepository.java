@@ -45,7 +45,34 @@ public class ColorRepository {
 		return colors;
 	}
 
-	public static void main(String[] args) {
-		new ColorRepository().getAllColor();
+	public Color findByName(String name) {
+		connection = DBConnection.getConection();
+		String sql = "SELECT * FROM color where name = ?";
+		try {
+			pst = connection.prepareStatement(sql);
+			pst.setString(1, name);
+			ResultSet rs = pst.executeQuery();
+			if (rs.next()) {
+				return new Color(rs.getLong(1), rs.getString(2), rs.getString(3));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (pst != null) {
+				try {
+					pst.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return null;
 	}
 }

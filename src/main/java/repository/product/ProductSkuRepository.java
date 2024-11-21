@@ -3,6 +3,8 @@ package repository.product;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +21,39 @@ import entity.SubCategory;
 public class ProductSkuRepository {
 	private Connection connection = null;
 	private PreparedStatement pst = null;
+	private ResultSet rs = null;
+
+	public long addProductSku(ProductSku productSku) {
+		long productSkuId = 0;
+		connection = DBConnection.getConection();
+		String sql = "INSERT INTO product_sku (product_color_img_id, size_id, price) VALUES (?, ?, ?)";
+		try {
+			// Đặt AutoCommit thành false
+			connection.setAutoCommit(false);
+
+			pst = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			pst.setLong(1, productSku.getProductColorImage().getId());
+			pst.setLong(2, productSku.getSize().getId());
+			pst.setDouble(3, productSku.getPrice());
+			// Thực thi câu lệnh
+			int rowsAffected = pst.executeUpdate();
+
+			if (rowsAffected > 0) {
+				ResultSet rs = pst.getGeneratedKeys();
+				if (rs.next()) {
+					productSkuId = rs.getLong(1); // Lấy ID của đơn hàng vừa tạo
+				}
+			}
+			if (productSkuId == 0) {
+				throw new SQLException("Không thể tạo ProductSku: Không có ID ProductSku được sinh ra.");
+			}
+
+		} catch (Exception e) {
+			rollbackTransaction();
+			e.printStackTrace();
+		}
+		return productSkuId;
+	}
 
 	public ProductSku findById(Long id) {
 		connection = DBConnection.getConection();
@@ -231,8 +266,48 @@ public class ProductSkuRepository {
 		return null;
 	}
 
-	public static void main(String[] args) {
-		new ProductSkuRepository().findByProductColorImgAndSize(1L, "S");
+	// Phương thức chuyển trạng thái Commit khi xử lý xong OrderDetail
+	public void finalizeTransaction() {
+		try {
+			if (connection != null && !connection.getAutoCommit()) {
+				connection.commit(); // Commit giao dịch
+				connection.setAutoCommit(true); // Trả lại trạng thái AutoCommit
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			closeResources();
+		}
 	}
 
+	// Phương thức rollback giao dịch
+	public void rollbackTransaction() {
+		try {
+			if (connection != null && !connection.getAutoCommit()) {
+				connection.rollback();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			closeResources();
+		}
+	}
+
+	// Phương thức hỗ trợ đóng các tài nguyên (Connection, PreparedStatement,
+	// ResultSet)
+	private void closeResources() {
+		try {
+			if (rs != null) {
+				rs.close();
+			}
+			if (pst != null) {
+				pst.close();
+			}
+			if (connection != null) {
+				connection.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }

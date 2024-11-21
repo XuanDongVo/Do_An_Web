@@ -3,6 +3,7 @@ package repository.inventory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.Optional;
 
 import dbConnection.DBConnection;
@@ -14,6 +15,19 @@ import entity.ProductSku;
 public class InventoryRepository {
 	public Connection connection = null;
 	public PreparedStatement preparedStatement = null;
+
+	public void addStockInInventory(Inventory inventory) {
+		connection = DBConnection.getConection();
+		String sql = "INSERT INTO product_sku (product_sku_id, stock) VALUES (?, ?)";
+		try {
+			preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			preparedStatement.setLong(1, inventory.getProductSku().getId());
+			preparedStatement.setInt(2, inventory.getStock());
+			preparedStatement.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	public Optional<Inventory> findByProductSkuId(Long id) {
 		Connection connection = DBConnection.getConection();
@@ -62,8 +76,8 @@ public class InventoryRepository {
 		try {
 			String sql = "UPDATE inventory SET stock = ? WHERE id = ?";
 			preparedStatement = connection.prepareStatement(sql);
-			preparedStatement.setLong(1, id);
-			preparedStatement.setInt(2, quantity);
+			preparedStatement.setInt(1, quantity);
+			preparedStatement.setLong(2, id);
 			preparedStatement.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();

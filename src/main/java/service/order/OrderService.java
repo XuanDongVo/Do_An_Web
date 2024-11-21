@@ -1,6 +1,5 @@
 package service.order;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -39,16 +38,11 @@ public class OrderService {
 				createOrderDetailForAnonymous(orderId, orderRequest, request, response);
 			}
 
-			// Commit giao dịch sau khi mọi thứ thành công
-			orderRepository.commitTransaction();
+			// Hoàn tất giao dịch
+			orderRepository.finalizeTransaction();
 		} catch (Exception e) {
 			e.printStackTrace();
-			try {
-				// Rollback giao dịch nếu có lỗi xảy ra
-				orderRepository.rollbackTransaction();
-			} catch (SQLException rollbackException) {
-				rollbackException.printStackTrace();
-			}
+			orderRepository.rollbackTransaction();
 			throw new RuntimeException("Error processing order items", e);
 		}
 	}

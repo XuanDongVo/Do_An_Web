@@ -45,4 +45,35 @@ public class SizeRepository {
 		return sizes;
 	}
 
+	public Size findByName(String name) {
+		connection = DBConnection.getConection();
+		String sql = "SELECT * FROM size where name = ?";
+		try {
+			pst = connection.prepareStatement(sql);
+			pst.setString(1, name);
+			ResultSet rs = pst.executeQuery();
+			while (rs.next()) {
+				Size size = new Size(rs.getLong(1), rs.getString(2), null);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (pst != null) {
+				try {
+					pst.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return null;
+	}
+
 }

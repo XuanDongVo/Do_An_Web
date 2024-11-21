@@ -69,55 +69,55 @@ public class StringeeCallService extends HttpServlet {
         }
     }
 
-    // Hàm tạo mã OTP ngẫu nhiên
-    public static String generateRandomOtp() {
-        Random random = new Random();
-        StringBuilder otp = new StringBuilder();
-        for (int i = 0; i < 4; i++) {
-            otp.append(random.nextInt(10)); // Tạo số từ 0 đến 9
-        }
-        return convertOtpToWords(otp.toString());
-    }
-
-    // Hàm chuyển đổi OTP thành dạng đọc từng số
-    private static String convertOtpToWords(String otp) {
-        StringBuilder sb = new StringBuilder();
-        for (char c : otp.toCharArray()) {
-            switch (c) {
-                case '0':
-                    sb.append("không ");
-                    break;
-                case '1':
-                    sb.append("một ");
-                    break;
-                case '2':
-                    sb.append("hai ");
-                    break;
-                case '3':
-                    sb.append("ba ");
-                    break;
-                case '4':
-                    sb.append("bốn ");
-                    break;
-                case '5':
-                    sb.append("năm ");
-                    break;
-                case '6':
-                    sb.append("sáu ");
-                    break;
-                case '7':
-                    sb.append("bảy ");
-                    break;
-                case '8':
-                    sb.append("tám ");
-                    break;
-                case '9':
-                    sb.append("chín ");
-                    break;
-            }
-        }
-        return sb.toString().trim();
-    }
+	    // Hàm tạo mã OTP ngẫu nhiên
+	    public static String generateRandomOtp() {
+	        Random random = new Random();
+	        StringBuilder otp = new StringBuilder();
+	        for (int i = 0; i < 4; i++) {
+	            otp.append(random.nextInt(10)); // Tạo số từ 0 đến 9
+	        }
+	        return convertOtpToWords(otp.toString());
+	    }
+	
+	    // Hàm chuyển đổi OTP thành dạng đọc từng số
+	    private static String convertOtpToWords(String otp) {
+	        StringBuilder sb = new StringBuilder();
+	        for (char c : otp.toCharArray()) {
+	            switch (c) {
+	                case '0':
+	                    sb.append("không ");
+	                    break;
+	                case '1':
+	                    sb.append("một ");
+	                    break;
+	                case '2':
+	                    sb.append("hai ");
+	                    break;
+	                case '3':
+	                    sb.append("ba ");
+	                    break;
+	                case '4':
+	                    sb.append("bốn ");
+	                    break;
+	                case '5':
+	                    sb.append("năm ");
+	                    break;
+	                case '6':
+	                    sb.append("sáu ");
+	                    break;
+	                case '7':
+	                    sb.append("bảy ");
+	                    break;
+	                case '8':
+	                    sb.append("tám ");
+	                    break;
+	                case '9':
+	                    sb.append("chín ");
+	                    break;
+	            }
+	        }
+	        return sb.toString().trim();
+	    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

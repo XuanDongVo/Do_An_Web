@@ -11,6 +11,9 @@ public class Inventory {
 		this.stock = stock;
 	}
 
+	public Inventory() {
+	}
+
 	public Long getId() {
 		return id;
 	}

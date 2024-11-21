@@ -3,6 +3,8 @@ package repository.product;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +14,39 @@ import entity.Product;
 public class ProductRepository {
 	private Connection connection = null;
 	private PreparedStatement pst = null;
+	private ResultSet rs = null;
+
+	public long addProduct(Product product) {
+		long productId = 0;
+		connection = DBConnection.getConection();
+		String sql = "INSERT INTO product (name, description, sub_category_id) VALUES (?, ?, ?)";
+		try {
+			// Đặt AutoCommit thành false
+			connection.setAutoCommit(false);
+
+			pst = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			pst.setString(1, product.getName());
+			pst.setString(2, product.getDescription());
+			pst.setLong(3, product.getSubCategory().getId());
+			// Thực thi câu lệnh
+			int rowsAffected = pst.executeUpdate();
+
+			if (rowsAffected > 0) {
+				rs = pst.getGeneratedKeys();
+				if (rs.next()) {
+					productId = rs.getLong(1); // Lấy ID của đơn hàng vừa tạo
+				}
+			}
+			if (productId == 0) {
+				throw new SQLException("Không thể tạo product: Không có ID product được sinh ra.");
+			}
+
+		} catch (Exception e) {
+			rollbackTransaction();
+			e.printStackTrace();
+		}
+		return productId;
+	}
 
 	public List<Product> getRandomProduct(int randomOfProduct) {
 		connection = DBConnection.getConection();
@@ -157,50 +192,49 @@ public class ProductRepository {
 		return products;
 	}
 
-//	public List<Product> findBySearching(String search) {
-//		connection = DBConnection.getConection();
-//		List<Product> products = new ArrayList<>();
-//		StringBuilder builder = appendPercentage(search);
-//		String sql = "";
-//		try {
-//			sql = "SELECT * FROM ecommerce.product where  name like " + builder.toString();
-//			pst = connection.prepareStatement(sql);
-//			ResultSet rs = pst.executeQuery();
-//			while (rs.next()) {
-//				Product product = new Product(rs.getLong(1), rs.getString(2), rs.getString(3), null);
-//				products.add(product);
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		} finally {
-//			if (pst != null) {
-//				try {
-//					pst.close();
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//				if (connection != null) {
-//					try {
-//						connection.close();
-//					} catch (Exception e) {
-//						e.printStackTrace();
-//					}
-//				}
-//			}
-//		}
-//		return products;
-//	}
-//
-//	private StringBuilder appendPercentage(String search) {
-//		String[] words = search.split("\\s+"); // Tách chuỗi theo khoảng trắng
-//		StringBuilder result = new StringBuilder();
-//
-//		for (String word : words) {
-//			result.append("'%").append(word).append("%' "); // Thêm % ở trước và sau từng từ
-//		}
-//
-//		return result;
-//	}
+	// Phương thức chuyển trạng thái Commit khi xử lý xong OrderDetail
+	public void finalizeTransaction() {
+		try {
+			if (connection != null && !connection.getAutoCommit()) {
+				connection.commit(); // Commit giao dịch
+				connection.setAutoCommit(true); // Trả lại trạng thái AutoCommit
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			closeResources();
+		}
+	}
 
+	// Phương thức rollback giao dịch
+	public void rollbackTransaction() {
+		try {
+			if (connection != null && !connection.getAutoCommit()) {
+				connection.rollback();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			closeResources();
+		}
+	}
+
+	// Phương thức hỗ trợ đóng các tài nguyên (Connection, PreparedStatement,
+	// ResultSet)
+	private void closeResources() {
+		try {
+			if (rs != null) {
+				rs.close();
+			}
+			if (pst != null) {
+				pst.close();
+			}
+			if (connection != null) {
+				connection.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 }

@@ -1,0 +1,14 @@
+.color-options button {
+	width: 40px;
+	height: 40px;
+	margin-right: 10px;
+	border: 1px solid #99999999;
+}
+
+.color-options button:hover {
+	border: 1px solid black;
+}
+
+.color-options button:active {
+	border: 2px solid black;
+}

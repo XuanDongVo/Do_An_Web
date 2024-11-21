@@ -1,4 +1,6 @@
+/utils/
 /controller/
 /service/
-/productDetail/
 /repository/
+/dto/
+/entity/
