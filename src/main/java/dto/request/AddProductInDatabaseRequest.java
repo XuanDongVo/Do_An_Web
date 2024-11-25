@@ -4,27 +4,22 @@ import java.util.List;
 import java.util.Map;
 
 public class AddProductInDatabaseRequest {
-	private Long productId;
 	private String name;
 	private String subCategory;
 	private double price;
-	private String typeProduct;
 	private String description;
 
-	private List<ProductSkuResponse> productSkus;
+	private List<ProductSkuResponse> skus;
 
 	public AddProductInDatabaseRequest() {
 	}
 
-	public AddProductInDatabaseRequest(Long productId, String name, String subCategory, double price,
-			String typeProduct, List<ProductSkuResponse> productSkus, String description) {
-		super();
-		this.productId = productId;
+	public AddProductInDatabaseRequest(String name, String subCategory, double price, List<ProductSkuResponse> skus,
+			String description) {
 		this.name = name;
 		this.subCategory = subCategory;
 		this.price = price;
-		this.typeProduct = typeProduct;
-		this.productSkus = productSkus;
+		this.skus = skus;
 		this.description = description;
 	}
 
@@ -34,30 +29,6 @@ public class AddProductInDatabaseRequest {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public Long getProductId() {
-		return productId;
-	}
-
-	public void setProductId(Long productId) {
-		this.productId = productId;
-	}
-
-	public String getTypeProduct() {
-		return typeProduct;
-	}
-
-	public void setTypeProduct(String typeProduct) {
-		this.typeProduct = typeProduct;
-	}
-
-	public Long getId() {
-		return productId;
-	}
-
-	public void setId(Long id) {
-		this.productId = id;
 	}
 
 	public String getName() {
@@ -76,12 +47,12 @@ public class AddProductInDatabaseRequest {
 		this.subCategory = subCategory;
 	}
 
-	public List<ProductSkuResponse> getProductSkus() {
-		return productSkus;
+	public List<ProductSkuResponse> getskus() {
+		return skus;
 	}
 
-	public void setProductSkus(List<ProductSkuResponse> productSkus) {
-		this.productSkus = productSkus;
+	public void setskus(List<ProductSkuResponse> skus) {
+		this.skus = skus;
 	}
 
 	public double getPrice() {
@@ -93,27 +64,18 @@ public class AddProductInDatabaseRequest {
 	}
 
 	public static class ProductSkuResponse {
-		private Long productColorImgId;
 		private String color;
-		private String img;
+		private String image;
 		private Map<String, Integer> sizeAndStock;
 
 		public ProductSkuResponse() {
 		}
 
-		public ProductSkuResponse(Long productColorImgId, String color, String img, Map<String, Integer> sizeAndStock) {
-			this.productColorImgId = productColorImgId;
+		public ProductSkuResponse(String color, String image, Map<String, Integer> sizeAndStock) {
+			super();
 			this.color = color;
-			this.img = img;
+			this.image = image;
 			this.sizeAndStock = sizeAndStock;
-		}
-
-		public Long getProductColorImgId() {
-			return productColorImgId;
-		}
-
-		public void setProductColorImgId(Long productColorImgId) {
-			this.productColorImgId = productColorImgId;
 		}
 
 		public String getColor() {
@@ -124,12 +86,12 @@ public class AddProductInDatabaseRequest {
 			this.color = color;
 		}
 
-		public String getImg() {
-			return img;
+		public String getImage() {
+			return image;
 		}
 
-		public void setImg(String img) {
-			this.img = img;
+		public void setImage(String image) {
+			this.image = image;
 		}
 
 		public Map<String, Integer> getSizeAndStock() {

@@ -5,8 +5,6 @@ public class ProductColorImage {
 	private Product product;
 	private Color color;
 	private String image;
-	
-	
 
 	public ProductColorImage() {
 		super();

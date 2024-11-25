@@ -1,6 +1,3 @@
-/utils/
-/controller/
 /service/
 /repository/
-/dto/
-/entity/
+/controller/

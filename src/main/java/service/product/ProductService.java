@@ -1,16 +1,18 @@
 package service.product;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import dbConnection.DBConnection;
 import dto.request.AddProductInDatabaseRequest;
 import dto.request.MultipleOptionsProductRequest;
 import dto.response.ProductDetailResponse;
 import entity.Category;
-import entity.Color;
 import entity.Inventory;
 import entity.Product;
 import entity.ProductColorImage;
@@ -39,60 +41,87 @@ public class ProductService {
 
 	// Adđ Product
 	public void addProduct(AddProductInDatabaseRequest productInDatabaseRequest) {
+		Connection connection = null;
 		try {
+			connection = DBConnection.getConection();
+			connection.setAutoCommit(false); // Bắt đầu giao dịch
+
 			// lưu prouduct
 			Product product = new Product();
 			product.setName(productInDatabaseRequest.getName());
 			product.setDescription(productInDatabaseRequest.getDescription());
 			SubCategory subCategory = subCategoryRepository.findByName(productInDatabaseRequest.getSubCategory()).get();
 			product.setSubCategory(subCategory);
-			long productId = productRepository.addProduct(product);
+			long productId = productRepository.addProduct(connection, product);
 			if (productId == 0) {
 				throw new RuntimeException("Không thể tạo product: Không có ID product được sinh ra.");
 			}
 			// lưu productColorImg
-			productInDatabaseRequest.getProductSkus().forEach(productColorImg -> {
-				ProductColorImage productColorImage = new ProductColorImage();
-				productColorImage.setProduct(new Product(productId, null, null, null));
-				productColorImage.setImage(productColorImg.getImg());
-				productColorImage.setColor(colorRepository.findByName(productColorImg.getColor()));
+			for (AddProductInDatabaseRequest.ProductSkuResponse productColorImg : productInDatabaseRequest.getskus()) {
+				saveProductColorImgAndSku(connection, productId, productColorImg, productInDatabaseRequest);
+			}
 
-				long productColorImgId = productColorImgRepository.addProductColorImg(productColorImage);
-				if (productColorImgId == 0) {
-					throw new RuntimeException(
-							"Không thể tạo productColorImg: Không có ID productColorImg được sinh ra.");
+			connection.setAutoCommit(true); // Hoàn tất giao dịch
+		} catch (Exception e) {
+			if (connection != null) {
+				try {
+					connection.rollback(); // Rollback toàn bộ giao dịch
+				} catch (SQLException rollbackEx) {
+					rollbackEx.printStackTrace();
 				}
+			}
+			throw new RuntimeException("Giao dịch thất bại: " + e.getMessage(), e);
+		} finally {
+			if (connection != null) {
+				try {
+					connection.close(); // Đóng kết nối
+				} catch (SQLException closeEx) {
+					closeEx.printStackTrace();
+				}
+			}
+		}
+	}
 
-				// lưu productSku
-				productColorImg.getSizeAndStock().forEach((size, stock) -> {
+	private void saveProductColorImgAndSku(Connection connection, long productId,
+			AddProductInDatabaseRequest.ProductSkuResponse productColorImg, AddProductInDatabaseRequest request) {
+		try {
+			// Xử lý logic lưu ProductColorImage
+			ProductColorImage productColorImage = new ProductColorImage();
+			productColorImage.setProduct(new Product(productId, null, null, null));
+			productColorImage.setImage(productColorImg.getImage());
+			productColorImage.setColor(colorRepository.findByName(productColorImg.getColor()));
+
+			long productColorImgId = productColorImgRepository.addProductColorImg(connection, productColorImage);
+			if (productColorImgId == 0) {
+				throw new RuntimeException("Không thể tạo productColorImg.");
+			}
+
+			// Xử lý logic lưu ProductSku và Inventory
+			productColorImg.getSizeAndStock().forEach((size, stock) -> {
+				try {
 					ProductSku productSku = new ProductSku();
-					productSku.setPrice(productInDatabaseRequest.getPrice());
+					productSku.setPrice(request.getPrice());
 					productSku.setSize(sizeRepository.findByName(size));
 					productSku.setProductColorImage(new ProductColorImage(productColorImgId, null, null, null));
-					long productSkuId = productSkuRepository.addProductSku(productSku);
+
+					long productSkuId = productSkuRepository.addProductSku(connection, productSku);
 					if (productSkuId == 0) {
-						throw new RuntimeException("Không thể tạo ProductSku: Không có ID ProductSku được sinh ra.");
+						throw new RuntimeException("Không thể tạo ProductSku.");
 					}
 
-					// cập nhật số lượng tồn kho
 					Inventory inventory = new Inventory();
 					ProductSku newProductSku = new ProductSku();
 					newProductSku.setId(productSkuId);
 					inventory.setProductSku(newProductSku);
 					inventory.setStock(stock);
-					inventoryRepository.addStockInInventory(inventory);
-				});
+					inventoryRepository.addStockInInventory(connection, inventory);
+				} catch (Exception e) {
+					throw new RuntimeException("Lỗi khi xử lý ProductSku hoặc Inventory: " + e.getMessage(), e);
+				}
 			});
 		} catch (Exception e) {
-			productRepository.rollbackTransaction();
-			productColorImgRepository.rollbackTransaction();
-			productSkuRepository.rollbackTransaction();
+			throw new RuntimeException("Lỗi khi xử lý ProductColorImg hoặc ProductSku: " + e.getMessage(), e);
 		}
-
-		// set Commit true
-		productRepository.finalizeTransaction();
-		productColorImgRepository.finalizeTransaction();
-		productSkuRepository.finalizeTransaction();
 	}
 
 	// Find Product Sku by id

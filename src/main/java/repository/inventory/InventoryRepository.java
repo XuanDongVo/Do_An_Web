@@ -16,9 +16,8 @@ public class InventoryRepository {
 	public Connection connection = null;
 	public PreparedStatement preparedStatement = null;
 
-	public void addStockInInventory(Inventory inventory) {
-		connection = DBConnection.getConection();
-		String sql = "INSERT INTO product_sku (product_sku_id, stock) VALUES (?, ?)";
+	public void addStockInInventory(Connection connection, Inventory inventory) {
+		String sql = "INSERT INTO inventory (product_sku_id, stock) VALUES (?, ?)";
 		try {
 			preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			preparedStatement.setLong(1, inventory.getProductSku().getId());

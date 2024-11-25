@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,15 +24,11 @@ public class ProductSkuRepository {
 	private PreparedStatement pst = null;
 	private ResultSet rs = null;
 
-	public long addProductSku(ProductSku productSku) {
+	public long addProductSku(Connection connection, ProductSku productSku) throws SQLException {
 		long productSkuId = 0;
-		connection = DBConnection.getConection();
 		String sql = "INSERT INTO product_sku (product_color_img_id, size_id, price) VALUES (?, ?, ?)";
-		try {
-			// Đặt AutoCommit thành false
-			connection.setAutoCommit(false);
+		try (PreparedStatement pst = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-			pst = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			pst.setLong(1, productSku.getProductColorImage().getId());
 			pst.setLong(2, productSku.getSize().getId());
 			pst.setDouble(3, productSku.getPrice());
@@ -44,14 +41,8 @@ public class ProductSkuRepository {
 					productSkuId = rs.getLong(1); // Lấy ID của đơn hàng vừa tạo
 				}
 			}
-			if (productSkuId == 0) {
-				throw new SQLException("Không thể tạo ProductSku: Không có ID ProductSku được sinh ra.");
-			}
-
-		} catch (Exception e) {
-			rollbackTransaction();
-			e.printStackTrace();
 		}
+
 		return productSkuId;
 	}
 
@@ -161,7 +152,7 @@ public class ProductSkuRepository {
 				ProductColorImage productColorImage = new ProductColorImage();
 				productColorImage.setId(resultSet.getLong("pci.id"));
 				productColorImage.setImage(resultSet.getString("pci.image"));
-
+				;
 				// Create Product and SubCategory objects
 				Product product = new Product();
 				product.setId(resultSet.getLong("product_id"));
@@ -228,7 +219,7 @@ public class ProductSkuRepository {
 			if (rs.next()) {
 				ProductSku productSku = new ProductSku(rs.getLong(1), null, null, (rs.getDouble(6)));
 				ProductColorImage productColorImage = new ProductColorImage();
-				productColorImage.setImage(rs.getString("image"));
+				productColorImage.setImage(rs.getString("pci.image"));
 
 				Color color = new Color();
 				color.setName(rs.getString("color"));

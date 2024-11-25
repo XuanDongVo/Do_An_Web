@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,8 +51,11 @@ public class CartDetailRepository {
 
 			ResultSet rs = pst.executeQuery();
 			while (rs.next()) {
+				// Chuyển byte[] thành chuỗi Base64
+				String base64Image = Base64.getEncoder().encodeToString(rs.getBytes(3));
+
 				DetailCartResponse detailCartResponse = new DetailCartResponse(rs.getLong(1), rs.getString(2),
-						rs.getString(3), rs.getString(4), rs.getString(5), rs.getInt(6), rs.getDouble(7));
+						base64Image, rs.getString(4), rs.getString(5), rs.getInt(6), rs.getDouble(7));
 				responses.add(detailCartResponse);
 			}
 		} catch (Exception e) {
@@ -166,8 +170,12 @@ public class CartDetailRepository {
 			pst.setLong(1, cartId);
 			ResultSet rs = pst.executeQuery();
 			while (rs.next()) {
+
+				// Chuyển byte[] thành chuỗi Base64
+				String base64Image = Base64.getEncoder().encodeToString(rs.getBytes(3));
+
 				DetailCartResponse detailCartResponse = new DetailCartResponse(rs.getLong(1), rs.getString(2),
-						rs.getString(3), rs.getString(4), rs.getString(5), rs.getInt(6), rs.getDouble(7));
+						base64Image, rs.getString(4), rs.getString(5), rs.getInt(6), rs.getDouble(7));
 				responses.add(detailCartResponse);
 			}
 		} catch (Exception e) {

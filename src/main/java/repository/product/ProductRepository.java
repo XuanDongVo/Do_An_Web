@@ -16,34 +16,22 @@ public class ProductRepository {
 	private PreparedStatement pst = null;
 	private ResultSet rs = null;
 
-	public long addProduct(Product product) {
+	public long addProduct(Connection connection, Product product) throws SQLException {
 		long productId = 0;
-		connection = DBConnection.getConection();
 		String sql = "INSERT INTO product (name, description, sub_category_id) VALUES (?, ?, ?)";
-		try {
-			// Đặt AutoCommit thành false
-			connection.setAutoCommit(false);
-
-			pst = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+		try (PreparedStatement pst = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 			pst.setString(1, product.getName());
 			pst.setString(2, product.getDescription());
 			pst.setLong(3, product.getSubCategory().getId());
-			// Thực thi câu lệnh
 			int rowsAffected = pst.executeUpdate();
 
 			if (rowsAffected > 0) {
-				rs = pst.getGeneratedKeys();
-				if (rs.next()) {
-					productId = rs.getLong(1); // Lấy ID của đơn hàng vừa tạo
+				try (ResultSet rs = pst.getGeneratedKeys()) {
+					if (rs.next()) {
+						productId = rs.getLong(1);
+					}
 				}
 			}
-			if (productId == 0) {
-				throw new SQLException("Không thể tạo product: Không có ID product được sinh ra.");
-			}
-
-		} catch (Exception e) {
-			rollbackTransaction();
-			e.printStackTrace();
 		}
 		return productId;
 	}
@@ -190,51 +178,6 @@ public class ProductRepository {
 			}
 		}
 		return products;
-	}
-
-	// Phương thức chuyển trạng thái Commit khi xử lý xong OrderDetail
-	public void finalizeTransaction() {
-		try {
-			if (connection != null && !connection.getAutoCommit()) {
-				connection.commit(); // Commit giao dịch
-				connection.setAutoCommit(true); // Trả lại trạng thái AutoCommit
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			closeResources();
-		}
-	}
-
-	// Phương thức rollback giao dịch
-	public void rollbackTransaction() {
-		try {
-			if (connection != null && !connection.getAutoCommit()) {
-				connection.rollback();
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			closeResources();
-		}
-	}
-
-	// Phương thức hỗ trợ đóng các tài nguyên (Connection, PreparedStatement,
-	// ResultSet)
-	private void closeResources() {
-		try {
-			if (rs != null) {
-				rs.close();
-			}
-			if (pst != null) {
-				pst.close();
-			}
-			if (connection != null) {
-				connection.close();
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 	}
 
 }

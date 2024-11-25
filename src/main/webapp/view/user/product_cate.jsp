@@ -22,9 +22,6 @@
 
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="adding/bootstrap/boostrap.min.css">
-<!-- <script src="adding/jquery/jquery-3.4.1.min.js"></script>
-    <script src="adding/poper/poper.min.js"></script>	
-    <script src="adding/bootstrap/boostrap.min.js"></script>  -->
 
 <script src="adding/bootstrap/bootstrap.bundle.min.js"></script>
 

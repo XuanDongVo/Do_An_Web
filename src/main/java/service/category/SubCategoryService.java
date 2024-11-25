@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import entity.Category;
 import entity.Gender;
@@ -41,7 +42,7 @@ public class SubCategoryService {
 
 				// Thêm vào innerMap với tên category và danh sách tên subcategories
 				innerMap.putIfAbsent(category.getName(), nameSubCategories);
-			});       
+			});
 
 			// Thêm vào dropListCategory với tên gender và innerMap
 			dropListCategory.putIfAbsent(gender.getName(), innerMap);
@@ -55,6 +56,39 @@ public class SubCategoryService {
 			throw new RuntimeException();
 		}
 		return beadCrumb;
+	}
+
+	public Map<String, List<String>> getSubCategoryByGender() {
+		// Lấy tất cả các giới tính từ repository
+		List<Gender> genders = genderRepository.getAllGender();
+		if (genders == null || genders.isEmpty()) {
+			throw new RuntimeException("Error: Cannot get all genders");
+		}
+
+		// Khởi tạo Map để lưu kết quả
+		Map<String, List<String>> genderToSubCategoryMap = new HashMap<>();
+
+		// Duyệt qua từng gender
+		genders.forEach(gender -> {
+			// Lấy tất cả các categories dựa trên gender
+			List<Category> categories = categoryRepository.getAllCategoriesByGender(gender.getName());
+			if (categories == null || categories.isEmpty()) {
+				return; // Bỏ qua nếu không có categories
+			}
+
+			// Lấy tất cả các subCategories thuộc các categories này
+			List<String> subCategoryNames = categories.stream().flatMap(category -> {
+				List<SubCategory> subCategories = subCategoryRepository.getSubCategoryByCategory(category.getName());
+				if (subCategories != null) {
+					return subCategories.stream().map(SubCategory::getName);
+				}
+				return Stream.empty();
+			}).collect(Collectors.toList());
+
+			// Đưa vào map
+			genderToSubCategoryMap.put(gender.getName(), subCategoryNames);
+		});
+		return genderToSubCategoryMap;
 	}
 
 }
