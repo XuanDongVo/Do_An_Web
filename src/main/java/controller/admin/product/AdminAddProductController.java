@@ -32,6 +32,7 @@ public class AdminAddProductController extends HttpServlet {
 		String action = req.getParameter("action");
 		if ("view".equalsIgnoreCase(action)) {
 			viewAddAdminProduct(req, resp);
+			return;
 		} else {
 			resp.sendRedirect(req.getContextPath() + "/adminAddProduct?action=view");
 		}
@@ -55,7 +56,8 @@ public class AdminAddProductController extends HttpServlet {
 
 		try {
 			String encodedMessage = URLEncoder.encode(message, "UTF-8");
-			resp.sendRedirect(req.getContextPath() + "/adminAddProduct?action=view&message=" + encodedMessage);
+			resp.sendRedirect(
+					req.getContextPath() + "/adminAddProduct?action=view&message=" + encodedMessage);
 		} catch (UnsupportedEncodingException e) {
 			// Xử lý nếu gặp lỗi mã hóa
 			e.printStackTrace();
@@ -76,7 +78,7 @@ public class AdminAddProductController extends HttpServlet {
 			req.setAttribute("message", message);
 		}
 
-		req.getRequestDispatcher("view/admin/admin_add_product.jsp").forward(req, resp);
+		req.getRequestDispatcher( "view/admin/admin_add_product.jsp").forward(req, resp);
 	}
 
 	@Override

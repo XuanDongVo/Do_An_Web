@@ -14,8 +14,27 @@ import entity.Product;
 public class ProductRepository {
 	private Connection connection = null;
 	private PreparedStatement pst = null;
-	private ResultSet rs = null;
 
+	public void removeById(Long productId) {
+		Connection connection = DBConnection.getConection();
+		try {
+			String sql = "DELETE FROM product WHERE id = ?";
+			pst = connection.prepareStatement(sql);
+			pst.setLong(1, productId);
+			pst.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	public long addProduct(Connection connection, Product product) throws SQLException {
 		long productId = 0;
 		String sql = "INSERT INTO product (name, description, sub_category_id) VALUES (?, ?, ?)";

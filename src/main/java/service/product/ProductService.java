@@ -18,14 +18,19 @@ import entity.Product;
 import entity.ProductColorImage;
 import entity.ProductSku;
 import entity.SubCategory;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import repository.cart.CartDetailRepository;
 import repository.category.CategoryRepository;
 import repository.category.SubCategoryRepository;
 import repository.color.ColorRepository;
 import repository.inventory.InventoryRepository;
+import repository.order.OrderDetailRepository;
 import repository.product.ProductColorImgRepository;
 import repository.product.ProductRepository;
 import repository.product.ProductSkuRepository;
 import repository.size.SizeRepository;
+import service.cartdetail.CartDetailService;
 import utils.MultipleOptionsSQLQueryBuilder;
 
 public class ProductService {
@@ -38,6 +43,31 @@ public class ProductService {
 	private ColorRepository colorRepository = new ColorRepository();
 	private ProductColorImgRepository productColorImgRepository = new ProductColorImgRepository();
 	private SizeRepository sizeRepository = new SizeRepository();
+	private OrderDetailRepository orderDetailRepository = new OrderDetailRepository();
+	private CartDetailRepository cartDetailRepository = new CartDetailRepository();
+	private CartDetailService cartDetailService = new CartDetailService();
+
+	// xoa san pham
+	public void deleteProduct(Long productId, HttpServletRequest request, HttpServletResponse response) {
+		List<ProductSku> productSkus = productSkuRepository.findByProductId(productId);
+
+		for (ProductSku productSku : productSkus) {
+			// xoa san pham trong inventory
+			inventoryRepository.removeByProductSkuId(productSku.getId());
+			// xoa trong orderDetail
+			orderDetailRepository.removeByProductSkuId(productSku.getId());
+			// xoa trong cartDetail
+			cartDetailRepository.removeByProductSkuId(productSku.getId());
+			// xoa trong cookies neu ton tai
+//			cartDetailService.removeProductForAnonymous(productId, request, response);
+			// xoa sku
+			productSkuRepository.removeByProductSkuId(productSku.getId());
+		}
+		// xoa productcolorimg
+		productColorImgRepository.removeByProductId(productId);
+		// xoa product
+		productRepository.removeById(productId);
+	}
 
 	// Adđ Product
 	public void addProduct(AddProductInDatabaseRequest productInDatabaseRequest) {
@@ -337,6 +367,9 @@ public class ProductService {
 			// Thêm SKU mới vào danh sách SKUs của product
 			productResponse.getProductSkus().add(skuResponse);
 		}
+	}
+	public static void main(String[] args) {
+		new ProductService().deleteProduct(36L, null, null);
 	}
 
 }

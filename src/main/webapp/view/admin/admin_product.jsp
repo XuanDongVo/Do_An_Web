@@ -1,236 +1,250 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: ngoke
-  Date: 5/15/2024
-  Time: 10:15 PM
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java"%>
-<html>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
-<title>Quản lí số luợng tồn kho</title>
+<title>Danh sách nhân viên | Quản trị Admin</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Main CSS-->
+<link rel="stylesheet" type="text/css" href="../../css/admin/main.css">
 <link rel="stylesheet"
-	href="//cdn.datatables.net/2.0.2/css/dataTables.dataTables.min.css">
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-	rel="stylesheet"
-	integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-	crossorigin="anonymous">
+	href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+<!-- or -->
 <link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+	href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+
+<!-- Font-icon css-->
+<link rel="stylesheet" type="text/css"
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+<link rel="stylesheet"
+	href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+
 </head>
-<style>
-.spinner {
-	display: none;
-	position: fixed;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-}
 
-#table_id_wrapper {
-	overflow-x: auto;
-}
-
-#table_id_wrapper {
-	width: 100%;
-	overflow-x: auto; /* Allow horizontal scrolling if necessary */
-}
-
-#table_id {
-	width: 100%; /* Ensures table fills the container */
-	table-layout: fixed; /* Ensures that columns take up fixed width */
-}
-
-.table-responsive {
-	overflow-x: auto;
-	-webkit-overflow-scrolling: touch;
-	margin-bottom: 15px; /* Optional, for some spacing */
-}
-</style>
-<body>
-	<jsp:include page="admin_header.jsp"></jsp:include>
-	<div class="container-fluid">
-		<div class="row flex-nowrap">
-			<div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
-				<div
-					class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
-					<a href="#"
-						class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-						<span class="fs-5 d-none d-sm-inline">Danh mục </span>
-					</a>
-					<ul
-						class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start">
-						<li class="nav-item"><a
-							href="<%=request.getContextPath()%>/view/admin/admin_summary.jsp"
-							class="nav-link align-middle px-0"> <i
-								class="fa-solid fa-chart-simple"></i> <span
-								class="ms-1 d-none d-sm-inline">Doanh thu</span>
-						</a></li>
-						<li><a
-							href="<%=request.getContextPath()%>/view/admin/admin_product.jsp"
-							class="nav-link px-0 align-middle" id="menu_0"> <i
-								class="fa-brands fa-product-hunt"></i> <span
-								class="ms-1 d-none d-sm-inline">Quản lí sản phẩm</span>
-						</a></li>
-						<li><a
-							href="<%=request.getContextPath()%>/view/admin/admin_form_upload_product.jsp"
-							class="nav-link px-0 align-middle" id="menu_1"> <i
-								class="fa-solid fa-upload"></i> <span
-								class="ms-1 d-none d-sm-inline">Thêm sản phẩm</span>
-						</a></li>
-						<li><a
-							href="<%=request.getContextPath()%>/view/admin/admin_order.jsp"
-							class="nav-link px-0 align-middle"> <i
-								class="fa-solid fa-gift"></i> <span
-								class="ms-1 d-none d-sm-inline">Quản lí đơn hàng</span>
-						</a></li>
-						<li><a
-							href="<%=request.getContextPath()%>/view/admin/admin_user.jsp"
-							class="nav-link px-0 align-middle"> <i
-								class="fa-solid fa-user"></i> <span
-								class="ms-1 d-none d-sm-inline">Quản lí người dùng</span>
-						</a></li>
-						<li><a
-							href="<%=request.getContextPath()%>/view/admin/admin_inventory.jsp"
-							class="nav-link px-0 align-middle"> <i
-								class="fa-solid fa-warehouse"></i><span
-								class="ms-1 d-none d-sm-inline">Quản lí số lượng tồn kho</span>
-						</a></li>
-						<li><a
-							href="<%=request.getContextPath()%>/view/admin/admin_log.jsp"
-							class="nav-link px-0 align-middle"> <i
-								class="fa-solid fa-note-sticky"></i> <span
-								class="ms-1 d-none d-sm-inline">Quản lí log</span>
-						</a></li>
-						<li><a
-							href="<%=request.getContextPath()%>/view/admin/admin_image.jsp"
-							class="nav-link px-0 align-middle"> <i
-								class="fa-solid fa-image"></i> <span
-								class="ms-1 d-none d-sm-inline">Quản lí ảnh</span>
-						</a></li>
-						<%
-						if (session.getAttribute("user") != null) {
-						%>
-						<li><a href="<%=request.getContextPath()%>/admin_logout"
-							class="nav-link px-0 align-middle"> <i
-								class="fa-solid fa-door-open"></i><span
-								class="ms-1 d-none d-sm-inline">Đăng xuất</span>
-						</a></li>
-						<%
-						}
-						%>
-					</ul>
+<body onload="time()" class="app sidebar-mini rtl">
+	<!-- Navbar-->
+	<header class="app-header">
+		<!-- Sidebar toggle button-->
+		<a class="app-sidebar__toggle" href="#" data-toggle="sidebar"
+			aria-label="Hide Sidebar"></a>
+		<!-- Navbar Right Menu-->
+		<ul class="app-nav">
 
 
-					<hr>
-				</div>
+			<!-- User Menu-->
+			<li><a class="app-nav__item" href="/index.html"><i
+					class='bx bx-log-out bx-rotate-180'></i> </a></li>
+		</ul>
+	</header>
+	<!-- Sidebar menu-->
+	<div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+	<aside class="app-sidebar">
+		<div class="app-sidebar__user">
+			<div>
+				<p class="app-sidebar__user-name">
+					<b>Võ Trường</b>
+				</p>
+				<p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
 			</div>
+		</div>
+		<hr>
+		<ul class="app-menu">
+			<li><a class="app-menu__item " href="${pageContext.request.contextPath}/view/admin/admin.jsp"><i
+					class='app-menu__icon bx bx-tachometer'></i><span
+					class="app-menu__label">Bảng điều khiển</span></a></li>
+			<li><a class="app-menu__item " href="table-data-table.html"><i
+					class='app-menu__icon bx bx-id-card'></i> <span
+					class="app-menu__label">Quản lý nhân viên</span></a></li>
+			<li><a class="app-menu__item" href="#"><i
+					class='app-menu__icon bx bx-user-voice'></i><span
+					class="app-menu__label">Quản lý khách hàng</span></a></li>
+			<li><a class="app-menu__item active" href="${pageContext.request.contextPath}/view/admin/admin_product.jsp"><i
+					class='app-menu__icon bx bx-purchase-tag-alt'></i><span
+					class="app-menu__label">Quản lý sản phẩm</span></a></li>	
+			<li><a class="app-menu__item" href="table-data-oder.html"><i
+					class='app-menu__icon bx bx-task'></i><span class="app-menu__label">Quản
+						lý đơn hàng</span></a></li>
+		</ul>
+	</aside>
+	<main class="app-content">
+		<div class="app-title">
+			<ul class="app-breadcrumb breadcrumb side">
+				<li class="breadcrumb-item active"><a
+					href="#"><b>Danh sách sản phẩm</b></a></li>
+			</ul>
+			<div id="clock"></div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="tile">
+					<div class="tile-body">
+						<div class="row element-button">
+							<div class="col-sm-2">
 
+								<a class="btn btn-add btn-sm" href="<%=request.getContextPath()%>/adminAddProduct?action=view"
+									title="Thêm"><i class="fas fa-plus"></i> Tạo mới sản phẩm</a>
+							</div>
 
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<th scope="col">#</th>
-						<th scope="col">First</th>
-						<th scope="col">Last</th>
-						<th scope="col">Handle</th>
-					</tr>
-				</thead>
-				<tbody id="body">
-					
-				</tbody>
-			</table>
-
-
-			<!-- <div class="container-fluid">
-				<div class="row flex-nowrap">
-					<div class="col py-3" style="width: 70%">
-						Thêm nút chọn giới tính
-						<div class="d-flex align-items-center mb-3">
-							<label for="gender" class="me-3">Giới tính:</label>
-							<button class="btn btn-primary me-2" id="maleButton">Nam</button>
-							<button class="btn btn-primary" id="femaleButton">Nữ</button>
 						</div>
+						<table class="table table-hover table-bordered" id="sampleTable">
+							<thead>
+								<tr>
+									<th>Mã sản phẩm</th>
+									<th>Tên sản phẩm</th>
+									<th>Danh mục</th>
+									<th>Giá tiền</th>
+									<th>Chức năng</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>71309005</td>
+									<td>Bàn ăn gỗ Theresa</td>
+									<td>Bàn ăn</td>
+									<td>5.600.000 đ</td>
+									<td><button class="btn btn-primary btn-sm trash"
+											type="button" title="Xóa" onclick="myFunction(this)">
+											<i class="fas fa-trash-alt"></i>
+										</button>
+										<button class="btn btn-primary btn-sm edit" type="button"
+											title="Sửa" id="show-emp" data-toggle="modal"
+											data-target="#ModalUP">
+											<i class="fas fa-edit"></i>
+										</button></td>
+								</tr>
 
-						Bảng dữ liệu
-						<div class="table-responsive">
-							<table id="table_id" class="table table-striped">
-								<thead>
-									<tr>
-										<th>Mã sản phẩm</th>
-										<th>Tên sản phẩm</th>
-										<th>Danh mục</th>
-										<th>Giá</th>
-										<th></th>
-									</tr>
-								</thead>
-								<tbody id="body">
-									Nội dung bảng
-								</tbody>
-							</table>
-						</div>
+							</tbody>
+						</table>
 					</div>
 				</div>
-			</div> -->
+			</div>
+		</div>
+	</main>
 
+	<!--
+  MODAL
+-->
+	<div class="modal fade" id="ModalUP" tabindex="-1" role="dialog"
+		aria-hidden="true" data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+
+				<div class="modal-body">
+					<div class="row">
+						<div class="form-group  col-md-12">
+							<span class="thong-tin-thanh-toan">
+								<h5>Chỉnh sửa thông tin sản phẩm cơ bản</h5>
+							</span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group col-md-6">
+							<label class="control-label">Mã sản phẩm </label> <input
+								class="form-control" type="number" value="71309005">
+						</div>
+						<div class="form-group col-md-6">
+							<label class="control-label">Tên sản phẩm</label> <input
+								class="form-control" type="text" required
+								value="Bàn ăn gỗ Theresa">
+						</div>
+						<div class="form-group  col-md-6">
+							<label class="control-label">Số lượng</label> <input
+								class="form-control" type="number" required value="20">
+						</div>
+						<div class="form-group col-md-6 ">
+							<label for="exampleSelect1" class="control-label">Tình
+								trạng sản phẩm</label> <select class="form-control" id="exampleSelect1">
+								<option>Còn hàng</option>
+								<option>Hết hàng</option>
+								<option>Đang nhập hàng</option>
+							</select>
+						</div>
+						<div class="form-group col-md-6">
+							<label class="control-label">Giá bán</label> <input
+								class="form-control" type="text" value="5.600.000">
+						</div>
+						<div class="form-group col-md-6">
+							<label for="exampleSelect1" class="control-label">Danh
+								mục</label> <select class="form-control" id="exampleSelect1">
+								<option>Bàn ăn</option>
+								<option>Bàn thông minh</option>
+								<option>Tủ</option>
+								<option>Ghế gỗ</option>
+								<option>Ghế sắt</option>
+								<option>Giường người lớn</option>
+								<option>Giường trẻ em</option>
+								<option>Bàn trang điểm</option>
+								<option>Giá đỡ</option>
+							</select>
+						</div>
+					</div>
+					<BR> <a href="#"
+						style="float: right; font-weight: 600; color: #ea0000;">Chỉnh
+						sửa sản phẩm nâng cao</a> <BR> <BR>
+					<button class="btn btn-save" type="button">Lưu lại</button>
+					<a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy bỏ</a>
+					<BR>
+				</div>
+				<div class="modal-footer"></div>
+			</div>
 		</div>
 	</div>
+	<!--
+MODAL
+-->
+
+	<script src="${pageContext.request.contextPath}/js/admin/main.js"></script>
+	
+	<script type="text/javascript">
+        //Thời Gian
+    function time() {
+      var today = new Date();
+      var weekday = new Array(7);
+      weekday[0] = "Chủ Nhật";
+      weekday[1] = "Thứ Hai";
+      weekday[2] = "Thứ Ba";
+      weekday[3] = "Thứ Tư";
+      weekday[4] = "Thứ Năm";
+      weekday[5] = "Thứ Sáu";
+      weekday[6] = "Thứ Bảy";
+      var day = weekday[today.getDay()];
+      var dd = today.getDate();
+      var mm = today.getMonth() + 1;
+      var yyyy = today.getFullYear();
+      var h = today.getHours();
+      var m = today.getMinutes();
+      var s = today.getSeconds();
+      m = checkTime(m);
+      s = checkTime(s);
+      nowTime = h + " giờ " + m + " phút " + s + " giây";
+      if (dd < 10) {
+        dd = '0' + dd
+      }
+      if (mm < 10) {
+        mm = '0' + mm
+      }
+      today = day + ', ' + dd + '/' + mm + '/' + yyyy;
+      tmp = '<span class="date"> ' + today + ' - ' + nowTime +
+        '</span>';
+      document.getElementById("clock").innerHTML = tmp;
+      clocktime = setTimeout("time()", "1000", "Javascript");
+
+      function checkTime(i) {
+        if (i < 10) {
+          i = "0" + i;
+        }
+        return i;
+      }
+    }
+    </script>
+	
 </body>
-/Do_An_Web/src/main/webapp/js/admin/admin_product.js
-<script type="text/javascript" src="../../js/admin/admin_product.js"></script>
-
-<script src="https://code.jquery.com/jquery-3.7.1.js"
-	integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
-	crossorigin="anonymous"></script>
-<script
-	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-	integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-	crossorigin="anonymous"></script>
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="//cdn.datatables.net/2.0.2/js/dataTables.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $("#table_id").DataTable()
-    })
-
-
-    $(document).ready(function () {
-        $('.dt-empty').hide();
-    })
-    var $tbody=$('#body')
-    //hiển thị dữ liệu lên table
-    $(document).ready(function(){
-        var $spinner = $('<div class="spinner"><div class="d-flex justify-content-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div></div>');
-        $('body').append($spinner);
-
-        function showSpinner() {
-            $spinner.show();
-        }
-
-        function hideSpinner() {
-            $spinner.hide();
-        }
-
-        showSpinner();
-        $.ajax({
-            url:
-            	'<%=request.getContextPath()%>/gender?gender=nam',
-									method : 'GET',
-									dataType : 'JSON',
-									success : function(response) {
-										hideSpinner()
-										renderProduct(response)
-
-									},
-									error : function(error) {
-										alert('Lấy dữ liệu không thành công')
-									}
-								})
-					})
-</script>
 
 </html>

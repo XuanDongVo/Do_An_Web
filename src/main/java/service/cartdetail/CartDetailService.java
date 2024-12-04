@@ -197,7 +197,7 @@ public class CartDetailService {
 	}
 
 	// xóa sản phẩm trong giỏ hàng tạm thời
-	private void removeProductForAnonymous(Long productSkuId, HttpServletRequest request,
+	public void removeProductForAnonymous(Long productSkuId, HttpServletRequest request,
 			HttpServletResponse response) {
 		List<DetailCartResponse> detailCarts;
 

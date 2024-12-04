@@ -2,6 +2,7 @@ package controller.admin.authenticate;
 
 import java.io.IOException;
 
+import entity.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -17,10 +18,16 @@ public class AdminLoginContrller extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String phone = req.getParameter("phone");
-		String password = req.getParameter("password");
+	    String phone = req.getParameter("phone");
+	    String password = req.getParameter("password");
+	    
+	    
 
-		req.getRequestDispatcher("/view/admin/admin.jsp").forward(req, resp);
+	    User user = new User(); 
+	    req.getSession().setAttribute("user", user);
 
+	    // Forward đến trang admin
+	    resp.sendRedirect(req.getContextPath() + "/view/admin/admin.jsp");
 	}
+
 }

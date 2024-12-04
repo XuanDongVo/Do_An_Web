@@ -23,6 +23,27 @@ public class ProductSkuRepository {
 	private Connection connection = null;
 	private PreparedStatement pst = null;
 	private ResultSet rs = null;
+	
+	
+	public void removeByProductSkuId(Long productskuId) {
+		Connection connection = DBConnection.getConection();
+		try {
+			String sql = "DELETE FROM product_sku WHERE id = ?";
+			pst = connection.prepareStatement(sql);
+			pst.setLong(1, productskuId);
+			pst.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
 	public long addProductSku(Connection connection, ProductSku productSku) throws SQLException {
 		long productSkuId = 0;

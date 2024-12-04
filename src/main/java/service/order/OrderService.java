@@ -6,12 +6,14 @@ import java.util.List;
 
 import dto.request.OrderRequest;
 import dto.response.DetailCartResponse;
+import entity.CartDetail;
 import entity.Inventory;
 import entity.OrderDetail;
 import entity.ProductSku;
 import entity.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import repository.cart.CartDetailRepository;
 import repository.inventory.InventoryRepository;
 import repository.order.OrderDetailRepository;
 import repository.order.OrderRepository;
@@ -24,6 +26,7 @@ public class OrderService {
 	private ProductSkuRepository productSkuRepository = new ProductSkuRepository();
 	private InventoryRepository inventoryRepository = new InventoryRepository();
 	private OrderDetailRepository orderDetailRepository = new OrderDetailRepository();
+	private CartDetailRepository cartDetailRepository = new CartDetailRepository();
 
 	public void processOrderItems(User user, OrderRequest orderRequest, HttpServletRequest request,
 			HttpServletResponse response) {
@@ -38,6 +41,8 @@ public class OrderService {
 				createOrderDetailForAnonymous(orderId, orderRequest, request, response);
 			}
 
+			createOrderDetailInDatabase(orderId, orderRequest.getIds());
+
 			// Hoàn tất giao dịch
 			orderRepository.finalizeTransaction();
 		} catch (Exception e) {
@@ -47,6 +52,34 @@ public class OrderService {
 		}
 	}
 
+	// tao don dat hang cho nguoi dung da dang nhap
+	private void createOrderDetailInDatabase(Long orderId, String[] cartDetailIds) {
+		for (int i = 0; i < cartDetailIds.length; i++) {
+			Long cartId = Long.parseLong(cartDetailIds[i]);
+			CartDetail cartDetail = cartDetailRepository.findById(cartId).orElseThrow();
+
+			ProductSku productSku = productSkuRepository.findById(cartDetail.getProductSku().getId());
+
+			// tao order detail cho khach hang
+			OrderDetail orderDetail = new OrderDetail();
+			orderDetail.setOrderId(orderId);
+
+			orderDetail.setProductSkuId(productSku.getId());
+			orderDetail.setPrice(productSku.getPrice());
+			orderDetail.setQuantity(cartDetail.getQuantity());
+
+			// cập nhật hàng tồn kho trong kho hàng
+			Inventory invetory = inventoryRepository.findByProductSkuId(productSku.getId()).get();
+			invetory.setStock(invetory.getStock() - cartDetail.getQuantity());
+			orderDetailRepository.save(orderDetail);
+			inventoryRepository.updateQuantityByInvetoryid(invetory.getId(), invetory.getStock());
+
+			// xoa san pham trong gio hang
+			cartDetailRepository.deleteProductSkuInCartDetail(cartId);
+		}
+	}
+
+	// tao don dat hang cho nguoi an danh
 	private void createOrderDetailForAnonymous(Long orderId, OrderRequest orderRequest, HttpServletRequest request,
 			HttpServletResponse response) {
 		// Lấy giỏ hàng từ cookie hiện tại (nếu có)

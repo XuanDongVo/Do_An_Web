@@ -21,39 +21,42 @@ public class SecurityFilterRoleLoginController implements Filter {
 
 	@Override
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
-			throws IOException, ServletException {
-		HttpServletRequest request = (HttpServletRequest) servletRequest;
-		HttpServletResponse response = (HttpServletResponse) servletResponse;
-		HttpSession session = request.getSession();
-		
-		if (request.getRequestURI().endsWith("/admin_login.jsp")) {
+	        throws IOException, ServletException {
+	    HttpServletRequest request = (HttpServletRequest) servletRequest;
+	    HttpServletResponse response = (HttpServletResponse) servletResponse;
+	    HttpSession session = request.getSession();
+
+	    String requestURI = request.getRequestURI();
+
+	    // Bỏ qua kiểm tra nếu đang ở trang login
+	    if (requestURI.endsWith("/admin_login.jsp")) {
 	        filterChain.doFilter(request, response);
 	        return;
 	    }
 
-		// Check if user is logged in
-		User user = (User) session.getAttribute("user");
-		if (user == null) {
-			response.sendRedirect(request.getContextPath() + "/view/admin/admin_login.jsp"); // Redirect to home if not logged in
-			return; // Stop further processing
-		}
+	    // Kiểm tra xem user đã login chưa
+	    User user = (User) session.getAttribute("user");
+	    if (user == null) {
+	        response.sendRedirect(request.getContextPath() + "/view/admin/admin_login.jsp");
+	        return;
+	    }
 
-		// Get user's role
-		User_Role user_role = userRoleRepository.getUserRole(user);
+	    // Kiểm tra quyền hạn
+	    User_Role user_role = (User_Role) session.getAttribute("user_role");
+	    if (user_role == null) {
+	        user_role = userRoleRepository.getUserRole(user);
+	        if (user_role != null) {
+	            session.setAttribute("user_role", user_role);
+	        }
+	    }
 
-		if (user_role == null || "USER".equalsIgnoreCase(user_role.getRole().getNameRole())) {
-			// Redirect to "not permission" page if user is not an admin
-			response.sendRedirect(request.getContextPath() + "/view/not_permission.jsp");
-			return; // Stop further processing
-		}
+	    // Nếu user không phải admin
+	    if (user_role == null || "USER".equalsIgnoreCase(user_role.getRole().getNameRole())) {
+	        response.sendRedirect(request.getContextPath() + "/view/not_permission.jsp");
+	        return;
+	    }
 
-		if ("ADMIN".equalsIgnoreCase(user_role.getRole().getNameRole())) {
-			// Redirect to admin page
-			response.sendRedirect(request.getContextPath() + "/view/admin/admin.jsp");
-			return; // Stop further processing
-		}
-
-		// If all checks pass, continue with the filter chain
-		filterChain.doFilter(request, response);
+	    // Nếu user là admin và đang truy cập đúng trang, tiếp tục xử lý
+	    filterChain.doFilter(request, response);
 	}
 }

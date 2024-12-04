@@ -33,4 +33,24 @@ public class OrderDetailRepository {
 			}
 		}
 	}
+
+	public void removeByProductSkuId(Long ProductSkuId) {
+		Connection connection = DBConnection.getConection();
+		try {
+			String sql = "DELETE FROM order_detail WHERE product_sku_id = ?";
+			pst = connection.prepareStatement(sql);
+			pst.setLong(1, ProductSkuId);
+			pst.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
 }

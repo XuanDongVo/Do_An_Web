@@ -1,0 +1,103 @@
+table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+table td, table th {
+	border: 1px solid #ddd;
+	padding: 8px;
+	text-align: center; /* Căn giữa ngang */
+	vertical-align: middle; /* Căn giữa dọc */
+}
+
+table th {
+	background-color: #f4f4f4;
+	font-weight: bold;
+}
+
+.color-options, .size-options {
+	display: flex;
+	flex-flow: row wrap;
+	min-width: 0;
+}
+
+.w-7 {
+	width: 2.25rem !important;
+}
+
+.h-7 {
+	height: 2.25rem !important;
+}
+
+.mb-2 {
+	margin-bottom: .5rem !important;
+}
+
+.ellipsis-t {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	font-size: 1rem; /* Tăng nhẹ kích thước chữ cho dễ đọc */
+}
+
+.ellipsis-t {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.font-medium {
+	font-weight: 500 !important;
+}
+
+.text-xs {
+	font-size: 1rem !important;
+	line-height: 1rem !important;
+	font-style: normal;
+}
+
+.text-center {
+	text-align: center !important;
+}
+
+.w-full {
+	width: 100% !important;
+}
+
+.p-2\.5 {
+	padding: .625rem !important;
+}
+
+.border-border {
+	/* border-color: gray !important; */
+	border: 0 solid #e5e7eb;
+}
+
+.border-\[1px\] {
+	border-width: 1px !important;
+}
+
+.justify-center {
+	justify-content: center !important;
+}
+
+.items-center {
+	align-items: center !important;
+}
+
+.flex-col {
+	flex-direction: column !important;
+}
+
+.cursor-pointer {
+	cursor: pointer !important;
+}
+
+.flex {
+	display: flex !important;
+}
+
+.min-w-\[400px\] {
+	min-width: 400px !important;
+	max-height: 500px !important;
+}

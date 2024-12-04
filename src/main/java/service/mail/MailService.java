@@ -19,7 +19,7 @@ public class MailService {
 	private UserRepository userRepository = new UserRepository();
 
 	static final String from = "ecommerce789789";
-	static final String password = "Ecom123456789"; // Mật khẩu ứng dụng Gmail
+	static final String password = "Ecom123456789";
 
 	// gửi email
 	private boolean sendEmail(String to, String subject, String content) {

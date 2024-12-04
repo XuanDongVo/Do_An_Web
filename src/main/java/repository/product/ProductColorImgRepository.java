@@ -12,6 +12,9 @@ import entity.Product;
 import entity.ProductColorImage;
 
 public class ProductColorImgRepository {
+	private Connection connection = null;
+	private PreparedStatement pst = null;
+	private ResultSet rs = null;
 
 	public long addProductColorImg(Connection connection, ProductColorImage productColorImage) throws SQLException {
 		long productColorImgId = 0;
@@ -31,6 +34,26 @@ public class ProductColorImgRepository {
 			}
 		}
 		return productColorImgId;
+	}
+
+	public void removeByProductId(Long productId) {
+		Connection connection = DBConnection.getConection();
+		try {
+			String sql = "DELETE FROM product_color_img WHERE product_id = ?";
+			pst = connection.prepareStatement(sql);
+			pst.setLong(1, productId);
+			pst.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 }

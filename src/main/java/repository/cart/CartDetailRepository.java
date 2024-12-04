@@ -17,6 +17,27 @@ import entity.ProductSku;
 public class CartDetailRepository {
 	private Connection connection = null;
 	private PreparedStatement pst = null;
+	
+	
+	public void removeByProductSkuId(Long productskuId) {
+		Connection connection = DBConnection.getConection();
+		try {
+			String sql = "DELETE FROM cart_detail WHERE product_sku_id = ?";
+			pst = connection.prepareStatement(sql);
+			pst.setLong(1, productskuId);
+			pst.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
 	// lấy ra những sản phẩm mà khách hàng chọn để checkout
 	public List<DetailCartResponse> getSelectProductsForCheckout(String[] selectedCartIds) {
