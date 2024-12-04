@@ -9,7 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- Main CSS-->
-<link rel="stylesheet" type="text/css" href="../../css/admin/main.css">
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/admin/main.css">
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
 <!-- or -->
@@ -55,7 +55,8 @@
 		</div>
 		<hr>
 		<ul class="app-menu">
-			<li><a class="app-menu__item active" href="${pageContext.request.contextPath}/view/admin/admin.jsp"><i
+			<li><a class="app-menu__item active"
+				href="${pageContext.request.contextPath}/view/admin/admin.jsp"><i
 					class='app-menu__icon bx bx-tachometer'></i><span
 					class="app-menu__label">Bảng điều khiển</span></a></li>
 			<li><a class="app-menu__item " href="table-data-table.html"><i
@@ -64,10 +65,12 @@
 			<li><a class="app-menu__item" href="#"><i
 					class='app-menu__icon bx bx-user-voice'></i><span
 					class="app-menu__label">Quản lý khách hàng</span></a></li>
-			<li><a class="app-menu__item " href="${pageContext.request.contextPath}/view/admin/admin_product.jsp"><i
+			<li><a class="app-menu__item "
+				href="${pageContext.request.contextPath}/view/admin/admin_product.jsp"><i
 					class='app-menu__icon bx bx-purchase-tag-alt'></i><span
-					class="app-menu__label">Quản lý sản phẩm</span></a></li>	
-			<li><a class="app-menu__item" href="table-data-oder.html"><i
+					class="app-menu__label">Quản lý sản phẩm</span></a></li>
+			<li><a class="app-menu__item "
+				href="${pageContext.request.contextPath}/view/admin/admin_order.jsp"><i
 					class='app-menu__icon bx bx-task'></i><span class="app-menu__label">Quản
 						lý đơn hàng</span></a></li>
 		</ul>
@@ -263,49 +266,10 @@
 
 
 	</main>
-	<script src="../../js/admin/jquery-3.2.1.min.js"></script>
+	
 	<!--===============================================================================================-->
-	<script src="../../js/admin/popper.min.js"></script>
-	<script src="https://unpkg.com/boxicons@latest/dist/boxicons.js"></script>
+	<script src="${pageContext.request.contextPath}/js/admin/main.js"></script>
 	<!--===============================================================================================-->
-	<script src="../../js/admin/bootstrap.min.js"></script>
-	<!--===============================================================================================-->
-	<script src="../../js/admin/main.js"></script>
-	<!--===============================================================================================-->
-	<script src="../../js/admin/plugins/pace.min.js"></script>
-	<!--===============================================================================================-->
-	<script type="text/javascript" src="../../js/admin/plugins/chart.js"></script>
-	<!--===============================================================================================-->
-	<script type="text/javascript">
-		var data = {
-			labels : [ "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5",
-					"Tháng 6" ],
-			datasets : [ {
-				label : "Dữ liệu đầu tiên",
-				fillColor : "rgba(255, 213, 59, 0.767), 212, 59)",
-				strokeColor : "rgb(255, 212, 59)",
-				pointColor : "rgb(255, 212, 59)",
-				pointStrokeColor : "rgb(255, 212, 59)",
-				pointHighlightFill : "rgb(255, 212, 59)",
-				pointHighlightStroke : "rgb(255, 212, 59)",
-				data : [ 20, 59, 90, 51, 56, 100 ]
-			}, {
-				label : "Dữ liệu kế tiếp",
-				fillColor : "rgba(9, 109, 239, 0.651)  ",
-				pointColor : "rgb(9, 109, 239)",
-				strokeColor : "rgb(9, 109, 239)",
-				pointStrokeColor : "rgb(9, 109, 239)",
-				pointHighlightFill : "rgb(9, 109, 239)",
-				pointHighlightStroke : "rgb(9, 109, 239)",
-				data : [ 48, 48, 49, 39, 86, 10 ]
-			} ]
-		};
-		var ctxl = $("#lineChartDemo").get(0).getContext("2d");
-		var lineChart = new Chart(ctxl).Line(data);
-
-		var ctxb = $("#barChartDemo").get(0).getContext("2d");
-		var barChart = new Chart(ctxb).Bar(data);
-	</script>
 	<script type="text/javascript">
 		//Thời Gian
 		function time() {
