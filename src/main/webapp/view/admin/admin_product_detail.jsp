@@ -80,76 +80,90 @@
 					class='app-menu__icon bx bx-user-voice'></i><span
 					class="app-menu__label">Quản lý khách hàng</span></a></li>
 			<li><a class="app-menu__item active"
-				href="${pageContext.request.contextPath}/view/admin/admin_product.jsp"><i
+				href="${pageContext.request.contextPath}/adminProduct"><i
 					class='app-menu__icon bx bx-purchase-tag-alt'></i><span
 					class="app-menu__label">Quản lý sản phẩm</span></a></li>
-			<li><a class="app-menu__item " href="${pageContext.request.contextPath}/view/admin/admin_order.jsp"><i
+			<li><a class="app-menu__item "
+				href="${pageContext.request.contextPath}/view/admin/admin_order.jsp"><i
 					class='app-menu__icon bx bx-task'></i><span class="app-menu__label">Quản
 						lý đơn hàng</span></a></li>
 		</ul>
 	</aside>
-	
+
 	<main class="app-content">
-	<div class="container">
-		<c:set value="${productResponse}" var="product" />
-		<div class="row">
-			<!-- Left Section: Image Gallery -->
-			<div class="col-md-4">
-				<div class="main-image mb-3">
-					<img id="mainImage" src="${product.productSkus[0].img}"
-						alt="${product.name}" class="img-fluid" style="width: 100%;">
-				</div>
+
+		<div class="row mb-4">
+			<div class="col-12">
+				<h3 class="text-center font-weight-bold mt-4 mb-3"
+					style=" padding: 10px;">Chi
+					tiết sản phẩm</h3>
 			</div>
 
-			<!-- Right Section: Product Info -->
-			<div class="col-md-8">
-				<h2 id="productTitle">${product.name}</h2>
-				<p>
-					<span class="productPrice"><fmt:formatNumber
-							value="${product.price}" pattern="#,###" /> đ</span>
-				</p>
-
-				<!-- Color Options -->
-				<h6 id="color-name">Màu sắc:
-					${product.productSkus[0].color.toUpperCase()}</h6>
-
-
-				<div class="color-options d-flex mt-3 mb-3">
-					<c:forEach items="${product.productSkus}" var="sku">
-						<button class="btn btn-outline-primary color-btn"
-							style="background-color: ${sku.color};"
-							onclick="selectImage('${sku.img}', '${fn:escapeXml(sku.sizeAndStock)}' , '${sku.color}')" /></button>
-					</c:forEach>
-				</div>
-			</div>
-			<!-- Label cho bảng -->
-			<h5>Bảng Size và Số lượng</h5>
-			<!-- Bảng hiển thị size và quantity -->
-			<div class="table-responsive mt-3">
-				<table class="table table-striped table-hover table-bordered"
-					style="max-width: 600px;">
-					<thead class="table-primary text-center">
-						<tr>
-							<th scope="col">Size</th>
-							<th scope="col">Số lượng</th>
-						</tr>
-					</thead>
-					<tbody id="sizeTableBody">
-						<c:forEach items="${product.productSkus[0].sizeAndStock}"
-							var="entry">
-							<tr class="text-center">
-								<td>${fn:toUpperCase(entry.key)}</td>
-								<td>${entry.value}</td>
-							</tr>
-						</c:forEach>
-					</tbody>
-				</table>
-			</div>
 		</div>
-	</div>
+		<div class="container ">
+
+
+			<c:set value="${productResponse}" var="product" />
+			<div class="row">
+				<!-- Left Section: Image Gallery -->
+				<div class="col-md-4">
+					<div class="main-image mb-3">
+						<img id="mainImage" src="${product.productSkus[0].img}"
+							alt="${product.name}" class="img-fluid" style="width: 100%;">
+					</div>
+				</div>
+
+				<!-- Right Section: Product Info -->
+				<div class="col-md-8">
+					<h2 id="productTitle">${product.name}</h2>
+					<p>
+						<span class="productPrice"><fmt:formatNumber
+								value="${product.price}" pattern="#,###" /> đ</span>
+					</p>
+
+					<!-- Color Options -->
+					<h6 id="color-name">Màu sắc:
+						${product.productSkus[0].color.toUpperCase()}</h6>
+
+
+					<div class="color-options d-flex mt-3 mb-3">
+						<c:forEach items="${product.productSkus}" var="sku">
+							<button class="btn btn-outline-primary color-btn"
+								style="background-color: ${sku.color};"
+								onclick="selectImage('${sku.img}', '${fn:escapeXml(sku.sizeAndStock)}' , '${sku.color}')" /></button>
+						</c:forEach>
+					</div>
+
+					<!-- Label cho bảng -->
+					<h5>Bảng Size và Số lượng</h5>
+					<!-- Bảng hiển thị size và quantity -->
+					<div class="table-responsive mt-3">
+						<table class="table table-striped table-hover table-bordered"
+							style="max-width: 600px;">
+							<thead class="table-primary text-center">
+								<tr>
+									<th scope="col">Size</th>
+									<th scope="col">Số lượng</th>
+								</tr>
+							</thead>
+							<tbody id="sizeTableBody">
+								<c:forEach items="${product.productSkus[0].sizeAndStock}"
+									var="entry">
+									<tr class="text-center">
+										<td class="text-center">${fn:toUpperCase(entry.key)}</td>
+										<td class="text-center">${entry.value}</td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+
+		</div>
 	</main>
-	
-	
+
+
 
 	<script src="${pageContext.request.contextPath}/js/admin/main.js"></script>
 

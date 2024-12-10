@@ -30,7 +30,8 @@ public class NavbarController extends HttpServlet {
 		User user = (User) session.getAttribute("user");
 
 		Integer quantityProduct = cartDetailService.getQuantityProductFromCart(user, req);
-		List<DetailCartResponse> cartResponse = cartDetailService.getDetailsInCart(user, req);
+		List<DetailCartResponse> cartResponse = cartDetailService.removeNonExistentProducts(user, req , resp);
+		
 		Map<String, Map<String, List<String>>> dropListCategory = subCategoryService.dropListCategory();
 
 		Map<String, Object> responseData = new HashMap<>();

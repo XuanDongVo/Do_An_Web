@@ -23,19 +23,10 @@ public class OrderDetailRepository {
 			pst.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				if (connection != null) {
-					connection.close();
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		}
 	}
 
-	public void removeByProductSkuId(Long ProductSkuId) {
-		Connection connection = DBConnection.getConection();
+	public void removeByProductSkuId(Connection connection, Long ProductSkuId) {
 		try {
 			String sql = "DELETE FROM order_detail WHERE product_sku_id = ?";
 			pst = connection.prepareStatement(sql);
@@ -43,14 +34,6 @@ public class OrderDetailRepository {
 			pst.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				if (connection != null) {
-					connection.close();
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		}
 	}
 }

@@ -26,21 +26,6 @@ public class SizeRepository {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (pst != null) {
-				try {
-					pst.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			if (connection != null) {
-				try {
-					connection.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
 		}
 		return sizes;
 	}
@@ -54,25 +39,10 @@ public class SizeRepository {
 			ResultSet rs = pst.executeQuery();
 			if (rs.next()) {
 				return new Size(rs.getLong(1), rs.getString(2), null);
-				
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (pst != null) {
-				try {
-					pst.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			if (connection != null) {
-				try {
-					connection.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
 		}
 		return null;
 	}
@@ -91,27 +61,8 @@ public class SizeRepository {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (pst != null) {
-				try {
-					pst.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			if (connection != null) {
-				try {
-					connection.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
 		}
 		return sizes;
-	}
-	
-	public static void main(String[] args) {
-		new SizeRepository().findByName("s");
 	}
 
 }

@@ -1,6 +1,6 @@
 .color-options button {
-	width: 40px;
-	height: 40px;
+	width: 30px;
+	height: 30px;
 	margin-right: 10px;
 	border: 1px solid #99999999;
 }
@@ -12,3 +12,14 @@
 .color-options button:active {
 	border: 2px solid black;
 }
+
+.container {
+	margin: 0 auto; /* Căn giữa theo chiều ngang */
+	padding: 20px; /* Thêm khoảng cách bên trong khung */
+	max-width: 800px; /* Đặt chiều rộng tối đa */
+	background-color: #ffffff; /* Màu nền trắng */
+	border: 1px solid #ddd; /* Tạo khung với viền mờ */
+	border-radius: 8px; /* Tạo góc bo tròn cho khung */
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Thêm hiệu ứng đổ bóng */
+}
+

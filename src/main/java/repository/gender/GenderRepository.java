@@ -13,7 +13,6 @@ public class GenderRepository {
 	private Connection connection = null;
 	private PreparedStatement pst = null;
 
-
 	public List<Gender> getAllGender() {
 		List<Gender> genders = new ArrayList<>();
 		connection = DBConnection.getConection();
@@ -29,25 +28,7 @@ public class GenderRepository {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (pst != null) {
-				try {
-					pst.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			if (connection != null) {
-				try {
-					connection.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
 		}
 		return genders;
-	}
-	public static void main(String[] args) {
-		new GenderRepository().getAllGender();
 	}
 }

@@ -1,4 +1,30 @@
 
+let deleteProductId = null;
+
+function deleteProduct(productId) {
+    deleteProductId = productId; // Lưu productId cho việc xóa
+    const deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
+    deleteModal.show();
+}
+
+// Khi nhấn "Xóa" trong Modal
+document.getElementById('confirmDelete').addEventListener('click', function () {
+    if (deleteProductId) {
+     	window.location.href = 'adminDeleteProduct?productId='+deleteProductId;
+    }
+});
+
+function viewProductDetails(productId) {
+    if (productId) {
+        window.location.href = `adminDetailProduct?action=view&id=${productId}`;
+    } else {
+        alert('Không tìm thấy sản phẩm. Vui lòng thử lại.');
+    }
+}
+
+
+
+
 
 
 function selectImage(imgSrc, sizeAndStockString, color) {

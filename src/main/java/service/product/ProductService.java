@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import dbConnection.DBConnection;
 import dto.request.AddProductInDatabaseRequest;
@@ -47,26 +48,74 @@ public class ProductService {
 	private CartDetailRepository cartDetailRepository = new CartDetailRepository();
 	private CartDetailService cartDetailService = new CartDetailService();
 
+	// lay ra tat ca san pham
+	public List<ProductDetailResponse> getAllProduct() {
+		List<Product> products = new ArrayList<>();
+
+		products = productRepository.getAllProduct();
+
+		// Lấy danh sách ID của sản phẩm từ trang kết quả
+		List<Long> productIds = products.stream().map(Product::getId).toList();
+
+		// Lấy danh sách ProductSku theo danh sách ID sản phẩm
+		List<ProductSku> productSkuList = new ArrayList<>();
+		productIds.forEach(productId -> {
+			List<ProductSku> productskus = productSkuRepository.findByProductId(productId);
+			productSkuList.addAll(productskus);
+		});
+		List<ProductDetailResponse> responses = createProductDetailResponses(productSkuList);
+		return responses;
+	}
+
 	// xoa san pham
 	public void deleteProduct(Long productId, HttpServletRequest request, HttpServletResponse response) {
-		List<ProductSku> productSkus = productSkuRepository.findByProductId(productId);
+		Connection connection = null;
 
-		for (ProductSku productSku : productSkus) {
-			// xoa san pham trong inventory
-			inventoryRepository.removeByProductSkuId(productSku.getId());
-			// xoa trong orderDetail
-			orderDetailRepository.removeByProductSkuId(productSku.getId());
-			// xoa trong cartDetail
-			cartDetailRepository.removeByProductSkuId(productSku.getId());
-			// xoa trong cookies neu ton tai
-//			cartDetailService.removeProductForAnonymous(productId, request, response);
-			// xoa sku
-			productSkuRepository.removeByProductSkuId(productSku.getId());
+		try {
+			connection = DBConnection.getConection();
+			connection.setAutoCommit(false); // Bắt đầu giao dịch
+			List<ProductSku> productSkus = productSkuRepository.findByProductId(productId);
+
+			List<Long> productSkuIds = productSkus.stream().map(ProductSku::getId).collect(Collectors.toList());
+
+			for (ProductSku productSku : productSkus) {
+				// xoa san pham trong inventory
+				inventoryRepository.removeByProductSkuId(connection, productSku.getId());
+				// xoa trong orderDetail
+				orderDetailRepository.removeByProductSkuId(connection, productSku.getId());
+				// xoa trong cartDetail
+				cartDetailRepository.removeByProductSkuId(connection, productSku.getId());
+				// xoa trong cookies neu ton tai
+
+				// xoa sku
+				productSkuRepository.removeByProductSkuId(connection, productSku.getId());
+			}
+			// xoa productcolorimg
+			productColorImgRepository.removeByProductId(connection, productId);
+			// xoa product
+			productRepository.removeById(connection, productId);
+
+			connection.commit();
+
+		} catch (Exception e) {
+			if (connection != null) {
+				try {
+					connection.rollback(); // Rollback toàn bộ giao dịch
+				} catch (SQLException rollbackEx) {
+					rollbackEx.printStackTrace();
+				}
+			}
+			throw new RuntimeException("Giao dịch thất bại: " + e.getMessage(), e);
+		} finally {
+			if (connection != null) {
+				try {
+					connection.close(); // Đóng kết nối
+				} catch (SQLException closeEx) {
+					closeEx.printStackTrace();
+				}
+			}
 		}
-		// xoa productcolorimg
-		productColorImgRepository.removeByProductId(productId);
-		// xoa product
-		productRepository.removeById(productId);
+
 	}
 
 	// Adđ Product
@@ -368,6 +417,7 @@ public class ProductService {
 			productResponse.getProductSkus().add(skuResponse);
 		}
 	}
+
 	public static void main(String[] args) {
 		new ProductService().deleteProduct(36L, null, null);
 	}

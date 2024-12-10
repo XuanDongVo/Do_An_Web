@@ -25,8 +25,7 @@ public class ProductSkuRepository {
 	private ResultSet rs = null;
 	
 	
-	public void removeByProductSkuId(Long productskuId) {
-		Connection connection = DBConnection.getConection();
+	public void removeByProductSkuId( Connection connection,Long productskuId) {
 		try {
 			String sql = "DELETE FROM product_sku WHERE id = ?";
 			pst = connection.prepareStatement(sql);
@@ -34,15 +33,7 @@ public class ProductSkuRepository {
 			pst.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				if (connection != null) {
-					connection.close();
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+		} 
 	}
 
 	public long addProductSku(Connection connection, ProductSku productSku) throws SQLException {
@@ -124,22 +115,7 @@ public class ProductSkuRepository {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (pst != null) {
-				try {
-					pst.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			if (connection != null) {
-				try {
-					connection.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
+		} 
 		return null;
 	}
 
@@ -205,22 +181,7 @@ public class ProductSkuRepository {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (pst != null) {
-				try {
-					pst.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			if (connection != null) {
-				try {
-					connection.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
+		} 
 
 		return list;
 	}
@@ -259,22 +220,7 @@ public class ProductSkuRepository {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (pst != null) {
-				try {
-					pst.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			if (connection != null) {
-				try {
-					connection.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
+		} 
 		return null;
 	}
 

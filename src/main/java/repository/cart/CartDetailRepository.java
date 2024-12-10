@@ -17,10 +17,8 @@ import entity.ProductSku;
 public class CartDetailRepository {
 	private Connection connection = null;
 	private PreparedStatement pst = null;
-	
-	
-	public void removeByProductSkuId(Long productskuId) {
-		Connection connection = DBConnection.getConection();
+
+	public void removeByProductSkuId(Connection connection, Long productskuId) {
 		try {
 			String sql = "DELETE FROM cart_detail WHERE product_sku_id = ?";
 			pst = connection.prepareStatement(sql);
@@ -28,14 +26,6 @@ public class CartDetailRepository {
 			pst.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				if (connection != null) {
-					connection.close();
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		}
 	}
 
@@ -113,21 +103,6 @@ public class CartDetailRepository {
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
-		} finally {
-			if (pst != null) {
-				try {
-					pst.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			if (connection != null) {
-				try {
-					connection.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
 		}
 		return 0;
 	}
@@ -156,21 +131,6 @@ public class CartDetailRepository {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (pst != null) {
-				try {
-					pst.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			if (connection != null) {
-				try {
-					connection.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
 		}
 		return null;
 	}
@@ -201,21 +161,6 @@ public class CartDetailRepository {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (pst != null) {
-				try {
-					pst.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			if (connection != null) {
-				try {
-					connection.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
 		}
 		return responses;
 	}
@@ -245,21 +190,6 @@ public class CartDetailRepository {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (pst != null) {
-				try {
-					pst.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			if (connection != null) {
-				try {
-					connection.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
 		}
 		return null;
 	}
@@ -292,22 +222,6 @@ public class CartDetailRepository {
 			// In ra lỗi ban đầu
 			e.printStackTrace();
 
-		} finally {
-			if (pst != null) {
-				try {
-					pst.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			if (connection != null) {
-				try {
-					connection.setAutoCommit(true); // Bật lại auto-commit sau giao dịch
-					connection.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
 		}
 	}
 
@@ -340,22 +254,6 @@ public class CartDetailRepository {
 			// In ra lỗi ban đầu
 			e.printStackTrace();
 
-		} finally {
-			if (pst != null) {
-				try {
-					pst.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			if (connection != null) {
-				try {
-					connection.setAutoCommit(true); // Bật lại auto-commit sau giao dịch
-					connection.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
 		}
 	}
 
@@ -385,22 +283,6 @@ public class CartDetailRepository {
 			// In ra lỗi ban đầu
 			e.printStackTrace();
 
-		} finally {
-			if (pst != null) {
-				try {
-					pst.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			if (connection != null) {
-				try {
-					connection.setAutoCommit(true); // Bật lại auto-commit sau giao dịch
-					connection.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
 		}
 	}
 }

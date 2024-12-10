@@ -8,12 +8,12 @@
     width: 100%;
     z-index: 2;
     transition: background-color 0.3s ease;
-    padding: 1rem 2rem;
+    padding: 0.7rem 2rem;
 }
 
 .shop-navbar.scrolled {
     background-color: black;
-    padding: 15px 2rem; 
+    padding: 0.7rem 2rem; 
     height: 70px;
     z-index: 9999999;
 }
@@ -30,7 +30,7 @@
     color: white;
     font-size: 38px;
     font-weight: 300;
-    margin-top: 20%;
+    margin-top: 14%;
     font-family: 'Roboto Condensed', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     cursor: pointer;
 } 
@@ -60,8 +60,8 @@
     width: 80%;
     height: 3px;
     border-radius: 10px;
-    background-color: black;
-    margin-top: 0px;
+  
+    margin-top: 11px;
 }
 .nav-menu hr.modify {
     border: none;

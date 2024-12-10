@@ -73,7 +73,7 @@
 			</div>
 		</div>
 		<hr>
-			<ul class="app-menu">
+		<ul class="app-menu">
 			<li><a class="app-menu__item "
 				href="${pageContext.request.contextPath}/view/admin/admin.jsp"><i
 					class='app-menu__icon bx bx-tachometer'></i><span
@@ -84,11 +84,12 @@
 			<li><a class="app-menu__item" href="#"><i
 					class='app-menu__icon bx bx-user-voice'></i><span
 					class="app-menu__label">Quản lý khách hàng</span></a></li>
-			<li><a class="app-menu__item active"
-				href="${pageContext.request.contextPath}/view/admin/admin_product.jsp"><i
+			<li><a class="app-menu__item "
+				href="${pageContext.request.contextPath}/adminProduct"><i
 					class='app-menu__icon bx bx-purchase-tag-alt'></i><span
 					class="app-menu__label">Quản lý sản phẩm</span></a></li>
-			<li><a class="app-menu__item " href="${pageContext.request.contextPath}/view/admin/admin_order.jsp"><i
+			<li><a class="app-menu__item "
+				href="${pageContext.request.contextPath}/view/admin/admin_order.jsp"><i
 					class='app-menu__icon bx bx-task'></i><span class="app-menu__label">Quản
 						lý đơn hàng</span></a></li>
 		</ul>
@@ -347,19 +348,19 @@
 	    // Tạo form ẩn và gửi dữ liệu
 	    const form = document.createElement('form');
 	    form.method = 'POST';
-	    form.action = '<%=request.getContextPath()%>/adminAddProduct';
+	    form.action = '<%=request.getContextPath()%>
+		/adminAddProduct';
 
-	    const inputJson = document.createElement('input');
-	    inputJson.type = 'hidden';
-	    inputJson.name = 'product';
-	    inputJson.value = product;
+			const inputJson = document.createElement('input');
+			inputJson.type = 'hidden';
+			inputJson.name = 'product';
+			inputJson.value = product;
 
-	    form.appendChild(inputJson);
-	    document.body.appendChild(form);
-	    form.submit();
-	    
-	}
-	
+			form.appendChild(inputJson);
+			document.body.appendChild(form);
+			form.submit();
+
+		}
 	</script>
 
 

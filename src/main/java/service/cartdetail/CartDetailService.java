@@ -30,6 +30,26 @@ public class CartDetailService {
 	private CartDetailRepository cartDetailRepository = new CartDetailRepository();
 	private ProductSkuRepository productSkuRepository = new ProductSkuRepository();
 
+	// xóa sản phẩm trong cookies nếu sản phẩm không còn trong cơ sở dữ liệu
+	public List<DetailCartResponse> removeNonExistentProducts(User user, HttpServletRequest request,
+			HttpServletResponse servletResponse) {
+		List<DetailCartResponse> list = getDetailsInCart(user, request);
+
+		if (user != null) {
+			return list;
+		}
+
+		for (DetailCartResponse detailCartResponse : list) {
+			ProductSku productSku = productSkuRepository.findById(detailCartResponse.getCartId());
+			// san pham da bi xoa trong database
+			if(productSku == null) {
+				removeProductForAnonymous(detailCartResponse.getCartId(), request, servletResponse);
+			}
+		}
+		return getDetailsInCart(user, request);
+
+	}
+
 	// lấy ra những sản phẩm mà khách hàng chọn để checkout
 	public List<DetailCartResponse> getSelectProductsForCheckout(User user, String[] selectedCartIds,
 			HttpServletRequest request) {
@@ -197,8 +217,7 @@ public class CartDetailService {
 	}
 
 	// xóa sản phẩm trong giỏ hàng tạm thời
-	public void removeProductForAnonymous(Long productSkuId, HttpServletRequest request,
-			HttpServletResponse response) {
+	public void removeProductForAnonymous(Long productSkuId, HttpServletRequest request, HttpServletResponse response) {
 		List<DetailCartResponse> detailCarts;
 
 		String cartCookieValue = getCookieValue(request, "cart");
@@ -214,8 +233,6 @@ public class CartDetailService {
 		if (existingDetailCart.isPresent()) {
 			// xóa sản phẩm
 			detailCarts.remove(existingDetailCart.get());
-		} else {
-			throw new RuntimeException("Product not found in cart for modification.");
 		}
 
 		// cập nhật dữ liệu trong cookie

@@ -15,10 +15,8 @@ import entity.ProductSku;
 public class InventoryRepository {
 	public Connection connection = null;
 	public PreparedStatement preparedStatement = null;
-	
-	
-	public void removeByProductSkuId(Long productskuId) {
-		Connection connection = DBConnection.getConection();
+
+	public void removeByProductSkuId(Connection connection, Long productskuId) {
 		try {
 			String sql = "DELETE FROM inventory WHERE product_sku_id = ?";
 			preparedStatement = connection.prepareStatement(sql);
@@ -26,17 +24,8 @@ public class InventoryRepository {
 			preparedStatement.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				if (connection != null) {
-					connection.close();
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		}
 	}
-	
 
 	public void addStockInInventory(Connection connection, Inventory inventory) {
 		String sql = "INSERT INTO inventory (product_sku_id, stock) VALUES (?, ?)";
@@ -80,14 +69,6 @@ public class InventoryRepository {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				if (connection != null) {
-					connection.close();
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		}
 		return Optional.empty(); // Trả về Optional rỗng nếu không có kết quả
 	}
@@ -102,14 +83,6 @@ public class InventoryRepository {
 			preparedStatement.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				if (connection != null) {
-					connection.close();
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		}
 	}
 

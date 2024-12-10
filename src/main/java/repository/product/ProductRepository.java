@@ -15,8 +15,25 @@ public class ProductRepository {
 	private Connection connection = null;
 	private PreparedStatement pst = null;
 
-	public void removeById(Long productId) {
-		Connection connection = DBConnection.getConection();
+	// lay ra toan bo danh sach san pham
+	public List<Product> getAllProduct() {
+		List<Product> list = new ArrayList<>();
+		connection = DBConnection.getConection();
+		String sql = "SELECT * FROM product";
+		try {
+			pst = connection.prepareStatement(sql);
+			ResultSet rs = pst.executeQuery();
+			while (rs.next()) {
+				Product product = new Product(rs.getLong(1), rs.getString(2), rs.getString(3), null);
+				list.add(product);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	public void removeById(Connection connection, Long productId) {
 		try {
 			String sql = "DELETE FROM product WHERE id = ?";
 			pst = connection.prepareStatement(sql);
@@ -24,17 +41,9 @@ public class ProductRepository {
 			pst.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				if (connection != null) {
-					connection.close();
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		}
 	}
-	
+
 	public long addProduct(Connection connection, Product product) throws SQLException {
 		long productId = 0;
 		String sql = "INSERT INTO product (name, description, sub_category_id) VALUES (?, ?, ?)";
@@ -69,21 +78,6 @@ public class ProductRepository {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (pst != null) {
-				try {
-					pst.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			if (connection != null) {
-				try {
-					connection.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
 		}
 		return products;
 	}
@@ -105,21 +99,6 @@ public class ProductRepository {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (pst != null) {
-				try {
-					pst.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			if (connection != null) {
-				try {
-					connection.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
 		}
 		return products;
 	}
@@ -142,21 +121,6 @@ public class ProductRepository {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (pst != null) {
-				try {
-					pst.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			if (connection != null) {
-				try {
-					connection.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
 		}
 		return products;
 	}
@@ -180,21 +144,6 @@ public class ProductRepository {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (pst != null) {
-				try {
-					pst.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			if (connection != null) {
-				try {
-					connection.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
 		}
 		return products;
 	}

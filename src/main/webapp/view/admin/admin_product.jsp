@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -22,6 +24,11 @@
 	href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+<%-- <link rel="stylesheet"
+	href="${pageContext.request.contextPath}/adding/bootstrap/boostrap.min.css"> --%>
+
+<script
+	src="${pageContext.request.contextPath}/adding/bootstrap/bootstrap.bundle.min.js"></script>
 
 </head>
 
@@ -63,8 +70,8 @@
 			<li><a class="app-menu__item" href="#"><i
 					class='app-menu__icon bx bx-user-voice'></i><span
 					class="app-menu__label">Quản lý khách hàng</span></a></li>
-			<li><a class="app-menu__item active"
-				href="${pageContext.request.contextPath}/view/admin/admin_product.jsp"><i
+			<li><a class="app-menu__item active "
+				href="${pageContext.request.contextPath}/adminProduct"><i
 					class='app-menu__icon bx bx-purchase-tag-alt'></i><span
 					class="app-menu__label">Quản lý sản phẩm</span></a></li>
 			<li><a class="app-menu__item "
@@ -104,30 +111,32 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<td>71309005</td>
-									<td>Bàn ăn gỗ Theresa</td>
-									<td>Bàn ăn</td>
-									<td>5.600.000 đ</td>
-									<td>
-										<button class="btn btn-primary btn-sm print-file"
-											type="button" title="Chi tiết" id="show-emp"
-											data-toggle="modal" data-target="#ModalUP">
-											<i class="fas fa-eye"></i>
-										</button>
+								<c:forEach items="${products}" var="product">
+									<tr>
+										<td>${product.productId }</td>
+										<td>${product.name }</td>
+										<td>${product.subCategory }</td>
+										<td><fmt:formatNumber value="${product.price}"
+												pattern="#,###" /> đ</td>
+										<td>
+											<button class="btn btn-primary btn-sm print-file"
+												type="button" title="Chi tiết"
+												onclick="viewProductDetails(${product.productId})">
+												<i class="fas fa-eye"></i>
+											</button>
 
-										<button class="btn btn-primary btn-sm trash" type="button"
-											title="Xóa" onclick="myFunction(this)">
-											<i class="fas fa-trash-alt"></i>
-										</button>
-										<button class="btn btn-primary btn-sm edit" type="button"
-											title="Sửa" id="show-emp" data-toggle="modal"
-											data-target="#ModalUP">
-											<i class="fas fa-edit"></i>
-										</button>
-									</td>
-								</tr>
-
+											<button class="btn btn-primary btn-sm trash" type="button"
+												title="Xóa" onclick="deleteProduct(${product.productId})">
+												<i class="fas fa-trash-alt"></i>
+											</button>
+											<button class="btn btn-primary btn-sm edit" type="button"
+												title="Sửa" id="show-emp" data-toggle="modal"
+												data-target="#ModalUP">
+												<i class="fas fa-edit"></i>
+											</button>
+										</td>
+									</tr>
+								</c:forEach>
 							</tbody>
 						</table>
 					</div>
@@ -136,79 +145,34 @@
 		</div>
 	</main>
 
-	<!--
-  MODAL
--->
-	<div class="modal fade" id="ModalUP" tabindex="-1" role="dialog"
-		aria-hidden="true" data-backdrop="static" data-keyboard="false">
-		<div class="modal-dialog modal-dialog-centered" role="document">
+	<!-- Modal -->
+	<div class="modal fade" id="deleteConfirmationModal" tabindex="-1"
+		aria-labelledby="deleteModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content">
-
-				<div class="modal-body">
-					<div class="row">
-						<div class="form-group  col-md-12">
-							<span class="thong-tin-thanh-toan">
-								<h5>Chỉnh sửa thông tin sản phẩm cơ bản</h5>
-							</span>
-						</div>
-					</div>
-					<div class="row">
-						<div class="form-group col-md-6">
-							<label class="control-label">Mã sản phẩm </label> <input
-								class="form-control" type="number" value="71309005">
-						</div>
-						<div class="form-group col-md-6">
-							<label class="control-label">Tên sản phẩm</label> <input
-								class="form-control" type="text" required
-								value="Bàn ăn gỗ Theresa">
-						</div>
-						<div class="form-group  col-md-6">
-							<label class="control-label">Số lượng</label> <input
-								class="form-control" type="number" required value="20">
-						</div>
-						<div class="form-group col-md-6 ">
-							<label for="exampleSelect1" class="control-label">Tình
-								trạng sản phẩm</label> <select class="form-control" id="exampleSelect1">
-								<option>Còn hàng</option>
-								<option>Hết hàng</option>
-								<option>Đang nhập hàng</option>
-							</select>
-						</div>
-						<div class="form-group col-md-6">
-							<label class="control-label">Giá bán</label> <input
-								class="form-control" type="text" value="5.600.000">
-						</div>
-						<div class="form-group col-md-6">
-							<label for="exampleSelect1" class="control-label">Danh
-								mục</label> <select class="form-control" id="exampleSelect1">
-								<option>Bàn ăn</option>
-								<option>Bàn thông minh</option>
-								<option>Tủ</option>
-								<option>Ghế gỗ</option>
-								<option>Ghế sắt</option>
-								<option>Giường người lớn</option>
-								<option>Giường trẻ em</option>
-								<option>Bàn trang điểm</option>
-								<option>Giá đỡ</option>
-							</select>
-						</div>
-					</div>
-					<BR> <a href="#"
-						style="float: right; font-weight: 600; color: #ea0000;">Chỉnh
-						sửa sản phẩm nâng cao</a> <BR> <BR>
-					<button class="btn btn-save" type="button">Lưu lại</button>
-					<a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy bỏ</a>
-					<BR>
+				<div class="modal-header">
+					<h5 class="modal-title" id="deleteModalLabel">Xác nhận xóa</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close">
+						<i class="fas fa-times"></i>
+					</button>
 				</div>
-				<div class="modal-footer"></div>
+				<div class="modal-body">Bạn có chắc chắn muốn xóa sản phẩm này
+					không?</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-bs-dismiss="modal">Hủy bỏ</button>
+					<button type="button" class="btn btn-danger" id="confirmDelete">Xóa</button>
+				</div>
 			</div>
 		</div>
 	</div>
-	<!--
-MODAL
--->
+
+
 
 	<script src="${pageContext.request.contextPath}/js/admin/main.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/js/admin/admin_product.js"></script>
 
 	<script type="text/javascript">
 		//Thời Gian

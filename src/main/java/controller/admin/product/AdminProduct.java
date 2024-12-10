@@ -1,6 +1,7 @@
 package controller.admin.product;
 
 import java.io.IOException;
+import java.util.List;
 
 import dto.response.ProductDetailResponse;
 import jakarta.servlet.ServletException;
@@ -10,23 +11,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import service.product.ProductService;
 
-@WebServlet("/adminDetailProduct")
-public class AdminProductDetailController extends HttpServlet {
+@WebServlet("/adminProduct")
+public class AdminProduct extends HttpServlet {
 	private ProductService productService = new ProductService();
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String action = req.getParameter("action");
-		Long id = Long.parseLong(req.getParameter("id"));
-
-		if (action.equalsIgnoreCase("view")) {
-			ProductDetailResponse detailResponse = productService.getSkusById(id);
-			req.setAttribute("productResponse", detailResponse);
-			req.getRequestDispatcher("/view/admin/admin_product_detail.jsp").forward(req, resp);
-			return;
-		} else if (action.equalsIgnoreCase("edit")) {
-
-		}
+		List<ProductDetailResponse> detailResponses = productService.getAllProduct();
+		req.setAttribute("products", detailResponses);
+		req.getRequestDispatcher("/view/admin/admin_product.jsp").forward(req, resp);
 	}
 
 	@Override

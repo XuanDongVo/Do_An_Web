@@ -26,14 +26,6 @@ public class SizeTypeRepository {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				if (connection != null) {
-					connection.close();
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		}
 		return sizeTypes;
 	}

@@ -36,8 +36,7 @@ public class ProductColorImgRepository {
 		return productColorImgId;
 	}
 
-	public void removeByProductId(Long productId) {
-		Connection connection = DBConnection.getConection();
+	public void removeByProductId( Connection connection,Long productId) {
 		try {
 			String sql = "DELETE FROM product_color_img WHERE product_id = ?";
 			pst = connection.prepareStatement(sql);
@@ -45,15 +44,7 @@ public class ProductColorImgRepository {
 			pst.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				if (connection != null) {
-					connection.close();
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+		} 
 	}
 
 }
