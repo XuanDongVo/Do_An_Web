@@ -368,7 +368,7 @@ public class CartDetailService {
 			}
 		}
 
-		return detailCartResponses;
+		return detailCartResponses;	
 	}
 
 	private List<DetailCartResponse> getSelectProductsFromCookiesForCheckout(String[] selectedCartIds,

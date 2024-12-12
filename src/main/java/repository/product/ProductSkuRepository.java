@@ -115,7 +115,23 @@ public class ProductSkuRepository {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} 
+		} finally {
+			if (pst != null) {
+				try {
+					pst.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			if (connection != null) {
+				try {
+					DBConnection.closeConnection(connection);
+					;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
 		return null;
 	}
 
@@ -181,7 +197,23 @@ public class ProductSkuRepository {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} 
+		} finally {
+			if (pst != null) {
+				try {
+					pst.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			if (connection != null) {
+				try {
+					DBConnection.closeConnection(connection);
+					;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
 
 		return list;
 	}
@@ -220,7 +252,23 @@ public class ProductSkuRepository {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} 
+		} finally {
+			if (pst != null) {
+				try {
+					pst.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			if (connection != null) {
+				try {
+					DBConnection.closeConnection(connection);
+					;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
 		return null;
 	}
 
@@ -262,7 +310,7 @@ public class ProductSkuRepository {
 				pst.close();
 			}
 			if (connection != null) {
-				connection.close();
+				DBConnection.closeConnection(connection);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

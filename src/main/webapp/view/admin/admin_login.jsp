@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -51,20 +52,22 @@ body {
 		<div class="login-header">
 			<h3>Admin Login</h3>
 		</div>
-		<form action="adminLogin" method="post">
+		<form action="<%=request.getContextPath()%>/adminLogin" method="post">
 			<div class="mb-3 mt-3">
 				<label for="phone" class="form-label">Nhập số diện thoại</label> <input
 					type="text" class="form-control" id="phone" name="phone"
-					required>
+					placeholder="Your Phone Number +84" maxlength="9" required>
 			</div>
 			<div class="mb-3">
 				<label for="password" class="form-label">Nhập mật khẩu</label> <input
 					type="password" class="form-control" id="password" name="password"
-					required>
+					required> <c:if test="${not empty message }">
+				<div class="text-danger">Vui lòng nhập mật khẩu hợp lệ.</div>
+				</c:if>
 			</div>
 			<div class="d-flex justify-content-between align-items-center mb-3">
-				<a href="forgotPassword.jsp"
-					class="text-decoration-none text-purple">Forget Password?</a>
+				<a href="#" class="text-decoration-none text-purple">Forget
+					Password?</a>
 			</div>
 			<button type="submit" class="btn btn-purple w-100">Submit</button>
 		</form>

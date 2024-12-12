@@ -8,9 +8,12 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import repository.user.UserRepository;
 
 @WebServlet("/adminLogin")
 public class AdminLoginController extends HttpServlet {
+	private UserRepository userRepository = new UserRepository();
+
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		doPost(req, resp);
@@ -18,16 +21,22 @@ public class AdminLoginController extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-	    String phone = req.getParameter("phone");
-	    String password = req.getParameter("password");
-	    
-	    
+		String phone = req.getParameter("phone");
+		String password = req.getParameter("password");
 
-	    User user = new User(); 
-	    req.getSession().setAttribute("user", user);
+		User user = userRepository.loginForAdmin(phone, password);
 
-	    // Forward đến trang admin
-	    resp.sendRedirect(req.getContextPath() + "/view/admin/admin.jsp");
+		// Tai khoan khong ton tai
+		if (user == null) {
+			String error = "Tài khoản không tồn tại";
+			req.setAttribute("message", error);
+			req.getRequestDispatcher(req.getContextPath() + "/view/admin/admin_login.jsp");
+		}
+
+		req.getSession().setAttribute("user", user);
+
+		// Forward đến trang admin
+		resp.sendRedirect(req.getContextPath() + "/view/admin/admin.jsp");
 	}
 
 }

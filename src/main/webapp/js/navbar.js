@@ -259,7 +259,7 @@ function renderDataListCartDetailHeader(listCartDetail) {
 		// Tạo phần tử giá sản phẩm
 		const cartItemPrice = document.createElement('div');
 		cartItemPrice.className = 'cart-item-price';
-		cartItemPrice.innerText = `${item.price}`;
+		cartItemPrice.innerText = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price);
 
 		// Gắn các phần tử vào cartItem
 		cartItem.appendChild(cartItemImage);

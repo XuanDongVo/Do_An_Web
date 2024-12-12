@@ -33,7 +33,6 @@ public class OrderDetailRepository {
 			pst.setLong(1, ProductSkuId);
 			pst.executeUpdate();
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 }

@@ -21,7 +21,7 @@ public class InventoryService {
 		Map<String, Integer> outOfStockProducts = new HashMap<>();
 		List<DetailCartResponse> filteredDetailCarts;
 		if (user != null) {
-			filteredDetailCarts = null;
+			filteredDetailCarts = cartDetailService.getSelectProductsForCheckout(user, ids, request);
 		} else {
 			// Lấy giỏ hàng từ cookie hiện tại (nếu có)
 			List<DetailCartResponse> detailCarts = new ArrayList<>();
@@ -41,7 +41,13 @@ public class InventoryService {
 		}
 
 		for (DetailCartResponse item : filteredDetailCarts) {
-			Inventory inventory = inventoryRepository.findByProductSkuId(item.getCartId()).get();
+			Inventory inventory = null;
+			if (user != null) {
+				inventory = inventoryRepository.findByProductName(item.getName()).get();
+			} else {
+				inventory = inventoryRepository.findByProductSkuId(item.getCartId()).get();
+			}
+
 			int stock = inventory.getStock();
 			if (item.getQuantity() > stock) {
 				outOfStockProducts.put(inventory.getProductSku().getProductColorImage().getProduct().getName(),

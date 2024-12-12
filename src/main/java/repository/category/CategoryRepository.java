@@ -30,7 +30,23 @@ public class CategoryRepository {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} 
+		}  finally {
+			if (pst != null) {
+				try {
+					pst.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			if (connection != null) {
+				try {
+					DBConnection.closeConnection(connection);
+					;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
 		return beadCrumbs;
 	}
 
@@ -57,7 +73,23 @@ public class CategoryRepository {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} 
+		}  finally {
+			if (pst != null) {
+				try {
+					pst.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			if (connection != null) {
+				try {
+					DBConnection.closeConnection(connection);
+					;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
 		return categories;
 	}
 
@@ -82,7 +114,23 @@ public class CategoryRepository {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();// TODO: handle exception
-		} 
+		}  finally {
+			if (pst != null) {
+				try {
+					pst.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			if (connection != null) {
+				try {
+					DBConnection.closeConnection(connection);
+					;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
 		return null;
 	}
 

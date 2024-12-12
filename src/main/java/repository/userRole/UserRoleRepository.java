@@ -16,7 +16,7 @@ public class UserRoleRepository {
 	public User_Role getUserRole(User user) {
 		connection = DBConnection.getConection();
 		try {
-			String sql = "SELECT user_role.id, user.id, role.role FROM user_role INNER JOIN role ON role.id = user_role.role_id\r\n"
+			String sql = "SELECT user_role.id, user.id, role.name FROM user_role INNER JOIN role ON role.id = user_role.role_id\r\n"
 					+ "	INNER JOIN user ON user.id = user_role.user_id\r\n" + " WHERE user.id = ? ";
 
 			pst = connection.prepareStatement(sql);

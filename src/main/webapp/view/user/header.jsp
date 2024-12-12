@@ -53,15 +53,25 @@
 						style="height: 30px; margin-top: 5%;">
 					</span>
 					<div class="user-options" style="display: none;">
-						<button
-							style="color: white; width: 100%; height: 40px; margin-bottom: 0.5rem; font-size: 15px; background-color: black;">
-							Đăng nhập</button>
-						<button
-							style="color: black; width: 100%; height: 40px; font-size: 15px; background-color: white; border: 1px solid black">
-							Đăng kí</button>
+						<c:choose>
+							<c:when test="${not empty user}">
+								<!-- Nút Profile và Logout -->
+								<a href = "<%=request.getContextPath()%>/view/user/profile.jsp"><button
+									style="color: white; width: 100%; height: 40px; margin-bottom: 0.5rem; font-size: 15px; background-color: black;">
+									Profile</button></a>
+								<a href = "<c:url value='/logout' />"><button
+									style="color: black; width: 100%; height: 40px; font-size: 15px; background-color: white; border: 1px solid black">
+									Logout</button></a>
+							</c:when>
+							<c:otherwise>
+								<!-- Nút Đăng nhập và Đăng ký -->
+								<a href = "<%=request.getContextPath()%>/view/user/login.jsp"><button
+									style="color: white; width: 100%; height: 40px; margin-bottom: 0.5rem; font-size: 15px; background-color: black;">
+									Đăng nhập</button></a>
+							</c:otherwise>
+						</c:choose>
 					</div>
 				</div>
-
 
 				<!-- Heart icon -->
 				<div class="heart">
@@ -105,28 +115,6 @@
 		</div>
 		<!-- Navbar placeholder -->
 	</div>
-
-	<!-- Modal -->
-	<!-- 	<div class="modal fade" id="exampleModalCenter" tabindex="-1"
-		role="dialog" aria-labelledby="exampleModalCenterTitle"
-		aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered" role="document">
-			<div class="modal-content">
-				<div class="modal-header text-center">
-					<h5 class="modal-title" id="exampleModalLongTitle">Giỏ hàng
-						trống</h5>
-					<button type="button" class="btn-close" data-dismiss="modal"
-						aria-label="Close" onclick="closeModal()"></button>
-				</div>
-				<div class="modal-body">Bạn chưa có sản phẩm nào trong giỏ
-					hàng. Tiếp tục mua hàng nào!</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-dark" 
-						data-dismiss="modal" onclick="closeModal()">Mua Hàng</button>
-				</div>
-			</div>
-		</div>
-	</div> -->
 
 
 	<script type="text/javascript">

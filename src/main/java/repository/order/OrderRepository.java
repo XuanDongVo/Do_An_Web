@@ -11,17 +11,13 @@ import entity.User;
 import utils.OrderStatus;
 
 public class OrderRepository {
-	private Connection connection = null;
 	private PreparedStatement pst = null;
 	private ResultSet rs = null;
 
 	// Phương thức tạo đơn hàng mới
-	public long createOrder(OrderRequest orderRequest, User user) {
+	public long createOrder(Connection connection, OrderRequest orderRequest, User user) {
 		long orderId = 0;
 		try {
-			// Mở kết nối cơ sở dữ liệu
-			connection = DBConnection.getConection();
-
 			// Đặt AutoCommit thành false
 			connection.setAutoCommit(false);
 
@@ -61,18 +57,19 @@ public class OrderRepository {
 			}
 
 		} catch (SQLException e) {
-			rollbackTransaction();
+			rollbackTransaction(connection);
 			e.printStackTrace();
 		}
 		return orderId; // Trả về ID của đơn hàng vừa tạo
 	}
 
 	// Phương thức chuyển trạng thái Commit khi xử lý xong OrderDetail
-	public void finalizeTransaction() {
+	public void finalizeTransaction(Connection connection) {
 		try {
 			if (connection != null && !connection.getAutoCommit()) {
 				connection.commit(); // Commit giao dịch
 				connection.setAutoCommit(true); // Trả lại trạng thái AutoCommit
+				DBConnection.closeConnection(connection);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -80,7 +77,7 @@ public class OrderRepository {
 	}
 
 	// Phương thức rollback giao dịch
-	public void rollbackTransaction() {
+	public void rollbackTransaction(Connection connection) {
 		try {
 			if (connection != null && !connection.getAutoCommit()) {
 				connection.rollback();

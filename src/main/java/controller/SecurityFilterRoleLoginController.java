@@ -15,48 +15,48 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import repository.userRole.UserRoleRepository;
 
-//@WebFilter("/view/admin/*")
+@WebFilter(urlPatterns = {"/view/admin/*" , "/adminProduct" ,"/adminAddProduct" ,"/adminDeleteProduct" ,"/adminDetailProduct"} )
 public class SecurityFilterRoleLoginController implements Filter {
 	private UserRoleRepository userRoleRepository = new UserRoleRepository();
 
 	@Override
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
-	        throws IOException, ServletException {
-	    HttpServletRequest request = (HttpServletRequest) servletRequest;
-	    HttpServletResponse response = (HttpServletResponse) servletResponse;
-	    HttpSession session = request.getSession();
+			throws IOException, ServletException {
+		HttpServletRequest request = (HttpServletRequest) servletRequest;
+		HttpServletResponse response = (HttpServletResponse) servletResponse;
+		HttpSession session = request.getSession();
 
-	    String requestURI = request.getRequestURI();
+		String requestURI = request.getRequestURI();
 
-	    // Bỏ qua kiểm tra nếu đang ở trang login
-	    if (requestURI.endsWith("/admin_login.jsp")) {
-	        filterChain.doFilter(request, response);
-	        return;
-	    }
+		// Bỏ qua kiểm tra nếu đang ở trang login
+		if (requestURI.endsWith("/admin_login.jsp")) {
+			filterChain.doFilter(request, response);
+			return;
+		}
 
-	    // Kiểm tra xem user đã login chưa
-	    User user = (User) session.getAttribute("user");
-	    if (user == null) {
-	        response.sendRedirect(request.getContextPath() + "/view/admin/admin_login.jsp");
-	        return;
-	    }
+		// Kiểm tra xem user đã login chưa
+		User user = (User) session.getAttribute("user");
+		if (user == null) {
+			response.sendRedirect(request.getContextPath() + "/view/admin/admin_login.jsp");
+			return;
+		}
 
-	    // Kiểm tra quyền hạn
-	    User_Role user_role = (User_Role) session.getAttribute("user_role");
-	    if (user_role == null) {
-	        user_role = userRoleRepository.getUserRole(user);
-	        if (user_role != null) {
-	            session.setAttribute("user_role", user_role);
-	        }
-	    }
+		// Kiểm tra quyền hạn
+		User_Role user_role = (User_Role) session.getAttribute("user_role");
+		if (user_role == null) {
+			user_role = userRoleRepository.getUserRole(user);
+			if (user_role != null) {
+				session.setAttribute("user_role", user_role);
+			}
+		}
 
-	    // Nếu user không phải admin
-	    if (user_role == null || "USER".equalsIgnoreCase(user_role.getRole().getNameRole())) {
-	        response.sendRedirect(request.getContextPath() + "/view/not_permission.jsp");
-	        return;
-	    }
+		// Nếu user không phải admin
+		if (user_role == null || "USER".equalsIgnoreCase(user_role.getRole().getNameRole())) {
+			response.sendRedirect(request.getContextPath() + "/view/not_permission.jsp");
+			return;
+		}
 
-	    // Nếu user là admin và đang truy cập đúng trang, tiếp tục xử lý
-	    filterChain.doFilter(request, response);
+		// Nếu user là admin và đang truy cập đúng trang, tiếp tục xử lý
+		filterChain.doFilter(request, response);
 	}
 }

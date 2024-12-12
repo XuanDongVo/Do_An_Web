@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,51 +27,6 @@ public class CartDetailRepository {
 			pst.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-	}
-
-	// lấy ra những sản phẩm mà khách hàng chọn để checkout
-	public List<DetailCartResponse> getSelectProductsForCheckout(String[] selectedCartIds) {
-		connection = DBConnection.getConection();
-		List<DetailCartResponse> responses = new ArrayList<>();
-		try {
-			// Xây dựng chuỗi câu hỏi cho số lượng `selectedCartIds` để sử dụng trong câu
-			// lệnh SQL IN
-			StringBuilder placeholders = new StringBuilder();
-			for (int i = 0; i < selectedCartIds.length; i++) {
-				placeholders.append("?");
-				if (i < selectedCartIds.length - 1) {
-					placeholders.append(", ");
-				}
-			}
-
-			// Sử dụng câu truy vấn với IN
-			String sql = "SELECT c.id, p.name, pci.image, color.name AS color, size.name AS size, cd.quantity, sku.price "
-					+ "FROM cart_detail AS cd " + "INNER JOIN cart AS c ON c.id = cd.cart_id "
-					+ "INNER JOIN product_sku AS sku ON sku.id = cd.product_sku_id "
-					+ "INNER JOIN size ON size.id = sku.size_id "
-					+ "INNER JOIN product_color_img AS pci ON pci.id = sku.product_color_img_id "
-					+ "INNER JOIN product AS p ON p.id = pci.product_id "
-					+ "INNER JOIN color ON color.id = pci.color_id " + "WHERE c.id IN (" + placeholders + ")";
-
-			pst = connection.prepareStatement(sql);
-
-			// Thiết lập giá trị cho từng tham số trong câu lệnh SQL
-			for (int i = 0; i < selectedCartIds.length; i++) {
-				pst.setString(i + 1, selectedCartIds[i]);
-			}
-
-			ResultSet rs = pst.executeQuery();
-			while (rs.next()) {
-				// Chuyển byte[] thành chuỗi Base64
-				String base64Image = Base64.getEncoder().encodeToString(rs.getBytes(3));
-
-				DetailCartResponse detailCartResponse = new DetailCartResponse(rs.getLong(1), rs.getString(2),
-						base64Image, rs.getString(4), rs.getString(5), rs.getInt(6), rs.getDouble(7));
-				responses.add(detailCartResponse);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		} finally {
 			if (pst != null) {
 				try {
@@ -81,14 +37,69 @@ public class CartDetailRepository {
 			}
 			if (connection != null) {
 				try {
-					connection.close();
+					DBConnection.closeConnection(connection);
+					;
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		}
-		return responses;
 	}
+
+	// lấy ra những sản phẩm mà khách hàng chọn để checkout
+	public List<DetailCartResponse> getSelectProductsForCheckout(String[] selectedCartIds) {
+	    connection = DBConnection.getConection();
+	    List<DetailCartResponse> responses = new ArrayList<>();
+	    try {
+	        // Xây dựng chuỗi placeholder
+	        String placeholders = String.join(", ", Collections.nCopies(selectedCartIds.length, "?"));
+
+	        // Sử dụng câu truy vấn với IN
+	        String sql = "SELECT c.id, p.name, pci.image, color.name AS color, size.name AS size, cd.quantity, sku.price "
+	                + "FROM cart_detail AS cd "
+	                + "INNER JOIN cart AS c ON c.id = cd.cart_id "
+	                + "INNER JOIN product_sku AS sku ON sku.id = cd.product_sku_id "
+	                + "INNER JOIN size ON size.id = sku.size_id "
+	                + "INNER JOIN product_color_img AS pci ON pci.id = sku.product_color_img_id "
+	                + "INNER JOIN product AS p ON p.id = pci.product_id "
+	                + "INNER JOIN color ON color.id = pci.color_id "
+	                + "WHERE cd.id IN (" + placeholders + ")";
+
+	        pst = connection.prepareStatement(sql);
+
+	        // Thiết lập giá trị cho từng tham số trong câu lệnh SQL
+	        for (int i = 0; i < selectedCartIds.length; i++) {
+	            pst.setLong(i + 1, Long.parseLong(selectedCartIds[i]));
+	        }
+
+	        ResultSet rs = pst.executeQuery();
+	        while (rs.next()) {
+	        
+	            DetailCartResponse detailCartResponse = new DetailCartResponse(rs.getLong(1), rs.getString(2),
+	                    rs.getString(3), rs.getString(4), rs.getString(5), rs.getInt(6), rs.getDouble(7));
+	            responses.add(detailCartResponse);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        if (pst != null) {
+	            try {
+	                pst.close();
+	            } catch (Exception e) {
+	                e.printStackTrace();
+	            }
+	        }
+	        if (connection != null) {
+	            try {
+	                DBConnection.closeConnection(connection);
+	            } catch (Exception e) {
+	                e.printStackTrace();
+	            }
+	        }
+	    }
+	    return responses;
+	}
+
 
 	// lấy ra số lượng sản phẩm trong giỏ hàng của khách hàng
 	public int getQuantityProductFromCart(Cart cart) {
@@ -102,13 +113,29 @@ public class CartDetailRepository {
 				return rs.getInt(1);
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			if (pst != null) {
+				try {
+					pst.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			if (connection != null) {
+				try {
+					DBConnection.closeConnection(connection);
+					;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		return 0;
 	}
 
 	// lấy ra CART_DETAIL bằng id
-	public Optional<CartDetail> findById(Long cartDetailId) {
+	public Optional<CartDetail> findById( Long cartDetailId) {
 		connection = DBConnection.getConection();
 		try {
 			String sql = "SELECT * FROM cart_detail WHERE id = ?";
@@ -131,6 +158,22 @@ public class CartDetailRepository {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			if (pst != null) {
+				try {
+					pst.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			if (connection != null) {
+				try {
+					DBConnection.closeConnection(connection);
+					;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		return null;
 	}
@@ -140,7 +183,7 @@ public class CartDetailRepository {
 		connection = DBConnection.getConection();
 		List<DetailCartResponse> responses = new ArrayList<>();
 		try {
-			String sql = "SELECT  c.id , p.name , pci.image , color.name as color , size.name  as size , cd.quantity , sku.price  FROM cart_detail as cd "
+			String sql = "SELECT  cd.id , p.name , pci.image , color.name as color , size.name  as size , cd.quantity , sku.price  FROM cart_detail as cd "
 					+ "INNER JOIN cart AS c ON c.id = cd.cart_id "
 					+ "INNER JOIN product_sku AS sku ON sku.id = cd.product_sku_id "
 					+ "INNER JOIN size ON size.id = sku.size_id "
@@ -152,15 +195,28 @@ public class CartDetailRepository {
 			ResultSet rs = pst.executeQuery();
 			while (rs.next()) {
 
-				// Chuyển byte[] thành chuỗi Base64
-				String base64Image = Base64.getEncoder().encodeToString(rs.getBytes(3));
-
 				DetailCartResponse detailCartResponse = new DetailCartResponse(rs.getLong(1), rs.getString(2),
-						base64Image, rs.getString(4), rs.getString(5), rs.getInt(6), rs.getDouble(7));
+						rs.getString(3), rs.getString(4), rs.getString(5), rs.getInt(6), rs.getDouble(7));
 				responses.add(detailCartResponse);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			if (pst != null) {
+				try {
+					pst.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			if (connection != null) {
+				try {
+					DBConnection.closeConnection(connection);
+					;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		return responses;
 	}
@@ -190,6 +246,22 @@ public class CartDetailRepository {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			if (pst != null) {
+				try {
+					pst.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			if (connection != null) {
+				try {
+					DBConnection.closeConnection(connection);
+					;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		return null;
 	}
@@ -203,8 +275,8 @@ public class CartDetailRepository {
 
 			String sql = "INSERT INTO cart_detail (cart_id ,product_sku_id ,quantity)  VALUES(?,?,?)";
 			pst = connection.prepareStatement(sql);
-			pst.setLong(1, productSkuId);
-			pst.setLong(2, cart.getId());
+			pst.setLong(1, cart.getId());
+			pst.setLong(2, productSkuId);
 			pst.setInt(3, quantity);
 			pst.executeUpdate();
 
@@ -279,10 +351,25 @@ public class CartDetailRepository {
 			} catch (Exception rollbackEx) {
 				rollbackEx.printStackTrace();
 			}
-
 			// In ra lỗi ban đầu
 			e.printStackTrace();
-
+		} finally {
+			if (pst != null) {
+				try {
+					pst.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			if (connection != null) {
+				try {
+					DBConnection.closeConnection(connection);
+					;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 		}
+
 	}
 }

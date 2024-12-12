@@ -1,9 +1,11 @@
 package service.order;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import dbConnection.DBConnection;
 import dto.request.OrderRequest;
 import dto.response.DetailCartResponse;
 import entity.CartDetail;
@@ -30,24 +32,24 @@ public class OrderService {
 
 	public void processOrderItems(User user, OrderRequest orderRequest, HttpServletRequest request,
 			HttpServletResponse response) {
+		Connection connection = null;
 		try {
 			// Tạo đơn hàng
-			Long orderId = orderRepository.createOrder(orderRequest, user);
+			connection = DBConnection.getConection();
+			Long orderId = orderRepository.createOrder(connection, orderRequest, user);
 			if (orderId == 0) {
 				throw new RuntimeException("Cannot create order");
 			}
-
 			if (user == null) {
 				createOrderDetailForAnonymous(orderId, orderRequest, request, response);
+			} else {
+				createOrderDetailInDatabase(orderId, orderRequest.getIds());
 			}
-
-			createOrderDetailInDatabase(orderId, orderRequest.getIds());
-
 			// Hoàn tất giao dịch
-			orderRepository.finalizeTransaction();
+			orderRepository.finalizeTransaction(connection);
 		} catch (Exception e) {
 			e.printStackTrace();
-			orderRepository.rollbackTransaction();
+			orderRepository.rollbackTransaction(connection);
 			throw new RuntimeException("Error processing order items", e);
 		}
 	}

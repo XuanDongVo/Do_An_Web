@@ -61,6 +61,10 @@
 	<div class="container mt-4">
 		<form action="processingOrder" method="post">
 			<div class="row">
+				<c:if test="${sessionScope.user != null}">
+					<c:set var="user" value="${sessionScope.user}" />
+				</c:if>
+
 				<!-- Phần bên trái: Thông tin thanh toán, Phương thức thanh toán, v.v. -->
 				<div class="col-md-7">
 					<!-- Thông tin giao hàng -->
@@ -70,17 +74,18 @@
 							<label for="fullName" class="form-label">Họ và tên *</label> <input
 								type="text" id="fullName" name="customerName"
 								class="form-control" placeholder="Nhập đầy đủ họ và tên của bạn"
-								required> <label for="address" class="form-label mt-3">Địa
-								chỉ *</label> <input type="text" id="address" name="address"
-								class="form-control"
+								required value=${user.name }> <label for="address"
+								class="form-label mt-3">Địa chỉ *</label> <input type="text"
+								id="address" name="address" class="form-control"
 								placeholder="Ví dụ: Số xx Ngõ xx Phú Kiều, Bắc Từ Liêm, Hà Nội"
-								required> <label for="phoneNumber"
+								required value=${user.name }> <label for="phoneNumber"
 								class="form-label mt-3">Số điện thoại *</label> <input
 								type="text" id="phoneNumber" name="customerPhone"
-								class="form-control " required> <label for="email"
-								class="form-label mt-3">Email (tuỳ chọn)</label> <input
+								class="form-control " required value=${user.phone }> <label
+								for="email" class="form-label mt-3">Email (tuỳ chọn)</label> <input
 								type="email" id="email" name="customerEmail"
-								class="form-control" placeholder="Nhập Email của bạn">
+								class="form-control" placeholder="Nhập Email của bạn"
+								value=${user.email }>
 						</div>
 					</div>
 

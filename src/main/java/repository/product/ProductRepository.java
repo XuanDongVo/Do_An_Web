@@ -29,6 +29,22 @@ public class ProductRepository {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+			if (pst != null) {
+				try {
+					pst.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			if (connection != null) {
+				try {
+					DBConnection.closeConnection(connection);
+					;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		return list;
 	}
@@ -78,6 +94,22 @@ public class ProductRepository {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+			if (pst != null) {
+				try {
+					pst.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			if (connection != null) {
+				try {
+					DBConnection.closeConnection(connection);
+					;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		return products;
 	}
@@ -99,6 +131,22 @@ public class ProductRepository {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+			if (pst != null) {
+				try {
+					pst.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			if (connection != null) {
+				try {
+					DBConnection.closeConnection(connection);
+					;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		return products;
 	}
@@ -121,6 +169,22 @@ public class ProductRepository {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+			if (pst != null) {
+				try {
+					pst.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			if (connection != null) {
+				try {
+					DBConnection.closeConnection(connection);
+					;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		return products;
 	}
@@ -144,6 +208,22 @@ public class ProductRepository {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+			if (pst != null) {
+				try {
+					pst.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			if (connection != null) {
+				try {
+					DBConnection.closeConnection(connection);
+					;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		return products;
 	}

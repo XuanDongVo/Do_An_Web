@@ -69,9 +69,77 @@ public class InventoryRepository {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			if (preparedStatement != null) {
+				try {
+					preparedStatement.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			if (connection != null) {
+				try {
+					DBConnection.closeConnection(connection);
+					;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		return Optional.empty(); // Trả về Optional rỗng nếu không có kết quả
 	}
+	
+	
+	public Optional<Inventory> findByProductName(String name ) {
+		Connection connection = DBConnection.getConection();
+		String sql = "SELECT i.id, i.stock, p.name FROM ecommerce.inventory i "
+				+ "INNER JOIN product_sku pu ON pu.id = i.product_sku_id "
+				+ "INNER JOIN product_color_img pci ON pu.product_color_img_id = pci.id "
+				+ "INNER JOIN product p ON pci.product_id = p.id " + "WHERE p.name = ?";
+
+		try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setString(1, name);
+
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				if (resultSet.next()) { // Kiểm tra nếu có kết quả
+					Long inventoryId = resultSet.getLong("id");
+					int stock = resultSet.getInt("stock");
+					String productName = resultSet.getString("name");
+					ProductSku productSku = new ProductSku();
+
+					ProductColorImage productColorImage = new ProductColorImage();
+					productSku.setProductColorImage(productColorImage);
+
+					Product product = new Product();
+					product.setName(productName);
+					productColorImage.setProduct(product);
+
+					Inventory inventory = new Inventory(inventoryId, productSku, stock);
+					return Optional.of(inventory);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (preparedStatement != null) {
+				try {
+					preparedStatement.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			if (connection != null) {
+				try {
+					DBConnection.closeConnection(connection);
+					;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return Optional.empty(); // Trả về Optional rỗng nếu không có kết quả
+	}
+
 
 	public void updateQuantityByInvetoryid(Long id, int quantity) {
 		Connection connection = DBConnection.getConection();
@@ -83,6 +151,22 @@ public class InventoryRepository {
 			preparedStatement.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			if (preparedStatement != null) {
+				try {
+					preparedStatement.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			if (connection != null) {
+				try {
+					DBConnection.closeConnection(connection);
+					;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 
