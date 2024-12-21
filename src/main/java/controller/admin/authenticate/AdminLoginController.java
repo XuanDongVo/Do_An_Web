@@ -30,7 +30,7 @@ public class AdminLoginController extends HttpServlet {
 		if (user == null) {
 			String error = "Tài khoản không tồn tại";
 			req.setAttribute("message", error);
-			req.getRequestDispatcher(req.getContextPath() + "/view/admin/admin_login.jsp");
+			req.getRequestDispatcher( "/view/admin/admin_login.jsp").forward(req, resp);
 		}
 
 		req.getSession().setAttribute("user", user);

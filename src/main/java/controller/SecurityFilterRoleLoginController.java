@@ -15,7 +15,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import repository.userRole.UserRoleRepository;
 
-@WebFilter(urlPatterns = {"/view/admin/*" , "/adminProduct" ,"/adminAddProduct" ,"/adminDeleteProduct" ,"/adminDetailProduct"} )
+@WebFilter(urlPatterns = { "/view/admin/*", "/adminProduct", "/adminAddProduct", "/adminDeleteProduct",
+		"/adminDetailProduct", "/admin_customer", "/delete_customer", "/add_employee_action", "/admin_employee",
+		"/delete_employee", "/delete_order", "/order", "/update_order_action", "/update_order" })
 public class SecurityFilterRoleLoginController implements Filter {
 	private UserRoleRepository userRoleRepository = new UserRoleRepository();
 

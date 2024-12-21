@@ -4,16 +4,18 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import dbConnection.DBConnection;
 import dto.request.OrderRequest;
+import dto.response.AdminOrderResponse;
 import entity.User;
-import utils.OrderStatus;
 
 public class OrderRepository {
 	private PreparedStatement pst = null;
 	private ResultSet rs = null;
-
+	private Connection connection;
 	// Phương thức tạo đơn hàng mới
 	public long createOrder(Connection connection, OrderRequest orderRequest, User user) {
 		long orderId = 0;
@@ -35,7 +37,7 @@ public class OrderRepository {
 			}
 
 			// Đặt các thông tin khác của đơn hàng
-			pst.setString(2, OrderStatus.PENDING.toString());
+			pst.setString(2, "Đang chờ");
 			pst.setDouble(3, orderRequest.getTotalPrice());
 			pst.setDate(4, java.sql.Date.valueOf(java.time.LocalDate.now()));
 			pst.setString(5, orderRequest.getCustomerEmail());
@@ -87,4 +89,123 @@ public class OrderRepository {
 		}
 	}
 
+	public List<AdminOrderResponse> getAllOrderWithResponse() {
+		List<AdminOrderResponse> list = new ArrayList<>();
+		connection = DBConnection.getConection();
+		String sql = "SELECT o.id, u.name, p.name , od.quantity, o.total_price, o.order_status "
+				+ " FROM ecommerce.order o "
+				+ " INNER JOIN ecommerce.user u ON o.user_id = u.id "
+				+ " INNER JOIN order_detail od ON od.order_id = o.id "
+				+ " INNER JOIN product_sku ps ON ps.id = od.product_sku_id "
+				+ " INNER JOIN product_color_img pci ON pci.id = ps.product_color_img_id "
+				+ " INNER JOIN product p ON p.id = pci.product_id;";
+		try {
+			pst = connection.prepareStatement(sql);
+			ResultSet rs = pst.executeQuery();
+			while (rs.next()) {
+				AdminOrderResponse aor = new AdminOrderResponse(rs.getLong(1), rs.getString(2), rs.getString(3),
+						rs.getInt(4), rs.getDouble(5), rs.getString(6));
+				list.add(aor);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	 public boolean deleteOrder(Long orderId) {
+	        String deleteOrderDetailQuery = "DELETE FROM order_detail WHERE order_id = ?";
+	        String deleteOrderQuery = "DELETE FROM ecommerce.order WHERE id = ?";
+	        connection = DBConnection.getConection();
+	        try (PreparedStatement orderDetailStmt = connection.prepareStatement(deleteOrderDetailQuery);
+	             PreparedStatement orderStmt = connection.prepareStatement(deleteOrderQuery)) {
+
+	            // Xóa các chi tiết đơn hàng (order_detail)
+	            orderDetailStmt.setLong(1, orderId);
+	            orderDetailStmt.executeUpdate();
+
+	            // Xóa đơn hàng (orders)
+	            orderStmt.setLong(1, orderId);
+	            int rowsAffected = orderStmt.executeUpdate();
+
+	            // Kiểm tra nếu xóa thành công
+	            return rowsAffected > 0;
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	            return false;
+	        }
+	    }
+
+	 public AdminOrderResponse getOrderById(Long orderId) {
+		    AdminOrderResponse orderResponse = null;
+		    String sql = "SELECT o.id, u.name AS user_name, p.name AS product_name, od.quantity, "
+		               + "o.total_price, o.order_status "
+		               + "FROM ecommerce.order o "
+		               + "INNER JOIN ecommerce.user u ON o.user_id = u.id "
+		               + "INNER JOIN order_detail od ON od.order_id = o.id "
+		               + "INNER JOIN product_sku ps ON ps.id = od.product_sku_id "
+		               + "INNER JOIN product_color_img pci ON pci.id = ps.product_color_img_id "
+		               + "INNER JOIN product p ON p.id = pci.product_id "
+		               + "WHERE o.id = ?";
+
+		    try (Connection connection = DBConnection.getConection();
+		         PreparedStatement pst = connection.prepareStatement(sql)) {
+		         
+		        pst.setLong(1, orderId); // Gán tham số orderId vào câu truy vấn
+		        try (ResultSet rs = pst.executeQuery()) {
+		            if (rs.next()) {
+		                orderResponse = new AdminOrderResponse(
+		                    rs.getLong(1),
+		                    rs.getString(2),
+		                    rs.getString(3),
+		                    rs.getInt(4),
+		                    rs.getDouble(5),
+		                    rs.getString(6)
+		                );
+		            }
+		        }
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    }
+		    return orderResponse; // Trả về kết quả
+		}
+	 
+	 public void updateOrderById(Long orderId, String status) {
+		    String sql = "UPDATE ecommerce.order SET order_status = ? WHERE id = ?";
+
+		    try (Connection connection = DBConnection.getConection();
+		         PreparedStatement pst = connection.prepareStatement(sql)) {
+
+		        // Gán giá trị cho câu lệnh SQL
+		        pst.setString(1, status);  // Cập nhật trạng thái đơn hàng
+		        pst.setLong(2, orderId);    // Cập nhật theo id đơn hàng
+
+		        // Thực thi câu lệnh UPDATE
+		        int rowsAffected = pst.executeUpdate(); // Dùng executeUpdate thay vì executeQuery
+
+		        // Kiểm tra nếu có dòng bị ảnh hưởng
+		        if (rowsAffected > 0) {
+		            System.out.println("Đơn hàng đã được cập nhật thành công.");
+		        } else {
+		            System.out.println("Không tìm thấy đơn hàng với ID: " + orderId);
+		        }
+
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    }
+		}
+
+
+	 
+	public static void main(String[] args) {
+//		List<AdminOrderResponse> list = new OrderRepository().getAllOrderWithResponse();
+//		for (AdminOrderResponse aor : list) {
+//			System.out.println(aor);
+//		}
+		
+		Long n = (long) 1;
+		new OrderRepository().updateOrderById(n, "Đã giao");
+//		System.out.println(new OrderRepository().getOrderById(n));
+//		System.out.println(new OrderRepository().deleteOrder(n));
+	}
 }

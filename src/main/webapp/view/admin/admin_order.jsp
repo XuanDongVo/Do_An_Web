@@ -53,22 +53,22 @@
 		</div>
 		<hr>
 		<ul class="app-menu">
-			<li><a class="app-menu__item "
+			<li><a class="app-menu__item active"
 				href="${pageContext.request.contextPath}/view/admin/admin.jsp"><i
 					class='app-menu__icon bx bx-tachometer'></i><span
 					class="app-menu__label">Bảng điều khiển</span></a></li>
-			<li><a class="app-menu__item " href="table-data-table.html"><i
+			<li><a class="app-menu__item " href="${pageContext.request.contextPath}/admin_employee"><i
 					class='app-menu__icon bx bx-id-card'></i> <span
 					class="app-menu__label">Quản lý nhân viên</span></a></li>
-			<li><a class="app-menu__item" href="#"><i
+			<li><a class="app-menu__item" href="${pageContext.request.contextPath}/admin_customer"><i
 					class='app-menu__icon bx bx-user-voice'></i><span
 					class="app-menu__label">Quản lý khách hàng</span></a></li>
-				<li><a class="app-menu__item "
+			<li><a class="app-menu__item "
 				href="${pageContext.request.contextPath}/adminProduct"><i
 					class='app-menu__icon bx bx-purchase-tag-alt'></i><span
 					class="app-menu__label">Quản lý sản phẩm</span></a></li>
-			<li><a class="app-menu__item active"
-				href="${pageContext.request.contextPath}/view/admin/admin_order.jsp"><i
+			<li><a class="app-menu__item "
+				href="${pageContext.request.contextPath}/order"><i
 					class='app-menu__icon bx bx-task'></i><span class="app-menu__label">Quản
 						lý đơn hàng</span></a></li>
 		</ul>
@@ -87,9 +87,9 @@
 					<div class="tile-body">
 						<div class="row element-button">
 							<div class="col-sm-2">
-								<a class="btn btn-add btn-sm"
+								<%-- <a class="btn btn-add btn-sm"
 									href="<%=request.getContextPath()%>/adminAddProduct?action=view"
-									title="Thêm"><i class="fas fa-plus"></i> Tạo mới sản phẩm</a>
+									title="Thêm"><i class="fas fa-plus"></i> Tạo mới sản phẩm</a> --%>
 							</div>
 						</div>
 						<table class="table table-hover table-bordered" id="sampleTable">
@@ -106,115 +106,42 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<td width="10"><input type="checkbox" name="check1"
-										value="1"></td>
-									<td>MD0837</td>
-									<td>Triệu Thanh Phú</td>
-									<td>Ghế làm việc Zuno, Bàn ăn gỗ Theresa</td>
-									<td>2</td>
-									<td>9.400.000 đ</td>
-									<td><span class="badge bg-success">Hoàn thành</span></td>
-									<td><button class="btn btn-primary btn-sm trash"
-											type="button" title="Xóa">
-											<i class="fas fa-trash-alt"></i>
-										</button>
-										<button class="btn btn-primary btn-sm edit" type="button"
-											title="Sửa">
-											<i class="fa fa-edit"></i>
-										</button></td>
-								</tr>
-								<tr>
-									<td width="10"><input type="checkbox" name="check1"
-										value="1"></td>
-									<td>MĐ8265</td>
-									<td>Nguyễn Thị Ngọc Cẩm</td>
-									<td>Ghế ăn gỗ Lucy màu trắng</td>
-									<td>1</td>
-									<td>3.800.000 đ</td>
-									<td><span class="badge bg-success">Hoàn thành</span></td>
-									<td><button class="btn btn-primary btn-sm trash"
-											type="button" title="Xóa">
-											<i class="fas fa-trash-alt"></i>
-										</button>
-										<button class="btn btn-primary btn-sm edit" type="button"
-											title="Sửa">
-											<i class="fa fa-edit"></i>
-										</button></td>
-								</tr>
-								<tr>
-									<td width="10"><input type="checkbox" name="check1"
-										value="1"></td>
-									<td>MT9835</td>
-									<td>Đặng Hoàng Phúc</td>
-									<td>Giường ngủ Jimmy, Bàn ăn mở rộng cao cấp Dolas, Ghế
-										làm việc Zuno</td>
-									<td>3</td>
-									<td>40.650.000 đ</td>
-									<td><span class="badge bg-success">Hoàn thành</span></td>
-									<td><button class="btn btn-primary btn-sm trash"
-											type="button" title="Xóa">
-											<i class="fas fa-trash-alt"></i>
-										</button>
-										<button class="btn btn-primary btn-sm edit" type="button"
-											title="Sửa">
-											<i class="fa fa-edit"></i>
-										</button></td>
-								</tr>
-								<tr>
-									<td width="10"><input type="checkbox" name="check1"
-										value="1"></td>
-									<td>ER3835</td>
-									<td>Nguyễn Thị Mỹ Yến</td>
-									<td>Bàn ăn mở rộng Gepa</td>
-									<td>1</td>
-									<td>16.770.000 đ</td>
-									<td><span class="badge bg-info">Chờ thanh toán</span></td>
-									<td><button class="btn btn-primary btn-sm trash"
-											type="button" title="Xóa">
-											<i class="fas fa-trash-alt"></i>
-										</button>
-										<button class="btn btn-primary btn-sm edit" type="button"
-											title="Sửa">
-											<i class="fa fa-edit"></i>
-										</button></td>
-								</tr>
-								<tr>
-									<td width="10"><input type="checkbox" name="check1"
-										value="1"></td>
-									<td>AL3947</td>
-									<td>Phạm Thị Ngọc</td>
-									<td>Bàn ăn Vitali mặt đá, Ghế ăn gỗ Lucy màu trắng</td>
-									<td>2</td>
-									<td>19.770.000 đ</td>
-									<td><span class="badge bg-warning">Đang giao hàng</span></td>
-									<td><button class="btn btn-primary btn-sm trash"
-											type="button" title="Xóa">
-											<i class="fas fa-trash-alt"></i>
-										</button>
-										<button class="btn btn-primary btn-sm edit" type="button"
-											title="Sửa">
-											<i class="fa fa-edit"></i>
-										</button></td>
-								</tr>
-								<tr>
-									<td width="10"><input type="checkbox" name="check1"
-										value="1"></td>
-									<td>QY8723</td>
-									<td>Ngô Thái An</td>
-									<td>Giường ngủ Kara 1.6x2m</td>
-									<td>1</td>
-									<td>14.500.000 đ</td>
-									<td><span class="badge bg-danger">Đã hủy</span></td>
-									<td><button class="btn btn-primary btn-sm trash"
-											type="button" title="Xóa">
-											<i class="fas fa-trash-alt"></i>
-										</button>
-										<button class="btn btn-primary btn-sm edit" type="button"
-											title="Sửa">
-											<i class="fa fa-edit"></i>
-										</button></td>
-								</tr>
+								<c:if test="${not empty error}">
+									<div class="alert alert-danger" role="alert">${error}</div>
+								</c:if>
+
+								<form action="${pageContext.request.contextPath}/delete_order"
+									method="POST">
+									<c:forEach var="order" items="${list_order}">
+										<tr>
+											<td width="10"><input type="checkbox" name="check1"
+												value="${order.id_order_admin}"></td>
+											<td>${order.id_order_admin}</td>
+											<td>${order.name_customer}</td>
+											<td>${order.name_product}</td>
+											<td>${order.quantity_order}</td>
+											<td>${order.price}đ</td>
+											<td><span class="badge bg-success">${order.status}</span></td>
+											<td>
+												<!-- Nút Xóa sẽ gửi ID đơn hàng qua POST --> <input
+												type="hidden" name="order_id"
+												value="${order.id_order_admin}">
+												<button class="btn btn-primary btn-sm trash" type="submit"
+													title="Xóa">
+													<i class="fas fa-trash-alt"></i>
+												</button> <a
+												href="${pageContext.request.contextPath}/update_order?order_id=${order.id_order_admin}">
+													<button class="btn btn-primary btn-sm edit" type="button"
+														title="Sửa">
+														<i class="fa fa-edit"></i>
+													</button>
+												</a>
+											</td>
+										</tr>
+									</c:forEach>
+								</form>
+
+
 							</tbody>
 						</table>
 					</div>

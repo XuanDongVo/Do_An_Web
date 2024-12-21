@@ -98,16 +98,16 @@
 	<main class="app-content">
 		<div class="container mt-5">
 			<!-- Title -->
-			<h2 class="text-center mb-4">Thêm Sản Phẩm</h2>
+			<h2 class="text-center mb-4">Sửa trạng thái đơn hàng</h2>
 
 			<!-- Tab navigation -->
 			<ul class="nav nav-tabs" id="productTab" role="tablist">
 				<li class="nav-item">
 					<button class="nav-link active" id="spu-tab" data-bs-toggle="tab"
 						data-bs-target="#spu" type="button" role="tab">Thông Tin
-						Sản Phẩm (SPU)</button>
+						Đơn Hàng</button>
 				</li>
-				<li class="nav-item">
+				<!-- <li class="nav-item">
 					<button class="nav-link disabled" id="sku-tab" data-bs-toggle="tab"
 						data-bs-target="#sku" type="button" role="tab">Thông Tin
 						Biến Thể (SKU)</button>
@@ -116,61 +116,56 @@
 					<button class="nav-link disabled" id="detail-sku-tab"
 						data-bs-toggle="tab" data-bs-target="#detailsku" type="button"
 						role="tab">Chi tiết Biến Thể (SKU)</button>
-				</li>
+				</li> -->
 			</ul>
 
 			<!-- Tab content -->
 			<div class="tab-content mt-4" id="productTabContent">
-				<!-- SPU Form -->
 				<div class="tab-pane fade show active" id="spu" role="tabpanel"
 					aria-labelledby="spu-tab">
-					<form id="spuForm">
+					<form action="${pageContext.request.contextPath}/update_order_action" method="POST">
 						<div class="mb-3">
-							<label for="productName" class="form-label">Tên Sản Phẩm</label>
-							<input type="text" class="form-control" id="productName"
-								name="name" required>
+							<label for="orderCode" class="form-label">Mã đơn hàng</label> 
+							<input
+								type="text" class="form-control" id="orderCode" name="orderId" value = "${order.id_order_admin}"
+								readonly >
 						</div>
 						<div class="mb-3">
-							<label for="productDescription" class="form-label">Mô Tả
-								Sản Phẩm</label>
-							<textarea class="form-control" id="productDescription"
-								name="description" rows="3"></textarea>
+							<label for="customerName" class="form-label">Tên khách
+								hàng</label> <input type="text" class="form-control" id="customerName"
+								name="customerName" value="${order.name_customer}" readonly>
 						</div>
-
 						<div class="mb-3">
-							<label for="productType" class="form-label">Loại Sản Phẩm</label>
-							<select class="form-select" id="productType" name="product_type"
-								required onchange="updateSubCategory(this)">
-								<option value="">Chọn loại sản phẩm</option>
-								<c:forEach var="entry" items="${genderToSubCategoryMap}">
-									<option value="${entry.key}"
-										data-type-subCatgory="${fn:escapeXml(entry.value)}">${entry.key}</option>
-								</c:forEach>
+							<label for="orderDetails" class="form-label">Đơn hàng</label> <input
+								type="text" class="form-control" id="orderDetails"
+								name="orderDetails"  value="${order.name_product}" readonly >
+						</div>
+						<div class="mb-3">
+							<label for="quantity" class="form-label">Số lượng</label> <input
+								type="text" class="form-control" id="quantity" name="quantity"
+								value="${order.quantity_order}" readonly>
+						</div>
+						<div class="mb-3">
+							<label for="totalPrice" class="form-label">Tổng tiền</label> <input
+								type="text" class="form-control" id="totalPrice"
+								name="totalPrice" value="${order.price}" readonly>
+						</div>
+						<div class="mb-3">
+							<label for="orderStatus" class="form-label">Tình trạng</label> <select
+								class="form-control" id="orderStatus" name="orderStatus" value="${order.status}"
+								required>
+								<option value="Đã hủy">Đã hủy</option>
+								<option value="Đang chờ">Đang chờ</option>
+								<option value="Đã giao">Đã giao</option>
 							</select>
 						</div>
-
-						<div class="mb-3">
-							<label for="subCategory" class="form-label">Danh Mục</label> <select
-								class="form-select" id="subCategory" name="subCatgory" required
-								disabled>
-								<option value="">Chọn danh mục</option>
-							</select>
-						</div>
-
-						<div class="mb-3">
-							<label for="price" class="form-label">Giá tiền</label> <input
-								type="number" class="form-control" id="productPrice"
-								name="price" required min="0" step="any">
-
-						</div>
-
-
-						<button type="button" class="btn btn-primary" id="saveSpu">Lưu
-							Thông Tin SPU</button>
+						<button type="submit" class="btn btn-primary" id="saveSpu">Lưu
+							Thông Tin Đơn Hàng</button>
 					</form>
 				</div>
 
-				<!-- SKU Form -->
+
+				<%-- 	<!-- SKU Form -->
 				<div class="tab-pane fade" id="sku" role="tabpanel"
 					aria-labelledby="sku-tab">
 					<form id="skuForm">
@@ -244,69 +239,9 @@
 					<button type="button" class="btn btn-success fade" id="saveSku"
 						onclick="saveProductSku()">Lưu sản phẩm</button>
 				</div>
+			</div> --%>
 			</div>
-		</div>
 	</main>
-
-	<%-- <div class="tab-pane fade" id="detailsku" role="tabpanel"
-		aria-labelledby="detail-sku-tab">
-		<div class="container ">
-			<div class="row">
-				<!-- Left Section: Image Gallery -->
-				<div class="col-md-4">
-					<div class="main-image mb-3">
-						<img id="mainImage" src="${product.productSkus[0].img}"
-							alt="${product.name}" class="img-fluid" style="width: 100%;">
-					</div>
-				</div>
-
-				<!-- Right Section: Product Info -->
-				<div class="col-md-8">
-					<h2 id="productTitle">${product.name}</h2>
-					<p>
-						<span class="productPrice"><fmt:formatNumber
-								value="${product.price}" pattern="#,###" /> đ</span>
-					</p>
-
-					<!-- Color Options -->
-					<h6 id="color-name">Màu sắc:
-						${product.productSkus[0].color.toUpperCase()}</h6>
-
-
-					<div class="color-options d-flex mt-3 mb-3">
-						<c:forEach items="${product.productSkus}" var="sku">
-							<button class="btn btn-outline-primary color-btn"
-								style="background-color: ${sku.color};"
-								onclick="selectImage('${sku.img}', '${fn:escapeXml(sku.sizeAndStock)}' , '${sku.color}')" /></button>
-						</c:forEach>
-					</div>
-				</div>
-				<!-- Label cho bảng -->
-				<h5>Bảng Size và Số lượng</h5>
-				<!-- Bảng hiển thị size và quantity -->
-				<div class="table-responsive mt-3">
-					<table class="table table-striped table-hover table-bordered"
-						style="max-width: 600px;">
-						<thead class="table-primary text-center">
-							<tr>
-								<th scope="col">Size</th>
-								<th scope="col">Số lượng</th>
-							</tr>
-						</thead>
-						<tbody id="sizeTableBody">
-							<c:forEach items="${product.productSkus[0].sizeAndStock}"
-								var="entry">
-								<tr class="text-center">
-									<td>${fn:toUpperCase(entry.key)}</td>
-									<td>${entry.value}</td>
-								</tr>
-							</c:forEach>
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</div>
-	</div> --%>
 
 	<c:if test="${not empty message}">
 		<div class="modal fade" id="message" tabindex="-1"
@@ -332,7 +267,7 @@
 
 
 	<script src="${pageContext.request.contextPath}/js/admin/main.js"></script>
-	<script
+	<%-- 	<script
 		src="${pageContext.request.contextPath}/js/admin/admin_add_product.js"></script>
 
 	<script type="text/javascript">
@@ -361,10 +296,9 @@
 			form.submit();
 
 		}
-	</script>
+	</script> --%>
 
 
 </body>
 </html>
-
 

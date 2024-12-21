@@ -45,7 +45,7 @@ public class LoginByPhoneController extends HttpServlet {
 					User user = userRepository.getUserByPhone(phone);
 					session.setAttribute("user", user);
 					session.setAttribute("userId", user.getId());
-					
+
 					// Xác thực thành công, chuyển hướng sang trang chủ
 					resp.sendRedirect(req.getContextPath() + "/home");
 				} else {

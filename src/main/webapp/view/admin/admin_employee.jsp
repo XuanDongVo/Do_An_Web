@@ -58,7 +58,6 @@
 				<p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
 			</div>
 		</div>
-		<hr>
 		<ul class="app-menu">
 			<li><a class="app-menu__item active"
 				href="${pageContext.request.contextPath}/view/admin/admin.jsp"><i
@@ -84,7 +83,7 @@
 		<div class="app-title">
 			<ul class="app-breadcrumb breadcrumb side">
 				<li class="breadcrumb-item active"><a href="#"><b>Danh
-							sách sản phẩm</b></a></li>
+							sách khách hàng</b></a></li>
 			</ul>
 			<div id="clock"></div>
 		</div>
@@ -94,49 +93,52 @@
 					<div class="tile-body">
 						<div class="row element-button">
 							<div class="col-sm-2">
-								<a class="btn btn-add btn-sm"
-									href="<%=request.getContextPath()%>/adminAddProduct?action=view"
-									title="Thêm"><i class="fas fa-plus"></i> Tạo mới sản phẩm</a>
+								 <a class="btn btn-add btn-sm"
+									href="view/admin/admin_add_employee.jsp"
+									title="Thêm"><i class="fas fa-plus"></i> Thêm nhân viên</a> 
 							</div>
 
 						</div>
 						<table class="table table-hover table-bordered" id="sampleTable">
 							<thead>
 								<tr>
-									<th>Mã sản phẩm</th>
-									<th>Tên sản phẩm</th>
-									<th>Danh mục</th>
-									<th>Giá tiền</th>
-									<th>Chức năng</th>
+									<th>Mã nhân viên</th>
+									<th>Email</th>
+									<th>Số điện thoại</th>
+									<th>Tên khách hàng</th>
+									<th>Địa chỉ</th>
+									<th>Ngày tạo</th>
+									<th>Phân quyền</th>
 								</tr>
 							</thead>
 							<tbody>
-								<c:forEach items="${products}" var="product">
-									<tr>
-										<td>${product.productId }</td>
-										<td>${product.name }</td>
-										<td>${product.subCategory }</td>
-										<td><fmt:formatNumber value="${product.price}"
-												pattern="#,###" /> đ</td>
-										<td>
-											<button class="btn btn-primary btn-sm print-file"
-												type="button" title="Chi tiết"
-												onclick="viewProductDetails(${product.productId})">
-												<i class="fas fa-eye"></i>
-											</button>
-
-											<button class="btn btn-primary btn-sm trash" type="button"
-												title="Xóa" onclick="deleteProduct(${product.productId})">
-												<i class="fas fa-trash-alt"></i>
-											</button>
-											<button class="btn btn-primary btn-sm edit" type="button"
-												title="Sửa" id="show-emp" data-toggle="modal"
-												data-target="#ModalUP">
-												<i class="fas fa-edit"></i>
-											</button>
-										</td>
-									</tr>
-								</c:forEach>
+								<form
+									action="${pageContext.request.contextPath}/delete_employee"
+									method="POST">
+									<c:if test="${not empty error}">
+										<div class="alert alert-danger" role="alert">${error}</div>
+									</c:if>
+									<c:forEach items="${list_employee}" var="employee">
+										<tr>
+											<td>${customer.user_id}</td>
+											<!-- Input ẩn để lưu `user_id` -->
+											<input type="hidden" name="user_id"
+												value="${employee.user_id}">
+											<td>${employee.email}</td>
+											<td>${employee.phone}</td>
+											<td>${employee.user_name}</td>
+											<td>${employee.address}</td>
+											<td>${employee.create_at}</td>
+											<td>${employee.role_name}</td>
+											<td>
+												<button class="btn btn-primary btn-sm trash" type="submit"
+													title="Xóa">
+													<i class="fas fa-trash-alt"></i>
+												</button>
+											</td>
+										</tr>
+									</c:forEach>
+								</form>
 							</tbody>
 						</table>
 					</div>

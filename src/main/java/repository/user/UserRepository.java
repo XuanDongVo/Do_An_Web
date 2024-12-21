@@ -3,11 +3,12 @@ package repository.user;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 
 import dbConnection.DBConnection;
+import dto.response.AdminUserResponse;
 import entity.User;
 
 public class UserRepository {
@@ -610,7 +611,7 @@ public class UserRepository {
 		try {
 			String sql = "SELECT * FROM user WHERE phone = ? and password = ? ";
 			pst = connection.prepareStatement(sql);
-			pst.setString(1, "84"+phone);
+			pst.setString(1, "84" + phone);
 			pst.setString(2, password);
 			ResultSet rs = pst.executeQuery();
 			if (rs.next()) {
@@ -643,8 +644,198 @@ public class UserRepository {
 		}
 		return null;
 	}
-	public static void main(String[] args) {
-		new UserRepository().loginForAdmin("111111111", "123");
+
+	// Lấy ra danh sach nhan vien
+	public List<AdminUserResponse> getAllEmployee() {
+		connection = DBConnection.getConection();
+		List<AdminUserResponse> lst = new ArrayList<>();
+
+		try {
+			String sql = "select u.id, u.email, u.phone, u.name, u.address, u.create_at, r.name "
+					+ " from ecommerce.user u " + " inner join ecommerce.user_role  ur on  u.id = ur.user_id "
+					+ " inner join ecommerce.role r on ur.role_id = r.id " + " where r.id = 2";
+			pst = connection.prepareStatement(sql);
+			ResultSet rs = pst.executeQuery();
+
+			// Sử dụng vòng lặp while để lấy tất cả phone
+			while (rs.next()) {
+				AdminUserResponse aur = new AdminUserResponse(rs.getLong(1), rs.getString(2), rs.getString(3),
+						rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7));
+				lst.add(aur);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (pst != null) {
+				try {
+					pst.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			if (connection != null) {
+				try {
+					DBConnection.closeConnection(connection);
+					;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return lst; // Trả về danh sách email
+	}
+
+	// Lấy ra danh sach khach hang
+	public List<AdminUserResponse> getAllCustomer() {
+		connection = DBConnection.getConection();
+		List<AdminUserResponse> lst = new ArrayList<>();
+
+		try {
+			String sql = "select u.id, u.email, u.phone, u.name, u.address,u.create_at, r.name "
+					+ " from ecommerce.user u " + " inner join ecommerce.user_role  ur on  u.id = ur.user_id "
+					+ " inner join ecommerce.role r on ur.role_id = r.id " + " where r.id = 3";
+			pst = connection.prepareStatement(sql);
+			ResultSet rs = pst.executeQuery();
+
+			// Sử dụng vòng lặp while để lấy tất cả phone
+			while (rs.next()) {
+				AdminUserResponse aur = new AdminUserResponse(rs.getLong(1), rs.getString(2), rs.getString(3),
+						rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7));
+				lst.add(aur);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (pst != null) {
+				try {
+					pst.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			if (connection != null) {
+				try {
+					DBConnection.closeConnection(connection);
+					;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return lst; // Trả về danh sách email
+	}
+
+	// thay đổi thông tin người dùng
+	public void setRoleForUser(Long userId) {
+		connection = DBConnection.getConection();
+		try {
+			// Tắt auto-commit để thực hiện giao dịch thủ công
+			connection.setAutoCommit(false);
+
+			String sql = "Insert into ecommerce.user_role (user_id, role_id) " + " values(?, 3)";
+			pst = connection.prepareStatement(sql);
+			pst.setLong(1, userId);
+
+			pst.executeUpdate();
+
+			connection.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (pst != null) {
+				try {
+					pst.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			if (connection != null) {
+				try {
+					DBConnection.closeConnection(connection);
+					;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	public boolean deleteUser(Long userId) {
+		String deleteRoleUser = "DELETE FROM ecommerce.user_role WHERE user_id = ?";
+		String deleteUser = "DELETE FROM ecommerce.user WHERE id = ?";
+		connection = DBConnection.getConection();
+		try (PreparedStatement userRolePST = connection.prepareStatement(deleteRoleUser);
+				PreparedStatement userPST = connection.prepareStatement(deleteUser)) {
+
+			// Xóa các phân quyền user
+			userRolePST.setLong(1, userId);
+			userRolePST.executeUpdate();
+
+			// Xóa đơn hàng (orders)
+			userPST.setLong(1, userId);
+			int rowsAffected = userPST.executeUpdate();
+
+			// Kiểm tra nếu xóa thành công
+			return rowsAffected > 0;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public boolean addUserWithRole(Long id, String email, String phone, String address, String name, Long roleId) {
+		Connection connection = null;
+		PreparedStatement pstUser = null;
+		PreparedStatement pstRole = null;
+
+		try {
+			connection = DBConnection.getConection();
+			connection.setAutoCommit(false); // Bắt đầu transaction
+
+			// Câu lệnh SQL để thêm user
+			String sqlUser = "INSERT INTO ecommerce.user (id, email, phone, address, `name`, create_at) "
+					+ "VALUES (?, ?, ?, ?, ?, DATE(NOW()))";
+			pstUser = connection.prepareStatement(sqlUser);
+			pstUser.setLong(1, id);
+			pstUser.setString(2, email);
+			pstUser.setString(3, phone);
+			pstUser.setString(4, address);
+			pstUser.setString(5, name);
+			pstUser.executeUpdate();
+
+			// Câu lệnh SQL để gán quyền
+			String sqlRole = "INSERT INTO user_role (user_id, role_id) VALUES (?, ?)";
+			pstRole = connection.prepareStatement(sqlRole);
+			pstRole.setLong(1, id);
+			pstRole.setLong(2, roleId);
+			pstRole.executeUpdate();
+
+			connection.commit(); // Commit transaction
+			return true;
+		} catch (SQLException e) {
+			try {
+				if (connection != null) {
+					connection.rollback(); // Rollback nếu có lỗi
+				}
+			} catch (SQLException rollbackEx) {
+				rollbackEx.printStackTrace();
+			}
+			e.printStackTrace();
+			return false;
+		} finally {
+			try {
+				if (pstUser != null)
+					pstUser.close();
+				if (pstRole != null)
+					pstRole.close();
+				if (connection != null)
+					DBConnection.closeConnection(connection);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 }
