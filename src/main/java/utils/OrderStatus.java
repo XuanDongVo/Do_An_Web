@@ -1,5 +1,7 @@
 package utils;
 
 public enum OrderStatus {
-	PENDING, SUBMIT,  CANCELLED
+	ĐANG_CHỜ,
+    ĐÃ_HOÀN_THÀNH,
+    ĐÃ_HỦY
 }

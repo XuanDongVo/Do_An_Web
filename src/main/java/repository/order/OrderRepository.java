@@ -11,6 +11,7 @@ import dbConnection.DBConnection;
 import dto.request.OrderRequest;
 import dto.response.AdminOrderResponse;
 import entity.User;
+import utils.OrderStatus;
 
 public class OrderRepository {
 	private PreparedStatement pst = null;
@@ -37,7 +38,7 @@ public class OrderRepository {
 			}
 
 			// Đặt các thông tin khác của đơn hàng
-			pst.setString(2, "Đang chờ");
+			pst.setString(2, OrderStatus.ĐANG_CHỜ.toString());
 			pst.setDouble(3, orderRequest.getTotalPrice());
 			pst.setDate(4, java.sql.Date.valueOf(java.time.LocalDate.now()));
 			pst.setString(5, orderRequest.getCustomerEmail());
