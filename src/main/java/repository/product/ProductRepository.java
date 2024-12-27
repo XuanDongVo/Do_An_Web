@@ -15,6 +15,8 @@ public class ProductRepository {
 	private Connection connection = null;
 	private PreparedStatement pst = null;
 
+	private int totalProduct = 0;
+
 	// lay ra toan bo danh sach san pham
 	public List<Product> getAllProduct() {
 		List<Product> list = new ArrayList<>();
@@ -29,7 +31,7 @@ public class ProductRepository {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		}finally {
+		} finally {
 			if (pst != null) {
 				try {
 					pst.close();
@@ -94,7 +96,7 @@ public class ProductRepository {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		}finally {
+		} finally {
 			if (pst != null) {
 				try {
 					pst.close();
@@ -115,23 +117,38 @@ public class ProductRepository {
 	}
 
 	// Find product by sub_cateogry ID
-	public List<Product> findBySubCategory(String subCategory) {
+	public List<Product> findBySubCategory(String subCategory, int currentPage) {
 		connection = DBConnection.getConection();
 		List<Product> products = new ArrayList<>();
 		String sql = "";
+
+		int itemsPerPage = 12;
+		int offset = (currentPage) * itemsPerPage;
 		try {
-			sql = "SELECT product.*" + "FROM ecommerce.product " + "INNER JOIN sub_category AS sc "
+			// Lấy tổng số sản phẩm
+			sql = "SELECT COUNT(*) " + "FROM ecommerce.product " + "INNER JOIN sub_category AS sc "
 					+ "ON sc.id = product.sub_category_id " + "WHERE sc.name = ?";
 			pst = connection.prepareStatement(sql);
 			pst.setString(1, subCategory);
 			ResultSet rs = pst.executeQuery();
+			if (rs.next()) {
+				totalProduct = rs.getInt(1);
+			}
+
+			sql = "SELECT product.*" + "FROM ecommerce.product " + "INNER JOIN sub_category AS sc "
+					+ "ON sc.id = product.sub_category_id " + "WHERE sc.name = ? " + "LIMIT ? OFFSET ?";
+			pst = connection.prepareStatement(sql);
+			pst.setString(1, subCategory);
+			pst.setInt(2, itemsPerPage);
+			pst.setInt(3, offset);
+			rs = pst.executeQuery();
 			while (rs.next()) {
 				Product product = new Product(rs.getLong(1), rs.getString(2), rs.getString(3), null);
 				products.add(product);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		}finally {
+		} finally {
 			if (pst != null) {
 				try {
 					pst.close();
@@ -152,24 +169,41 @@ public class ProductRepository {
 	}
 
 	// Find product by Cateogry ID
-	public List<Product> findByCategory(Long id) {
+	public List<Product> findByCategory(Long id, int currentPage) {
 		connection = DBConnection.getConection();
 		List<Product> products = new ArrayList<>();
 		String sql = "";
+
+		int itemsPerPage = 12;
+		int offset = (currentPage) * itemsPerPage;
+
 		try {
-			sql = "SELECT product.*" + "FROM ecommerce.product " + "INNER JOIN sub_category AS sc "
+			sql = "SELECT COUNT(*) " + "FROM ecommerce.product " + "INNER JOIN sub_category AS sc "
 					+ "ON sc.id = product.sub_category_id " + "INNER JOIN category AS c " + "ON c.id = sc.category_id "
 					+ "WHERE c.id = ?";
+
 			pst = connection.prepareStatement(sql);
 			pst.setLong(1, id);
 			ResultSet rs = pst.executeQuery();
+			if (rs.next()) {
+				totalProduct = rs.getInt(1); // Lưu tổng số sản phẩm vào biến totalProduct
+			}
+
+			sql = "SELECT product.*" + "FROM ecommerce.product " + "INNER JOIN sub_category AS sc "
+					+ "ON sc.id = product.sub_category_id " + "INNER JOIN category AS c " + "ON c.id = sc.category_id "
+					+ "WHERE c.id = ? " + "LIMIT ? OFFSET ?";
+			pst = connection.prepareStatement(sql);
+			pst.setLong(1, id);
+			pst.setInt(2, itemsPerPage);
+			pst.setInt(3, offset);
+			rs = pst.executeQuery();
 			while (rs.next()) {
 				Product product = new Product(rs.getLong(1), rs.getString(2), rs.getString(3), null);
 				products.add(product);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		}finally {
+		} finally {
 			if (pst != null) {
 				try {
 					pst.close();
@@ -190,25 +224,47 @@ public class ProductRepository {
 	}
 
 	// Find product by GENDER NAME
-	public List<Product> findByGender(String gender) {
+	public List<Product> findByGender(String gender, int currentPage) {
 		connection = DBConnection.getConection();
 		List<Product> products = new ArrayList<>();
 		String sql = "";
+
+		int itemsPerPage = 12;
+		int offset = (currentPage) * itemsPerPage;
+
 		try {
-			sql = "	SELECT p.* FROM ecommerce.product as p "
-					+ "	INNER JOIN sub_category AS sc ON sc.id = p.sub_category_id "
-					+ "	INNER JOIN category AS c ON c.id = sc.category_id "
-					+ "	INNER JOIN gender ON gender.id = c.gender_id " + "	WHERE gender.name = ? ";
-			pst = connection.prepareStatement(sql);
+			// Lấy tổng số sản phẩm
+			String countSql = "SELECT COUNT(*) FROM ecommerce.product AS p "
+					+ "INNER JOIN sub_category AS sc ON sc.id = p.sub_category_id "
+					+ "INNER JOIN category AS c ON c.id = sc.category_id "
+					+ "INNER JOIN gender ON gender.id = c.gender_id " + "WHERE gender.name = ?";
+
+			pst = connection.prepareStatement(countSql);
 			pst.setString(1, gender);
 			ResultSet rs = pst.executeQuery();
+			if (rs.next()) {
+				totalProduct = rs.getInt(1); // Lưu tổng số sản phẩm vào biến totalProduct
+			}
+
+			// Lấy sản phẩm theo phân trang
+			sql = "SELECT p.* FROM ecommerce.product AS p "
+					+ "INNER JOIN sub_category AS sc ON sc.id = p.sub_category_id "
+					+ "INNER JOIN category AS c ON c.id = sc.category_id "
+					+ "INNER JOIN gender ON gender.id = c.gender_id " + "WHERE gender.name = ? " + "LIMIT ? OFFSET ?";
+
+			pst = connection.prepareStatement(sql);
+			pst.setString(1, gender);
+			pst.setInt(2, itemsPerPage);
+			pst.setInt(3, offset);
+			rs = pst.executeQuery();
+
 			while (rs.next()) {
 				Product product = new Product(rs.getLong(1), rs.getString(2), rs.getString(3), null);
 				products.add(product);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		}finally {
+		} finally {
 			if (pst != null) {
 				try {
 					pst.close();
@@ -219,13 +275,17 @@ public class ProductRepository {
 			if (connection != null) {
 				try {
 					DBConnection.closeConnection(connection);
-					;
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		}
+
 		return products;
+	}
+
+	public int getTotalProduct() {
+		return totalProduct;
 	}
 
 }

@@ -108,6 +108,10 @@ function updateColorFilter(color) {
 	} else {
 		url.searchParams.delete("color"); // Xóa tham số nếu không còn màu sắc nào
 	}
+	// Xóa tham số `page` nếu nó tồn tại
+	if (url.searchParams.has("page")) {
+		url.searchParams.delete("page");
+	}
 
 	// Điều hướng đến URL mới
 	history.replaceState(null, "", url.toString()); // Cập nhật URL mà không tải lại trang
@@ -136,6 +140,10 @@ function updateSizeFilter(size) {
 	} else {
 		url.searchParams.delete("size"); // Xóa tham số nếu không còn kích cỡ nào
 	}
+	// Xóa tham số `page` nếu nó tồn tại
+	if (url.searchParams.has("page")) {
+		url.searchParams.delete("page");
+	}
 
 	// Điều hướng đến URL mới
 	history.replaceState(null, "", url.toString()); // Cập nhật URL mà không tải lại trang
@@ -149,7 +157,9 @@ function fetchFilteredProducts() {
 		url: currentUrl,
 		method: "GET",
 		success: function(response) {
-			renderProducts(response);
+			console.log(response)
+			renderProducts(response.data);
+			renderPagination(response.currentPage, response.totalPages)
 		},
 		error: function(xhr, status, error) {
 			console.error("Lỗi: ", error);
@@ -273,5 +283,77 @@ function renderProducts(response) {
 		collectionsDiv.appendChild(collectionItemDiv);
 	});
 }
+
+function renderPagination(currentPage, totalPage) {
+	const navElement = document.querySelector('nav[aria-label="Page navigation"].mt-4');
+
+	if (totalPage <= 1) {
+		navElement.innerHTML = '';
+		return;
+	}
+
+	// Tạo HTML cho phân trang
+	let paginationHTML = '<ul class="pagination justify-content-center custom-pagination">';
+
+	// Nút "Previous"
+	paginationHTML += `
+        <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+            <button class="page-link" onclick="handPagination(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>&laquo;</button>
+        </li>
+    `;
+
+	// Các số trang
+	for (let page = 1; page <= totalPage; page++) {
+		paginationHTML += `
+            <li class="page-item ${currentPage === page ? 'active' : ''}">
+                <button class="page-link" onclick="handPagination(${page})">${page}</button>
+            </li>
+        `;
+	}
+
+	// Nút "Next"
+	paginationHTML += `
+        <li class="page-item ${currentPage === totalPage ? 'disabled' : ''}">
+            <button class="page-link" onclick="handPagination(${currentPage + 1})" ${currentPage === totalPage ? 'disabled' : ''}>&raquo;</button>
+        </li>
+    `;
+
+	paginationHTML += '</ul>';
+
+	// Cập nhật DOM
+	navElement.innerHTML = paginationHTML;
+}
+
+function handPagination(pageNumber) {
+	// Lấy URL hiện tại
+	var currentUrl = window.location.href;
+
+	// Kiểm tra xem URL có chứa tham số page không
+	var newUrl;
+	if (currentUrl.includes('page=')) {
+		// Nếu có tham số page, thay thế giá trị của nó
+		newUrl = currentUrl.replace(/page=\d+/, 'page=' + pageNumber);
+	} else {
+		// Nếu không có tham số page, thêm vào cuối URL
+		newUrl = currentUrl + (currentUrl.includes('?') ? '&' : '?') + 'page=' + pageNumber;
+	}
+
+	// Cập nhật URL mà không tải lại trang
+	window.history.pushState({}, '', newUrl);
+	$.ajax({
+		url: newUrl,
+		method: "GET",
+		success: function(response) {
+			renderProducts(response.data);
+			renderPagination(response.currentPage , response.totalPages)
+		},
+		error: function(xhr, status, error) {
+			console.error("Lỗi: ", error);
+		}
+	});
+
+}
+
+
 
 

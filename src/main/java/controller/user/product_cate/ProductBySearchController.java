@@ -8,6 +8,7 @@ import java.util.List;
 import com.google.gson.Gson;
 
 import dto.request.MultipleOptionsProductRequest;
+import dto.response.PaginationResponse;
 import dto.response.ProductDetailResponse;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -27,6 +28,9 @@ public class ProductBySearchController extends HttpServlet {
 		String sizeParam = req.getParameter("size");
 		String colorParam = req.getParameter("color");
 
+		String currentPageParam = req.getParameter("page");
+		int currentPage = (currentPageParam == null) ? 0 : Integer.parseInt(currentPageParam);
+
 		// Chuyển đổi tham số thành danh sách nếu không rỗng
 		List<String> sizes = (sizeParam != null && !sizeParam.isEmpty()) ? Arrays.asList(sizeParam.split(",")) : null;
 		List<String> colors = (colorParam != null && !colorParam.isEmpty()) ? Arrays.asList(colorParam.split(","))
@@ -42,7 +46,7 @@ public class ProductBySearchController extends HttpServlet {
 
 		if (!isAjax) {
 			// Không có bộ lọc, trả về JSP
-			List<ProductDetailResponse> listResponses = productService.getSkusBySearching(mutileOption);
+			PaginationResponse listResponses = productService.getSkusBySearching(mutileOption, currentPage);
 			req.setAttribute("listResponses", listResponses);
 
 			// Thiết lập breadcrumb
@@ -54,7 +58,7 @@ public class ProductBySearchController extends HttpServlet {
 			req.getRequestDispatcher("view/user/product_search.jsp").forward(req, resp);
 
 		} else {
-			List<ProductDetailResponse> listResponses = productService.getSkusBySearching(mutileOption);
+			PaginationResponse listResponses = productService.getSkusBySearching(mutileOption, currentPage);
 			// Thiết lập phản hồi JSON
 			resp.setContentType("application/json");
 			resp.setCharacterEncoding("UTF-8");

@@ -39,8 +39,8 @@ public class DBConnection {
 	// Đóng kết nối (tự động trả về pool)
 	public static void closeConnection(Connection connection) {
 		try {
-			if (connection != null && !connection.isClosed()) {
-				connection.close(); // Trả về pool, không phải thực sự đóng
+			if (connection != null ) {
+				connection.close(); 
 			}
 		} catch (SQLException e) {
 			System.out.println("Error closing connection: " + e.getMessage());

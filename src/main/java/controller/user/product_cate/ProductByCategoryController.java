@@ -7,7 +7,7 @@ import java.util.List;
 import com.google.gson.Gson;
 
 import dto.request.MultipleOptionsProductRequest;
-import dto.response.ProductDetailResponse;
+import dto.response.PaginationResponse;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -26,6 +26,9 @@ public class ProductByCategoryController extends HttpServlet {
         String category = req.getParameter("category");
         String sizeParam = req.getParameter("size");
         String colorParam = req.getParameter("color");
+        
+        String currentPageParam = req.getParameter("page");
+		int currentPage = (currentPageParam == null) ? 0 : Integer.parseInt(currentPageParam)-1;
 
         // Chuyển các tham số thành mảng nếu chúng không rỗng, bỏ qua nếu null hoặc rỗng
         List<String> sizes = (sizeParam != null && !sizeParam.isEmpty()) ? Arrays.asList(sizeParam.split(",")) : null;
@@ -36,7 +39,7 @@ public class ProductByCategoryController extends HttpServlet {
 
         if (sizes == null && colors == null) {
             // Không có bộ lọc, trả về JSP
-            List<ProductDetailResponse> listResponses = productService.getSkusByCategory(category, null);
+        	PaginationResponse listResponses = productService.getSkusByCategory(category, null ,currentPage );
             req.setAttribute("listResponses", listResponses);
 
             // Thiết lập breadcrumb
@@ -61,7 +64,7 @@ public class ProductByCategoryController extends HttpServlet {
             mutileOption.setColors(colors);
             mutileOption.setSizes(sizes);
 
-            List<ProductDetailResponse> listResponses = productService.getSkusByCategory(category, mutileOption);
+            PaginationResponse listResponses = productService.getSkusByCategory(category, mutileOption, currentPage);
 
             // Thiết lập kiểu dữ liệu trả về là JSON
             resp.setContentType("application/json");

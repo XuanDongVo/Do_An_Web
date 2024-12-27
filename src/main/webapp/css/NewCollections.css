@@ -65,7 +65,6 @@
 	height: 25px;
 	width: 25px; /* Make the plus icon square */
 	z-index: 10; /* Ensure it's above the images */
-	border-radius: 50%;
 	background-color: white; /* Optional: Add a background color */
 	display: block; /* Always visible */
 	transition: opacity 0.3s ease-in-out;
@@ -184,4 +183,46 @@
 .collection-item .product-name strong a:hover {
 	text-decoration: underline;
 }
+
+.custom-pagination .page-item .page-link {
+    color: #000; /* Màu chữ đen */
+    background-color: #fff; /* Màu nền trắng */
+    border: 1px solid #000; /* Đường viền đen */
+    margin: 0 5px; /* Khoảng cách giữa các nút */
+    padding: 8px 16px; /* Khoảng cách trong nút */
+    font-weight: bold;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.custom-pagination .page-item.active .page-link {
+    color: #fff; /* Màu chữ trắng */
+    background-color: #000; /* Màu nền đen */
+    border-color: #000;
+}
+
+.custom-pagination .page-item .page-link:hover {
+    color: #fff; /* Màu chữ khi hover */
+    background-color: #000; /* Màu nền khi hover */
+    border-color: #000; /* Đường viền đen khi hover */
+}
+
+.custom-pagination .page-item.disabled .page-link {
+    color: #ccc; /* Màu chữ cho nút disabled */
+    background-color: #fff; /* Màu nền trắng */
+    border-color: #ccc; /* Đường viền xám */
+    cursor: not-allowed;
+}
+
+.custom-pagination .page-item {
+    display: inline-block;
+    text-align: center;
+}
+
+.custom-pagination {
+    display: flex;
+    gap: 5px;
+}
+
+
 

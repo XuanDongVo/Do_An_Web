@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import dbConnection.DBConnection;
 import dto.request.AddProductInDatabaseRequest;
 import dto.request.MultipleOptionsProductRequest;
+import dto.response.PaginationResponse;
 import dto.response.ProductDetailResponse;
 import entity.Category;
 import entity.Inventory;
@@ -217,9 +218,10 @@ public class ProductService {
 	}
 
 	// Find Product Sku by sub_category_id
-	public List<ProductDetailResponse> getSkusBySubCategory(String subCategoryName,
-			MultipleOptionsProductRequest options) {
+	public PaginationResponse getSkusBySubCategory(String subCategoryName, MultipleOptionsProductRequest options,
+			int currentPage) {
 		List<Product> products = new ArrayList<>();
+		int totalItems;
 
 		// Lấy thực thể sub-category dựa trên ID
 		SubCategory subCategory = subCategoryRepository.findByName(subCategoryName)
@@ -231,10 +233,12 @@ public class ProductService {
 			String gender = subCategory.getCategory().getGender().getName();
 			options.setGender(gender);
 			options.setSubCategory(subCategory.getName());
-			products = MultipleOptionsSQLQueryBuilder.findByMultipleOptions(options);
+			products = MultipleOptionsSQLQueryBuilder.findByMultipleOptions(options, currentPage);
+			totalItems = MultipleOptionsSQLQueryBuilder.totalProduct;
 		} else {
 			// Lấy danh sách sản phẩm theo danh mục con
-			products = productRepository.findBySubCategory(subCategoryName);
+			products = productRepository.findBySubCategory(subCategoryName, currentPage);
+			totalItems = productRepository.getTotalProduct();
 		}
 
 		// Lấy danh sách ID của sản phẩm từ trang kết quả
@@ -247,12 +251,20 @@ public class ProductService {
 			productSkuList.addAll(productskus);
 		});
 		List<ProductDetailResponse> responses = createProductDetailResponses(productSkuList);
-		return responses;
+
+		// tính toán pagination
+		int pageSize = 12;
+		int totalPages = (int) Math.ceil((double) totalItems / pageSize);
+
+		PaginationResponse response = new PaginationResponse(responses, totalPages, currentPage + 1);
+		return response;
 	}
 
 	// Find Product Sku by category_name
-	public List<ProductDetailResponse> getSkusByCategory(String categoryName, MultipleOptionsProductRequest options) {
+	public PaginationResponse getSkusByCategory(String categoryName, MultipleOptionsProductRequest options,
+			int currentPage) {
 		List<Product> products = new ArrayList<>();
+		int totalItems;
 
 		Category category = categoryRepository.findByName(categoryName)
 				.orElseThrow(() -> new RuntimeException("Category not found"));
@@ -262,10 +274,11 @@ public class ProductService {
 			// set options
 			options.setCategory(category.getName());
 			options.setGender(category.getGender().getName());
-
-			products = MultipleOptionsSQLQueryBuilder.findByMultipleOptions(options);
+			products = MultipleOptionsSQLQueryBuilder.findByMultipleOptions(options, currentPage);
+			totalItems = MultipleOptionsSQLQueryBuilder.totalProduct;
 		} else {
-			products = productRepository.findByCategory(category.getId());
+			products = productRepository.findByCategory(category.getId(), currentPage);
+			totalItems = productRepository.getTotalProduct();
 		}
 
 		// Lấy danh sách ID của sản phẩm từ trang kết quả
@@ -279,20 +292,29 @@ public class ProductService {
 		});
 
 		List<ProductDetailResponse> responses = createProductDetailResponses(productSkuList);
-		return responses;
+
+		// tính toán pagination
+		int pageSize = 12;
+		int totalPages = (int) Math.ceil((double) totalItems / pageSize);
+
+		PaginationResponse response = new PaginationResponse(responses, totalPages, currentPage + 1);
+		return response;
 
 	}
 
 	// Find PRODUCT SKU by gender
-	public List<ProductDetailResponse> getSkusByGender(String gender, MultipleOptionsProductRequest options) {
+	public PaginationResponse getSkusByGender(String gender, MultipleOptionsProductRequest options, int currentPage) {
 		List<Product> products = new ArrayList<>();
+		int totalItems;
 		// lọc với options
 		if (options != null) {
 			options.setGender(gender);
 			// Áp dụng lọc bằng Specification nếu có yêu cầu lọc
-			products = MultipleOptionsSQLQueryBuilder.findByMultipleOptions(options);
+			products = MultipleOptionsSQLQueryBuilder.findByMultipleOptions(options, currentPage);
+			totalItems = MultipleOptionsSQLQueryBuilder.totalProduct;
 		} else {
-			products = productRepository.findByGender(gender);
+			products = productRepository.findByGender(gender, currentPage);
+			totalItems = productRepository.getTotalProduct();
 		}
 		// Lấy danh sách ID của sản phẩm từ trang kết quả
 		List<Long> productIds = products.stream().map(Product::getId).toList();
@@ -305,16 +327,21 @@ public class ProductService {
 		});
 
 		List<ProductDetailResponse> responses = createProductDetailResponses(productSkuList);
-		return responses;
+
+		int pageSize = 12;
+		int totalPages = (int) Math.ceil((double) totalItems / pageSize);
+		PaginationResponse response = new PaginationResponse(responses, totalPages, currentPage + 1);
+
+		return response;
 
 	}
 
 	// Find PRODUCT SKU by searching
-	public List<ProductDetailResponse> getSkusBySearching(MultipleOptionsProductRequest options) {
+	public PaginationResponse getSkusBySearching(MultipleOptionsProductRequest options, int currentPage) {
 		List<Product> products = new ArrayList<>();
 		// lọc với options
 		// Áp dụng lọc bằng Specification nếu có yêu cầu lọc
-		products = MultipleOptionsSQLQueryBuilder.findByMultipleOptions(options);
+		products = MultipleOptionsSQLQueryBuilder.findByMultipleOptions(options, currentPage);
 		// Lấy danh sách ID của sản phẩm từ trang kết quả
 		List<Long> productIds = products.stream().map(Product::getId).toList();
 
@@ -326,7 +353,14 @@ public class ProductService {
 		});
 
 		List<ProductDetailResponse> responses = createProductDetailResponses(productSkuList);
-		return responses;
+
+		// tính toán pagination
+		int totalItems = MultipleOptionsSQLQueryBuilder.totalProduct;
+		int pageSize = 12;
+		int totalPages = (int) Math.ceil((double) totalItems / pageSize);
+
+		PaginationResponse response = new PaginationResponse(responses, totalPages, currentPage + 1);
+		return response;
 
 	}
 

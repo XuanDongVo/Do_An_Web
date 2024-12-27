@@ -123,3 +123,26 @@ document.addEventListener('DOMContentLoaded', function() {
 		});
 	});
 });
+
+// sử dụng để phân trang cho sản phẩm 
+function navigatePage(pageNumber) {
+        // Lấy URL hiện tại
+        var currentUrl = window.location.href;
+
+        // Kiểm tra xem URL có chứa tham số page không
+        var newUrl;
+        if (currentUrl.includes('page=')) {
+            // Nếu có tham số page, thay thế giá trị của nó
+            newUrl = currentUrl.replace(/page=\d+/, 'page=' + pageNumber);
+        } else {
+            // Nếu không có tham số page, thêm vào cuối URL
+            newUrl = currentUrl + (currentUrl.includes('?') ? '&' : '?') + 'page=' + pageNumber;
+        }
+
+        // Cập nhật URL mà không tải lại trang
+        window.history.pushState({}, '', newUrl);
+
+        window.location.href = newUrl;
+        
+        
+    }

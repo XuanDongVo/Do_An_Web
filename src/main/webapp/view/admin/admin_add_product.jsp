@@ -336,9 +336,6 @@
 		src="${pageContext.request.contextPath}/js/admin/admin_add_product.js"></script>
 
 	<script type="text/javascript">
-	
-	
-	
 	// Lưu thông tin sản phẩm (SPU và SKU) dưới dạng JSON
 	function saveProductSku() {
 	    const product = JSON.stringify(productSpu);
@@ -348,8 +345,7 @@
 	    // Tạo form ẩn và gửi dữ liệu
 	    const form = document.createElement('form');
 	    form.method = 'POST';
-	    form.action = '<%=request.getContextPath()%>
-		/adminAddProduct';
+	    form.action = '<%=request.getContextPath()%>/adminAddProduct';
 
 			const inputJson = document.createElement('input');
 			inputJson.type = 'hidden';
@@ -362,7 +358,6 @@
 
 		}
 	</script>
-
 
 </body>
 </html>

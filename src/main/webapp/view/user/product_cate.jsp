@@ -119,10 +119,10 @@
 
 	<!-- Collections -->
 	<div class="container new-collections mt-5">
-		<h1>NEW COLLECTIONS</h1>
-		<hr />
+		<!-- 	<h1>NEW COLLECTIONS</h1>
+		<hr /> -->
 		<div class="collections">
-			<c:forEach items="${listResponses}" var="product">
+			<c:forEach items="${listResponses.data}" var="product">
 				<div class="collection-item">
 					<a href="productDetail?id=${product.productId}">
 						<div class="image-container">
@@ -183,6 +183,37 @@
 				</div>
 			</c:forEach>
 		</div>
+		<c:if test="${listResponses.totalPages > 1}">
+			<nav aria-label="Page navigation" class="mt-4">
+				<ul class="pagination justify-content-center custom-pagination">
+					<!-- Previous Button (disabled if on the first page) -->
+					<li
+						class="page-item ${listResponses.currentPage == 1 ? 'disabled' : ''}">
+						<button class="page-link"
+							onclick="navigatePage(${listResponses.currentPage - 1})"
+							tabindex="-1" aria-disabled="true">&laquo;</button>
+					</li>
+
+					<!-- Page Numbers -->
+					<c:forEach var="page" begin="1" end="${listResponses.totalPages}">
+						<li
+							class="page-item ${listResponses.currentPage == page ? 'active' : ''}">
+							<button class="page-link" onclick="navigatePage(${page})">${page}</button>
+						</li>
+					</c:forEach>
+
+					<!-- Next Button (disabled if on the last page) -->
+					<li
+						class="page-item ${listResponses.currentPage == listResponses.totalPages ? 'disabled' : ''}">
+						<button class="page-link"
+							onclick="navigatePage(${listResponses.currentPage + 1})">&raquo;</button>
+					</li>
+				</ul>
+			</nav>
+		</c:if>
+
+
+
 	</div>
 
 
@@ -228,7 +259,8 @@
 				console.error("Lỗi: ", error);
 			}
 		});
-	</script>
+	
+</script>
 
 </body>
 

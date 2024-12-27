@@ -8,6 +8,7 @@ import java.util.List;
 import com.google.gson.Gson;
 
 import dto.request.MultipleOptionsProductRequest;
+import dto.response.PaginationResponse;
 import dto.response.ProductDetailResponse;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -27,6 +28,8 @@ public class ProductByGenderController extends HttpServlet {
 		String gender = req.getParameter("gender");
 		String sizeParam = req.getParameter("size");
 		String colorParam = req.getParameter("color");
+		String currentPageParam = req.getParameter("page");
+		int currentPage = (currentPageParam == null) ? 0 : Integer.parseInt(currentPageParam)-1;
 
 		// Chuyển đổi tham số thành danh sách nếu không rỗng
 		List<String> sizes = (sizeParam != null && !sizeParam.isEmpty()) ? Arrays.asList(sizeParam.split(",")) : null;
@@ -38,7 +41,7 @@ public class ProductByGenderController extends HttpServlet {
 
 		if (sizes == null && colors == null) {
 			// Không có bộ lọc, trả về JSP
-			List<ProductDetailResponse> listResponses = productService.getSkusByGender(gender, null);
+			PaginationResponse listResponses = productService.getSkusByGender(gender, null, currentPage);
 			req.setAttribute("listResponses", listResponses);
 
 			// Thiết lập breadcrumb
@@ -64,7 +67,7 @@ public class ProductByGenderController extends HttpServlet {
 			mutileOption.setColors(colors);
 			mutileOption.setSizes(sizes);
 
-			List<ProductDetailResponse> listResponses = productService.getSkusByGender(gender, mutileOption);
+			PaginationResponse listResponses = productService.getSkusByGender(gender, mutileOption, currentPage);
 
 			// Thiết lập phản hồi JSON
 			resp.setContentType("application/json");
