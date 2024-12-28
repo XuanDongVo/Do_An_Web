@@ -1,6 +1,7 @@
 package utils;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +50,7 @@ public class GoogleUtils {
             HttpGet get = new HttpGet(link);
             
             try (CloseableHttpResponse response = client.execute(get)) {
-                String responseBody = new String(response.getEntity().getContent().readAllBytes());
+                String responseBody = new String(response.getEntity().getContent().readAllBytes(), StandardCharsets.UTF_8);
                 GooglePojo googlePojo = new Gson().fromJson(responseBody, GooglePojo.class);
                 return googlePojo;
             }

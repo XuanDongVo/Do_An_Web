@@ -42,7 +42,7 @@ public class CartDetailService {
 		for (DetailCartResponse detailCartResponse : list) {
 			ProductSku productSku = productSkuRepository.findById(detailCartResponse.getCartId());
 			// san pham da bi xoa trong database
-			if(productSku == null) {
+			if (productSku == null) {
 				removeProductForAnonymous(detailCartResponse.getCartId(), request, servletResponse);
 			}
 		}
@@ -117,6 +117,7 @@ public class CartDetailService {
 				cartDetailRepository.addProductSkuInCartDetail(detail.getCartId(), cart, detail.getQuantity());
 			} else {
 				// cập nhật lại số lượng trong giỏ hàng
+				cartDetail.setQuantity(detail.getQuantity() + cartDetail.getQuantity());
 				cartDetailRepository.updateQuantityInCartDetail(cartDetail);
 			}
 		});
@@ -124,7 +125,6 @@ public class CartDetailService {
 
 		if (cookies != null) {
 			for (Cookie cookie : cookies) {
-				// Kiểm tra nếu cookie có tên là "cart"
 				if ("cart".equals(cookie.getName())) {
 					cookie.setMaxAge(0); // Xóa cookie ngay lập tức
 					cookie.setPath("/"); // Đảm bảo cookie bị xóa ở tất cả các đường dẫn
@@ -329,8 +329,9 @@ public class CartDetailService {
 			return null;
 		}
 		String phone = user.getPhone();
+		String email = user.getEmail();
 		// lấy ra cart
-		Cart cart = cartRepository.getUserCartByPhone(phone)
+		Cart cart = cartRepository.getUserCartByPhoneOrEmail(phone,email)
 				.orElseThrow(() -> new RuntimeException("Not found cart for user"));
 		return cart;
 	}
@@ -354,7 +355,7 @@ public class CartDetailService {
 			try {
 				// Giải mã chuỗi Base64 từ cookie
 				byte[] decodedBytes = Base64.getDecoder().decode(cartCookieValue);
-				String decodedCartJson = new String(decodedBytes);
+				String decodedCartJson = new String(decodedBytes, StandardCharsets.UTF_8);
 
 				// Chuyển đổi JSON thành List<DetailCartResponse> sử dụng Gson
 				List<DetailCartResponse> cartDetails = gson.fromJson(decodedCartJson,
@@ -368,7 +369,7 @@ public class CartDetailService {
 			}
 		}
 
-		return detailCartResponses;	
+		return detailCartResponses;
 	}
 
 	private List<DetailCartResponse> getSelectProductsFromCookiesForCheckout(String[] selectedCartIds,

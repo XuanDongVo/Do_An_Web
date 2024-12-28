@@ -12,12 +12,16 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import repository.cart.CartRepository;
 import repository.user.UserRepository;
+import service.cartdetail.CartDetailService;
 import utils.GoogleUtils;
 
 @WebServlet("/login-google")
 public class LoginGoogleController extends HttpServlet {
 	private UserRepository userRepository = new UserRepository();
+	private CartRepository cartRepository = new CartRepository();
+	private CartDetailService cartDetailService = new CartDetailService();
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -41,14 +45,15 @@ public class LoginGoogleController extends HttpServlet {
 		if (googlePojo.getEmail() != null) {
 			if (!userRepository.checkUserByEmail(googlePojo.getEmail())) {
 				userRepository.addUserByEmail(googlePojo.getEmail(), googlePojo.getName());
-				session.setAttribute("userId", userRepository.getUserByEmail(googlePojo.getEmail()).getId());
-				System.out.println(userRepository.getUserByEmail(googlePojo.getEmail()).getId());
 			}
 			User user = userRepository.getUserByEmail(googlePojo.getEmail());
+			// tạo cart cho người dùng
+			cartRepository.addCartForNewUser(user.getId());
+			cartDetailService.mergeCartAfterLogin(req, user, resp);
 			session.setAttribute("user", user);
 		}
 
 		// Ensure correct redirect after successful login
-		resp.sendRedirect("view/user/home.jsp");
+		resp.sendRedirect(req.getContextPath() + "/home");
 	}
 }

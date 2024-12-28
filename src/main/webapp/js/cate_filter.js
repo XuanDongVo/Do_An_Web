@@ -77,13 +77,20 @@ function renderFilter(colors, sizes) {
 	const sizeContainer = document.querySelector('.size-options');
 	sizeContainer.innerHTML = ''; // Xóa nội dung cũ
 	sizes.forEach(size => {
-		const sizeButton = document.createElement('button');
-		sizeButton.className = 'size-box';
-		sizeButton.textContent = size.name; // Hiển thị kích cỡ trên nút
-		sizeButton.dataset.sizeName = size; // Lưu kích cỡ trong thuộc tính data
-		sizeButton.onclick = () => updateSizeFilter(size.name); // Gọi hàm updateFilter với kích cỡ
-		sizeContainer.appendChild(sizeButton);
-	});
+        const sizeLabel = document.createElement('label');
+        sizeLabel.className = ' size-label';
+
+        const sizeInput = document.createElement('input');
+        sizeInput.type = 'checkbox';
+        sizeInput.className = 'btn-check';
+        sizeInput.dataset.sizeName = size.name;
+        sizeInput.onclick = () => updateSizeFilter(size.name.toUpperCase()); // Gọi hàm khi checkbox được nhấn
+
+        sizeLabel.appendChild(sizeInput);
+        sizeLabel.appendChild(document.createTextNode(size.name)); // Hiển thị kích cỡ trên nhãn
+
+        sizeContainer.appendChild(sizeLabel);
+    });
 }
 
 function updateColorFilter(color) {
@@ -94,20 +101,34 @@ function updateColorFilter(color) {
 	// Chuyển chuỗi màu sắc thành mảng
 	let colorArray = colors ? colors.split(",") : [];
 
-	// Nếu màu sắc đã có trong mảng, loại bỏ nó
-	if (colorArray.includes(color)) {
-		colorArray = colorArray.filter(c => c !== color);
-	} else {
-		// Nếu màu sắc chưa có, thêm vào mảng
-		colorArray.push(color);
-	}
+	// Lấy tất cả các phần tử colorWrapper
+	const colorItems = document.querySelectorAll('.color-options .item-color');
 
-	// Cập nhật lại tham số màu sắc trong URL
+	colorItems.forEach(item => {
+		const colorWrapper = item.querySelector('.border-border');
+		const colorName = item.querySelector('.ellipsis-t').textContent.trim().toLowerCase();
+
+		// Nếu màu sắc này được chọn, thêm 'active' vào
+		if (colorName === color.toLowerCase()) {
+			// Nếu màu sắc đã có trong mảng, xóa nó và bỏ lớp 'active'
+			if (colorArray.includes(color)) {
+				colorArray = colorArray.filter(c => c !== color);
+				colorWrapper.classList.remove('active'); // Xóa lớp 'active'
+			} else {
+				// Nếu chưa có màu sắc, thêm vào mảng và thêm lớp 'active'
+				colorArray.push(color);
+				colorWrapper.classList.add('active'); // Thêm lớp 'active'
+			}
+		}
+	});
+
+	// Cập nhật tham số màu sắc trong URL
 	if (colorArray.length > 0) {
 		url.searchParams.set("color", colorArray.join(","));
 	} else {
 		url.searchParams.delete("color"); // Xóa tham số nếu không còn màu sắc nào
 	}
+
 	// Xóa tham số `page` nếu nó tồn tại
 	if (url.searchParams.has("page")) {
 		url.searchParams.delete("page");
@@ -117,6 +138,7 @@ function updateColorFilter(color) {
 	history.replaceState(null, "", url.toString()); // Cập nhật URL mà không tải lại trang
 	fetchFilteredProducts();
 }
+
 
 function updateSizeFilter(size) {
 	// Lấy URL hiện tại
@@ -126,20 +148,34 @@ function updateSizeFilter(size) {
 	// Chuyển chuỗi kích cỡ thành mảng
 	let sizeArray = sizes ? sizes.split(",") : [];
 
-	// Nếu kích cỡ đã có trong mảng, loại bỏ nó
-	if (sizeArray.includes(size)) {
-		sizeArray = sizeArray.filter(s => s !== size);
-	} else {
-		// Nếu kích cỡ chưa có, thêm vào mảng
-		sizeArray.push(size);
-	}
+	// Lấy tất cả các phần tử sizeLabel
+	const sizeItems = document.querySelectorAll('.size-options .size-label');
 
-	// Cập nhật lại tham số kích cỡ trong URL
+	sizeItems.forEach(item => {
+		const sizeLabel = item;
+		const sizeName = sizeLabel.textContent.trim().toLowerCase();
+
+		// Nếu kích cỡ này được chọn, thêm 'active' vào
+		if (sizeName === size.toLowerCase()) {
+			// Nếu kích cỡ đã có trong mảng, xóa nó và bỏ lớp 'active'
+			if (sizeArray.includes(size)) {
+				sizeArray = sizeArray.filter(s => s !== size);
+				sizeLabel.classList.remove('active'); // Xóa lớp 'active'
+			} else {
+				// Nếu chưa có kích cỡ, thêm vào mảng và thêm lớp 'active'
+				sizeArray.push(size);
+				sizeLabel.classList.add('active'); // Thêm lớp 'active'
+			}
+		}
+	});
+
+	// Cập nhật tham số kích cỡ trong URL
 	if (sizeArray.length > 0) {
 		url.searchParams.set("size", sizeArray.join(","));
 	} else {
 		url.searchParams.delete("size"); // Xóa tham số nếu không còn kích cỡ nào
 	}
+
 	// Xóa tham số `page` nếu nó tồn tại
 	if (url.searchParams.has("page")) {
 		url.searchParams.delete("page");
@@ -149,6 +185,41 @@ function updateSizeFilter(size) {
 	history.replaceState(null, "", url.toString()); // Cập nhật URL mà không tải lại trang
 	fetchFilteredProducts();
 }
+
+
+function resetChoose() {
+	// Xóa các lựa chọn màu sắc
+	const colorItems = document.querySelectorAll('.color-options .item-color');
+	colorItems.forEach(item => {
+		const colorWrapper = item.querySelector('.border-border');
+		colorWrapper.classList.remove('active'); // Xóa lớp 'active' của màu sắc
+	});
+
+	// Xóa các lựa chọn kích cỡ
+	const sizeItems = document.querySelectorAll('.size-options .size-label');
+	sizeItems.forEach(item => {
+		item.classList.remove('active'); // Xóa lớp 'active' của kích cỡ
+	});
+
+	// Lấy URL hiện tại
+	let url = new URL(window.location.href);
+
+	// Xóa tham số color và size trong URL nếu có
+	url.searchParams.delete("color");
+	url.searchParams.delete("size");
+
+	// Xóa tham số `page` nếu nó tồn tại
+	if (url.searchParams.has("page")) {
+		url.searchParams.delete("page");
+	}
+
+	// Cập nhật lại URL mà không tải lại trang
+	history.replaceState(null, "", url.toString());
+
+	// Gọi lại hàm để tải lại sản phẩm theo bộ lọc mới (không có bộ lọc)
+	fetchFilteredProducts();
+}
+
 
 function fetchFilteredProducts() {
 	const currentUrl = window.location.href;

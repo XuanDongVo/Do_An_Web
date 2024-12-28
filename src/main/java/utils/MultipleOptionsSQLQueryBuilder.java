@@ -22,7 +22,7 @@ public class MultipleOptionsSQLQueryBuilder {
 		Connection connection = DBConnection.getConection();
 
 		// Lấy tổng số sản phẩm
-		totalProduct = getTotalProducts(options);
+		totalProduct = getTotalProducts(options, connection);
 
 		// Xây dựng câu truy vấn SQL để lấy danh sách sản phẩm
 		String sql = buildSQLQuery(options, parameters, currentPage);
@@ -54,14 +54,13 @@ public class MultipleOptionsSQLQueryBuilder {
 	}
 
 	// Hàm lấy tổng số sản phẩm thỏa mãn các điều kiện
-	private static int getTotalProducts(MultipleOptionsProductRequest options) {
+	private static int getTotalProducts(MultipleOptionsProductRequest options, Connection connection) {
 		int total = 0;
 		List<Object> parameters = new ArrayList<>();
-		Connection connection = DBConnection.getConection();
-		PreparedStatement pst = null;
 
 		// Câu truy vấn để lấy tổng số sản phẩm
-		String sql = "SELECT COUNT(*)as total FROM product AS p " + "INNER JOIN sub_category AS sc ON p.sub_category_id = sc.id "
+		String sql = "SELECT COUNT(*)as total FROM product AS p "
+				+ "INNER JOIN sub_category AS sc ON p.sub_category_id = sc.id "
 				+ "INNER JOIN category AS c ON sc.category_id = c.id " + "INNER JOIN gender AS g ON c.gender_id = g.id "
 				+ "INNER JOIN product_color_img AS pci ON p.id = pci.product_id "
 				+ "INNER JOIN color AS col ON pci.color_id = col.id "
@@ -77,7 +76,7 @@ public class MultipleOptionsSQLQueryBuilder {
 		sql = addCategoryFilter(sql, options.getCategory(), parameters);
 
 		try {
-			pst = connection.prepareStatement(sql);
+			PreparedStatement pst = connection.prepareStatement(sql);
 			setQueryParameters(pst, parameters); // Thiết lập tham số
 			ResultSet rs = pst.executeQuery();
 
@@ -86,21 +85,6 @@ public class MultipleOptionsSQLQueryBuilder {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (pst != null) {
-				try {
-					pst.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			if (connection != null) {
-				try {
-					DBConnection.closeConnection(connection);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
 		}
 
 		return total;

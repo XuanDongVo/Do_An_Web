@@ -135,6 +135,11 @@ function changeQuantity(change, inputId) {
 		}
 	}
 }
+function deleteInCart(inputId){
+	var cartId = inputId.split('_')[1];
+	document.getElementById('confirmDeleteButton').setAttribute('data-cart-id', cartId);
+	openModal();
+}
 
 function confirmDelete() {
 	// Lấy cartId từ nút xác nhận xóa

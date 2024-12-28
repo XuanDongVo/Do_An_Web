@@ -78,7 +78,7 @@
 								class="form-label mt-3">Địa chỉ *</label> <input type="text"
 								id="address" name="address" class="form-control"
 								placeholder="Ví dụ: Số xx Ngõ xx Phú Kiều, Bắc Từ Liêm, Hà Nội"
-								required value=${user.name }> <label for="phoneNumber"
+								required value=${user.address }> <label for="phoneNumber"
 								class="form-label mt-3">Số điện thoại *</label> <input
 								type="text" id="phoneNumber" name="customerPhone"
 								class="form-control " required value=${user.phone }> <label

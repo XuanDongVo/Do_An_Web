@@ -20,7 +20,7 @@ public class HomeController extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		List<ProductDetailResponse> listResponses = productService.getRandomProductSku(2);
+		List<ProductDetailResponse> listResponses = productService.getRandomProductSku(8);
 		req.setAttribute("listResponses", listResponses);
 		req.getRequestDispatcher("view/user/home.jsp").forward(req, resp);
 	}

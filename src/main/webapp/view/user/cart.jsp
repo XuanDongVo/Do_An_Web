@@ -17,7 +17,7 @@
 <link rel="stylesheet" href="css/Item.css">
 <link rel="stylesheet" href="css/NewCollections.css">
 <link rel="stylesheet" href="css/NewLetter.css">
-<link rel="stylesheet" href="css/Footer.css">
+
 <link rel="stylesheet" href="css/Cate.css">
 <link rel="stylesheet" href="css/Cart.css">
 <link rel="stylesheet" href="adding/bootstrap/boostrap.min.css">
@@ -46,7 +46,7 @@
 	</div>
 
 
-	<div class="container mt-5">
+	<div class="container mt-5" style="margin-bottom: 8rem">
 		<div class="row">
 			<!-- Cart Items Section -->
 			<div class="left-cart col-md-8">
@@ -105,6 +105,7 @@
 													<button class="btn-quantity"
 														onclick="changeQuantity(1, 'quantity_${detail.cartId}')">+</button>
 												</div>
+												<button class="remove-item-btn" onclick="deleteInCart( 'quantity_${detail.cartId}')"><img src="img/remove.png" alt="Remove Icon"></button>
 											</div>
 										</div>
 
@@ -170,35 +171,7 @@
 
 
 
-	<!-- Footer -->
-	<div class="footer">
-		<div class="footer-logo">
-			<img src="footer_logo.png" alt="" />
-			<p>SHOPPEE</p>
-		</div>
-		<ul class="footer-links">
-			<li>Company</li>
-			<li>Products</li>
-			<li>Offices</li>
-			<li>About</li>
-			<li>Contact</li>
-		</ul>
-		<div class="footer-social-icon">
-			<div class="footer-icons-container">
-				<img src="instagram.png" alt="" />
-			</div>
-			<div class="footer-icons-container">
-				<img src="pinterest.png" alt="" />
-			</div>
-			<div class="footer-icons-container">
-				<img src="whatsapp.png" alt="" />
-			</div>
-		</div>
-		<div class="footer-copyright">
-			<hr />
-			<p>© 2023 by Shoppee. Proudly created with Wix.com</p>
-		</div>
-	</div>
+	<jsp:include page="footer.jsp"></jsp:include>
 
 
 

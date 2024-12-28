@@ -105,9 +105,9 @@
 	<!-- Collections -->
 	<div class="container new-collections mt-5">
 		<div class="collections">
-			<c:forEach items="${listResponses}" var="product">
+			<c:forEach items="${listResponses.data}" var="product">
 				<div class="collection-item">
-					<a href="/product/${product.productId}">
+					<a href="productDetail?id=${product.productId}">
 						<div class="image-container">
 							<img id="image-main" class="image-main"
 								src="${product.productSkus[0].img}" alt="${product.name} Image" />
@@ -166,15 +166,46 @@
 				</div>
 			</c:forEach>
 		</div>
+		<c:if test="${listResponses.totalPages > 1}">
+			<nav aria-label="Page navigation" class="mt-4">
+				<ul class="pagination justify-content-center custom-pagination">
+					<!-- Previous Button (disabled if on the first page) -->
+					<li
+						class="page-item ${listResponses.currentPage == 1 ? 'disabled' : ''}">
+						<button class="page-link"
+							onclick="navigatePage(${listResponses.currentPage - 1})"
+							tabindex="-1" aria-disabled="true">&laquo;</button>
+					</li>
+
+					<!-- Page Numbers -->
+					<c:forEach var="page" begin="1" end="${listResponses.totalPages}">
+						<li
+							class="page-item ${listResponses.currentPage == page ? 'active' : ''}">
+							<button class="page-link" onclick="navigatePage(${page})">${page}</button>
+						</li>
+					</c:forEach>
+
+					<!-- Next Button (disabled if on the last page) -->
+					<li
+						class="page-item ${listResponses.currentPage == listResponses.totalPages ? 'disabled' : ''}">
+						<button class="page-link"
+							onclick="navigatePage(${listResponses.currentPage + 1})">&raquo;</button>
+					</li>
+				</ul>
+			</nav>
+		</c:if>
+
+
+
 	</div>
 
 
 
-	<div class="container justify-content-center">
+	<%-- <div class="container justify-content-center">
     <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-indicators">
             <!-- Điều khiển carousel -->
-            <c:forEach items="${listResponses}" var="product" varStatus="status">
+            <c:forEach items="${listResponses.data}" var="product" varStatus="status">
                 <!-- Dựng các chỉ số cho carousel -->
                 <button type="button" data-bs-target="#carouselExampleIndicators" 
                         data-bs-slide-to="${status.index / 4}" 
@@ -266,42 +297,14 @@
             <span class="visually-hidden">Next</span>
         </button>
     </div>
-</div>
+</div> --%>
 
 
 
 
 
 
-	<!-- Footer -->
-	<div class="footer">
-		<div class="footer-logo">
-			<img src="footer_logo.png" alt="" />
-			<p>SHOPPEE</p>
-		</div>
-		<ul class="footer-links">
-			<li>Company</li>
-			<li>Products</li>
-			<li>Offices</li>
-			<li>About</li>
-			<li>Contact</li>
-		</ul>
-		<div class="footer-social-icon">
-			<div class="footer-icons-container">
-				<img src="instagram.png" alt="" />
-			</div>
-			<div class="footer-icons-container">
-				<img src="pinterest.png" alt="" />
-			</div>
-			<div class="footer-icons-container">
-				<img src="whatsapp.png" alt="" />
-			</div>
-		</div>
-		<div class="footer-copyright">
-			<hr />
-			<p>© 2023 by Shoppee. Proudly created with Wix.com</p>
-		</div>
-	</div>
+	<jsp:include page="footer.jsp"></jsp:include>
 
 
 	<script type="text/javascript">

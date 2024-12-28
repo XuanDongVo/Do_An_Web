@@ -233,8 +233,7 @@ function renderDataListCartDetailHeader(listCartDetail) {
 		removeBtn.className = 'remove-item-btn';
 
 		const removeIcon = document.createElement('img');
-		removeIcon.src = 'https://via.placeholder.com/20x20';
-		/*	removeIcon.src = 'img/remove.png';*/
+		removeIcon.src = 'img/remove.png';
 		removeIcon.alt = 'Remove Icon';
 		removeBtn.appendChild(removeIcon);
 

@@ -90,10 +90,12 @@
 					<!-- Tab Content: Size -->
 					<div class="tab-content" id="sizeTab" style="display: none;">
 						<div class="size-options">
-							<label><input type="checkbox"> S</label> <label><input
-								type="checkbox"> M</label> <label><input type="checkbox">
-								L</label> <label><input type="checkbox"> XL</label> <label><input
-								type="checkbox"> XXL</label>
+							<div class="d-flex flex-wrap gap-2 size-options">
+								<label
+									class="btn btn-outline-dark d-flex align-items-center justify-content-center size-label">
+									<input type="checkbox" class="btn-check"> S
+								</label>
+							</div>
 						</div>
 					</div>
 
@@ -107,7 +109,8 @@
 
 
 
-					<button class="reset-button">Xoá hết</button>
+					<button class="reset-button" onclick="resetChoose()">Xoá
+						hết</button>
 					<!-- 	<button class="result-button">Xem kết quả (29)</button> -->
 				</div> </i> <i class="sort-icon">⇅</i> <i class="view-icon">◻</i> <i
 				class="grid-icon">☷</i>
@@ -217,35 +220,7 @@
 	</div>
 
 
-	<!-- Footer -->
-	<div class="footer">
-		<div class="footer-logo">
-			<img src="footer_logo.png" alt="" />
-			<p>SHOPPEE</p>
-		</div>
-		<ul class="footer-links">
-			<li>Company</li>
-			<li>Products</li>
-			<li>Offices</li>
-			<li>About</li>
-			<li>Contact</li>
-		</ul>
-		<div class="footer-social-icon">
-			<div class="footer-icons-container">
-				<img src="instagram.png" alt="" />
-			</div>
-			<div class="footer-icons-container">
-				<img src="pinterest.png" alt="" />
-			</div>
-			<div class="footer-icons-container">
-				<img src="whatsapp.png" alt="" />
-			</div>
-		</div>
-		<div class="footer-copyright">
-			<hr />
-			<p>© 2023 by Shoppee. Proudly created with Wix.com</p>
-		</div>
-	</div>
+	<jsp:include page="footer.jsp"></jsp:include>
 
 
 	<script type="text/javascript">

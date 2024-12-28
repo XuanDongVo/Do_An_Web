@@ -151,14 +151,19 @@
     margin-top: 5px;
 }
 
-.cart-item-quantity {
+/* .cart-item-quantity {
     margin-right: 10px;
-}
+} */
 
 .remove-item-btn {
     background: none;
     border: none;
     cursor: pointer;
+}
+
+.remove-item-btn img{
+	width:24px;
+	height:24px;
 }
 
 .cart-item-price {

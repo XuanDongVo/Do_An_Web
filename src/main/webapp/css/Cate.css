@@ -65,20 +65,35 @@
 
 .color-options, .size-options {
 	display: flex;
-	flex-flow: row wrap;
+	/* flex-flow: row wrap; */
 	min-width: 0;
 	/* justify-content: space-between; */
 }
 
+.border-border.active{
+	border: 1px solid black;
+}
+
+.size-label.active{
+	border: 1px solid black;
+}
+
+.color-options .border-border:hover{
+	border: 1px solid black;
+}
 .color-box, .size-options label {
-	width: 50px; /* Giảm chiều rộng */
-	height: 80px; /* Tăng chiều cao */
+	width: 40px; /* Giảm chiều rộng */
+	height: 40px; /* Tăng chiều cao */
 	margin: 5px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background-color: #f0f0f0;
+	border: 1px solid #ccc;
 	cursor: pointer;
+}
+
+.size-options label:hover{
+	border: 1px solid black;
 }
 
 .color-box:hover {

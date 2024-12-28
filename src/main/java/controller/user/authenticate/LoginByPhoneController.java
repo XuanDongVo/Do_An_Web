@@ -11,11 +11,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import repository.cart.CartRepository;
 import repository.user.UserRepository;
+import service.cartdetail.CartDetailService;
 
 @WebServlet("/verifyPhoneNumber")
 public class LoginByPhoneController extends HttpServlet {
 	UserRepository userRepository = new UserRepository();
 	CartRepository cartRepository = new CartRepository();
+	CartDetailService cartDetailService = new CartDetailService();
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -46,6 +48,7 @@ public class LoginByPhoneController extends HttpServlet {
 					session.setAttribute("user", user);
 					session.setAttribute("userId", user.getId());
 
+					cartDetailService.mergeCartAfterLogin(req, user, resp);
 					// Xác thực thành công, chuyển hướng sang trang chủ
 					resp.sendRedirect(req.getContextPath() + "/home");
 				} else {
@@ -57,7 +60,8 @@ public class LoginByPhoneController extends HttpServlet {
 					// tạo cart cho người dùng
 					cartRepository.addCartForNewUser(user.getId());
 					// Xác thực thành công, chuyển hướng sang trang chủ
-					resp.sendRedirect("home");
+					cartDetailService.mergeCartAfterLogin(req, user, resp);
+					resp.sendRedirect(req.getContextPath() + "/home");
 					return;
 				}
 			} else {

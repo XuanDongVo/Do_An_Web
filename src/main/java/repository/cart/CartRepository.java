@@ -15,13 +15,14 @@ public class CartRepository {
 	private Connection connection = null;
 	private PreparedStatement pst = null;
 
-	public Optional<Cart> getUserCartByPhone(String phone) {
+	public Optional<Cart> getUserCartByPhoneOrEmail(String phone , String email) {
 		connection = DBConnection.getConection();
 		String sql = "";
 		try {
-			sql = "SELECT cart.* FROM cart " + "JOIN user ON user.id = cart.user_id " + "WHERE user.phone = ?";
+			sql = "SELECT cart.* FROM cart " + "JOIN user ON user.id = cart.user_id " + "WHERE user.phone = ? OR user.email = ?";
 			pst = connection.prepareStatement(sql);
 			pst.setString(1, phone);
+			pst.setString(2, email);
 			ResultSet rs = pst.executeQuery();
 			if (rs.next()) {
 				Cart cart = new Cart(rs.getLong(1), null);
