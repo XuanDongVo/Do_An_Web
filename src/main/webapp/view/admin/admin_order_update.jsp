@@ -57,7 +57,7 @@
 
 
 			<!-- User Menu-->
-			<li><a class="app-nav__item" href="/index.html"><i
+			<li><a class="app-nav__item" href="${pageContext.request.contextPath}/logout"><i
 					class='bx bx-log-out bx-rotate-180'></i> </a></li>
 		</ul>
 	</header>

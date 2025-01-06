@@ -30,7 +30,7 @@ public class CategoryRepository {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		}  finally {
+		} finally {
 			if (pst != null) {
 				try {
 					pst.close();
@@ -73,7 +73,7 @@ public class CategoryRepository {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		}  finally {
+		} finally {
 			if (pst != null) {
 				try {
 					pst.close();
@@ -91,6 +91,42 @@ public class CategoryRepository {
 			}
 		}
 		return categories;
+	}
+
+	public Category findBySubCategoryName(String subCategoryName) {
+		connection = DBConnection.getConection();
+		String sql = "SELECT category.*  FROM category "
+				+ "INNER JOIN sub_category ON category.id = sub_category.category_id WHERE sub_category.name = ? ";
+		try {
+			pst = connection.prepareStatement(sql);
+			pst.setString(1, subCategoryName);
+			ResultSet rs = pst.executeQuery();
+			while (rs.next()) {
+				Category category = new Category();
+				category.setId(rs.getLong(1));
+				category.setName(rs.getString(2));
+				return category;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (pst != null) {
+				try {
+					pst.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			if (connection != null) {
+				try {
+					DBConnection.closeConnection(connection);
+					;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return null;
 	}
 
 	// Find Category By Name
@@ -114,7 +150,7 @@ public class CategoryRepository {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();// TODO: handle exception
-		}  finally {
+		} finally {
 			if (pst != null) {
 				try {
 					pst.close();

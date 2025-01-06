@@ -15,6 +15,8 @@ import entity.SubCategory;
 public class SubCategoryRepository {
 	private Connection connection = null;
 	private PreparedStatement pst = null;
+	
+	
 
 	public List<String> beadCrumb(String subCategory) {
 		List<String> beadCrumbs = new ArrayList<>();

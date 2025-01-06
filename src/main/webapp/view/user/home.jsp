@@ -88,20 +88,22 @@
 						<c:forEach items="${product.productSkus}" var="sku"
 							varStatus="status">
 							<img src="${sku.img}" alt="${sku.color} Image"
-								onclick="selectImage('${sku.productColorImgId}', '${sku.img}', '${fn:escapeXml(sku.sizeAndStock)}', '${product.typeProduct}')" />
+								onclick="selectImage(this,'${sku.productColorImgId}', '${sku.img}', '${fn:escapeXml(sku.sizeAndStock)}', '${product.typeProduct}')" />
 						</c:forEach>
 					</div>
 					<div class="item-price-new">
 						<fmt:formatNumber value="${product.price}" pattern="#,###" />
 						đ
 					</div>
-					<p class="product-name"><strong><a href="productDetail?id=${product.id}"  > ${product.name}</a></strong></p>
+					<p class="product-name">
+						<strong><a href="productDetail?id=${product.id}">
+								${product.name}</a></strong>
+					</p>
 
 				</div>
 			</c:forEach>
 		</div>
 	</div>
-
 
 
 

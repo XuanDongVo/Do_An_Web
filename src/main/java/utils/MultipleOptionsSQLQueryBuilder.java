@@ -18,7 +18,6 @@ public class MultipleOptionsSQLQueryBuilder {
 	public static List<Product> findByMultipleOptions(MultipleOptionsProductRequest options, int currentPage) {
 		List<Product> products = new ArrayList<>();
 		List<Object> parameters = new ArrayList<>();
-		PreparedStatement pst = null;
 		Connection connection = DBConnection.getConection();
 
 		// Lấy tổng số sản phẩm
@@ -28,19 +27,12 @@ public class MultipleOptionsSQLQueryBuilder {
 		String sql = buildSQLQuery(options, parameters, currentPage);
 
 		try {
-			pst = connection.prepareStatement(sql);
+			PreparedStatement	pst = connection.prepareStatement(sql);
 			setQueryParameters(pst, parameters); // Thiết lập tham số
 			products = executeQuery(pst); // Thực thi truy vấn và lấy kết quả
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (pst != null) {
-				try {
-					pst.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
 			if (connection != null) {
 				try {
 					DBConnection.closeConnection(connection);

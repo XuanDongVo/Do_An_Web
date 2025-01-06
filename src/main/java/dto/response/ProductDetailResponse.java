@@ -9,6 +9,15 @@ public class ProductDetailResponse {
 	private String subCategory;
 	private double price;
 	private String typeProduct;
+	private String description;
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
 	private List<ProductSkuResponse> productSkus;
 

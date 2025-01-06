@@ -122,8 +122,6 @@
 
 	<!-- Collections -->
 	<div class="container new-collections mt-5">
-		<!-- 	<h1>NEW COLLECTIONS</h1>
-		<hr /> -->
 		<div class="collections">
 			<c:forEach items="${listResponses.data}" var="product">
 				<div class="collection-item">
@@ -171,7 +169,7 @@
 						<c:forEach items="${product.productSkus}" var="sku"
 							varStatus="status">
 							<img src="${sku.img}" alt="${sku.color} Image"
-								onclick="selectImage('${sku.productColorImgId}', '${sku.img}', '${fn:escapeXml(sku.sizeAndStock)}', '${product.typeProduct}')" />
+								onclick="selectImage(this, '${sku.productColorImgId}', '${sku.img}', '${fn:escapeXml(sku.sizeAndStock)}', '${product.typeProduct}')" />
 						</c:forEach>
 					</div>
 
@@ -186,6 +184,8 @@
 				</div>
 			</c:forEach>
 		</div>
+		
+		<!-- Pagintion -->
 		<c:if test="${listResponses.totalPages > 1}">
 			<nav aria-label="Page navigation" class="mt-4">
 				<ul class="pagination justify-content-center custom-pagination">

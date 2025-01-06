@@ -9,7 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dbConnection.DBConnection;
+import dto.response.ProductDetailResponse;
 import entity.Product;
+import entity.SubCategory;
+import repository.category.SubCategoryRepository;
 
 public class ProductRepository {
 	private Connection connection = null;
@@ -49,6 +52,18 @@ public class ProductRepository {
 			}
 		}
 		return list;
+	}
+
+	public int updateProduct(Connection connection, ProductDetailResponse detailResponse, SubCategory subCategory)
+			throws SQLException {
+		String sql = "UPDATE product SET name = ?, description = ?  , sub_category_id = ?  WHERE id = ?";
+		pst = connection.prepareStatement(sql);
+		pst.setString(1, detailResponse.getName());
+		pst.setString(2, detailResponse.getDescription());
+		pst.setLong(3, subCategory.getId());
+		pst.setLong(4, detailResponse.getId());
+
+		return pst.executeUpdate();
 	}
 
 	public void removeById(Connection connection, Long productId) {

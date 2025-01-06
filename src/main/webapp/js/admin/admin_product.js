@@ -14,18 +14,13 @@ document.getElementById('confirmDelete').addEventListener('click', function () {
     }
 });
 
-function viewProductDetails(productId) {
+function viewProductDetails(action,productId) {
     if (productId) {
-        window.location.href = `adminDetailProduct?action=view&id=${productId}`;
+		 window.location.href = `adminDetailProduct?action=${action}&id=${productId}`;
     } else {
         alert('Không tìm thấy sản phẩm. Vui lòng thử lại.');
     }
 }
-
-
-
-
-
 
 function selectImage(imgSrc, sizeAndStockString, color) {
 	// Cập nhật hình ảnh chính

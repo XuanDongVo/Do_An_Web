@@ -48,7 +48,7 @@ public class AdminAddProductController extends HttpServlet {
 		// Thêm sản phẩm vào database
 		String message;
 		try {
-			productService.addProduct(databaseRequest);
+			productService.addProduct(databaseRequest );
 			message = "Thêm sản phẩm thành công";
 		} catch (Exception e) {
 			message = "Không thể thêm sản phẩm: " + e.getMessage();

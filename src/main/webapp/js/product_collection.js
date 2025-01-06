@@ -10,52 +10,58 @@ function addProductToCart(productColorImgId, size, quantity) {
 }
 
 
-function selectImage(productColorImgId, imgSrc, sizeAndStockString, typeProduct) {
-	// Cập nhật hình ảnh chính
-	document.getElementById('image-main').src = imgSrc;
-	document.getElementById('image-hover').src = imgSrc;
+function selectImage(imgElement, productColorImgId, imgSrc, sizeAndStockString, typeProduct) {
+    // Lấy phần tử cha gần nhất (thẻ .collection-item)
+    const collectionItem = imgElement.closest('.collection-item');
 
-	// Cập nhật kích thước dựa trên sizeAndStock
-	const sizeOptionsDiv = document.getElementById('size-options');
-	sizeOptionsDiv.innerHTML = ''; // Xóa các tùy chọn kích thước trước đó
+    // Cập nhật hình ảnh chính
+    const imageMain = collectionItem.querySelector('.image-main');
+    const imageHover = collectionItem.querySelector('.image-hover');
+    imageMain.src = imgSrc;
+    imageHover.src = imgSrc;
 
-	// Chuyển đổi sizeAndStock từ chuỗi sang đối tượng
-	const sizeAndStock = {};
-	try {
-		sizeAndStockString.replace(/{|}/g, '').split(',').forEach(item => {
-			const [size, stock] = item.split('=');
-			if (size && stock) {
-				sizeAndStock[size.trim()] = parseInt(stock.trim(), 10);
-			}
-		});
-	} catch (error) {
-		console.error('Lỗi khi phân tích cú pháp sizeAndStock:', error);
-		return;
-	}
+    // Cập nhật kích thước dựa trên sizeAndStock
+    const sizeOptionsDiv = collectionItem.querySelector('.size-options');
+    sizeOptionsDiv.innerHTML = ''; // Xóa các tùy chọn kích thước trước đó
 
-	// Tạo danh sách kích thước dựa trên loại sản phẩm
-	let sizeList = [];
-	if (typeProduct === 'áo') {
-		sizeList = ['s', 'm', 'l', 'xl', 'xxl'];
-	} else if (typeProduct === 'quần') {
-		sizeList = ['28', '29', '30', '31', '32'];
-	}
+    // Chuyển đổi sizeAndStock từ chuỗi sang đối tượng
+    const sizeAndStock = {};
+    try {
+        sizeAndStockString.replace(/{|}/g, '').split(',').forEach(item => {
+            const [size, stock] = item.split('=');
+            if (size && stock) {
+                sizeAndStock[size.trim()] = parseInt(stock.trim(), 10);
+            }
+        });
+    } catch (error) {
+        console.error('Lỗi khi phân tích cú pháp sizeAndStock:', error);
+        return;
+    }
 
-	// Duyệt qua danh sách kích thước
-	sizeList.forEach(size => {
-		const stock = sizeAndStock[size] || 0;
-		const sizeButton = document.createElement('button');
+    // Tạo danh sách kích thước dựa trên loại sản phẩm
+    let sizeList = [];
+    if (typeProduct === 'áo') {
+        sizeList = ['s', 'm', 'l', 'xl', 'xxl'];
+    } else if (typeProduct === 'quần') {
+        sizeList = ['28', '29', '30', '31', '32'];
+    }
 
-		sizeButton.className = stock > 0 ? 'size-btn' : 'size-btn size-unavailable';
-		sizeButton.textContent = size.toUpperCase();
+    // Duyệt qua danh sách kích thước
+    sizeList.forEach(size => {
+        const stock = sizeAndStock[size] || 0;
+        const sizeButton = document.createElement('button');
 
-		if (stock > 0) {
-			sizeButton.onclick = () => addProductToCart(productColorImgId, size, '1');
-		}
+        sizeButton.className = stock > 0 ? 'size-btn' : 'size-btn size-unavailable';
+        sizeButton.textContent = size.toUpperCase();
 
-		sizeOptionsDiv.appendChild(sizeButton);
-	});
+        if (stock > 0) {
+            sizeButton.onclick = () => addProductToCart(productColorImgId, size, '1');
+        }
+
+        sizeOptionsDiv.appendChild(sizeButton);
+    });
 }
+
 
 document.addEventListener('DOMContentLoaded', function() {
 	// Chọn tất cả các biểu tượng plus

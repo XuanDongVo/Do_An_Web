@@ -27,20 +27,8 @@ public class ColorRepository {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (pst != null) {
-				try {
-					pst.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
 			if (connection != null) {
-				try {
-					DBConnection.closeConnection(connection);
-					;
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				DBConnection.closeConnection(connection);
 			}
 		}
 		return colors;
@@ -59,20 +47,9 @@ public class ColorRepository {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (pst != null) {
-				try {
-					pst.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
 			if (connection != null) {
-				try {
-					DBConnection.closeConnection(connection);
-					;
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				DBConnection.closeConnection(connection);
+
 			}
 		}
 		return null;

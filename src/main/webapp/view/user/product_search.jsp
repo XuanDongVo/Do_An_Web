@@ -95,7 +95,6 @@
 					</div>
 
 					<button class="reset-button">Xoá hết</button>
-					<button class="result-button">Xem kết quả (29)</button>
 				</div> </i> <i class="sort-icon">⇅</i> <i class="view-icon">◻</i> <i
 				class="grid-icon">☷</i>
 		</div>

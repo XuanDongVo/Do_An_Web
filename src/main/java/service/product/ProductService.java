@@ -1,8 +1,12 @@
 package service.product;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,11 +19,13 @@ import dto.request.MultipleOptionsProductRequest;
 import dto.response.PaginationResponse;
 import dto.response.ProductDetailResponse;
 import entity.Category;
+import entity.Color;
 import entity.Inventory;
 import entity.Product;
 import entity.ProductColorImage;
 import entity.ProductSku;
 import entity.SubCategory;
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import repository.cart.CartDetailRepository;
@@ -96,7 +102,7 @@ public class ProductService {
 			// xoa product
 			productRepository.removeById(connection, productId);
 
-			connection.commit();
+			connection.setAutoCommit(true);
 
 		} catch (Exception e) {
 			if (connection != null) {
@@ -119,6 +125,86 @@ public class ProductService {
 
 	}
 
+	public void updateProductColorImg(Long productColorImgId, String img, String color) throws SQLException {
+		Connection connection = null;
+		try {
+			connection = DBConnection.getConection();
+			connection.setAutoCommit(false); // Bắt đầu giao dịch
+
+			Color currentColor = colorRepository.findByName(color);
+			if (currentColor == null) {
+				throw new RuntimeException("Màu không tồn tại: " + color);
+			}
+
+			int rowEffect = productColorImgRepository.updateColor(connection, currentColor.getId(), productColorImgId);
+			if (rowEffect == 0) {
+				throw new RuntimeException("Không thể cập nhật product.");
+			}
+
+			ProductColorImage productColorImage = productColorImgRepository.findById(productColorImgId);
+			if (productColorImage == null) {
+				throw new RuntimeException("Không tìm thấy productColorImage với ID: " + productColorImgId);
+			}
+
+			boolean isUpdate = updateImgInServer(img, productColorImage.getImage());
+			if (!isUpdate) {
+				throw new RuntimeException("Cập nhật hình ảnh thất bại cho productColorImgId: " + productColorImgId);
+			}
+
+			connection.setAutoCommit(true);
+		} catch (Exception e) {
+			if (connection != null) {
+				connection.rollback(); // Rollback giao dịch nếu lỗi
+			}
+			throw new RuntimeException("Giao dịch thất bại: " + e.getMessage(), e);
+		} finally {
+			if (connection != null) {
+				DBConnection.closeConnection(connection); // Đóng kết nối
+			}
+		}
+	}
+
+	// update product
+	public void updateProduct(ProductDetailResponse productDetailResponse) throws SQLException {
+		Connection connection = null;
+		try {
+			connection = DBConnection.getConection();
+			connection.setAutoCommit(false); // Bắt đầu giao dịch
+
+			SubCategory subCategory = subCategoryRepository.findByName(productDetailResponse.getSubCategory())
+					.orElseThrow(() -> new RuntimeException("Not found"));
+
+			// update Product
+			int rowEffect;
+			rowEffect = productRepository.updateProduct(connection, productDetailResponse, subCategory);
+
+			if (rowEffect == 0) {
+				throw new RuntimeException("Không thể cập nhật product.");
+			}
+
+			List<ProductColorImage> productColorImages = productColorImgRepository
+					.finbByProductId(productDetailResponse.getId());
+
+			for (ProductColorImage pci : productColorImages) {
+				rowEffect = productSkuRepository.updatePrice(connection, productDetailResponse.getPrice(), pci.getId());
+				if (rowEffect == 0) {
+					throw new RuntimeException("Không thể cập nhật productSku.");
+				}
+			}
+
+			connection.setAutoCommit(true);
+
+		} catch (Exception e) {
+			connection.rollback(); // Rollback toàn bộ giao dịch
+			throw new RuntimeException("Giao dịch thất bại: " + e.getMessage(), e);
+
+		} finally {
+			if (connection != null) {
+				DBConnection.closeConnection(connection);
+			}
+		}
+	}
+
 	// Adđ Product
 	public void addProduct(AddProductInDatabaseRequest productInDatabaseRequest) {
 		Connection connection = null;
@@ -135,6 +221,9 @@ public class ProductService {
 			long productId = productRepository.addProduct(connection, product);
 			if (productId == 0) {
 				throw new RuntimeException("Không thể tạo product: Không có ID product được sinh ra.");
+			}
+			if (connection.isClosed()) {
+				System.out.println("close");
 			}
 			// lưu productColorImg
 			for (AddProductInDatabaseRequest.ProductSkuResponse productColorImg : productInDatabaseRequest.getskus()) {
@@ -165,10 +254,12 @@ public class ProductService {
 	private void saveProductColorImgAndSku(Connection connection, long productId,
 			AddProductInDatabaseRequest.ProductSkuResponse productColorImg, AddProductInDatabaseRequest request) {
 		try {
+			String imageUrl = saveBase64Image(productColorImg.getImage(), request.getName(),
+					productColorImg.getColor());
 			// Xử lý logic lưu ProductColorImage
 			ProductColorImage productColorImage = new ProductColorImage();
 			productColorImage.setProduct(new Product(productId, null, null, null));
-			productColorImage.setImage(productColorImg.getImage());
+			productColorImage.setImage(imageUrl);
 			productColorImage.setColor(colorRepository.findByName(productColorImg.getColor()));
 
 			long productColorImgId = productColorImgRepository.addProductColorImg(connection, productColorImage);
@@ -202,6 +293,86 @@ public class ProductService {
 		} catch (Exception e) {
 			throw new RuntimeException("Lỗi khi xử lý ProductColorImg hoặc ProductSku: " + e.getMessage(), e);
 		}
+	}
+
+	private boolean updateImgInServer(String base64Image, String currentImg) {
+		try {
+			// Loại bỏ prefix "data:image"
+			if (base64Image.startsWith("data:image")) {
+				base64Image = base64Image.split(",")[1];
+			}
+
+			// Đường dẫn thư mục lưu trữ ảnh
+			String directoryPath = "E:\\Eclipse\\Do_An_Web\\src\\main\\webapp\\imgProduct";
+
+			// Lấy fileName từ currentImg
+			String fileName = currentImg.substring(currentImg.lastIndexOf("/") + 1);
+
+			// Kiểm tra fileName có tồn tại trong thư mục
+			File directory = new File(directoryPath);
+			File[] files = directory.listFiles();
+			if (files == null || files.length == 0) {
+				System.out.println("Thư mục không chứa file nào.");
+				return false;
+			}
+
+			boolean fileExists = false;
+			for (File file : files) {
+				if (file.getName().equals(fileName)) {
+					fileExists = true;
+					break;
+				}
+			}
+
+			if (!fileExists) {
+				System.out.println("File không tồn tại trong thư mục.");
+				return false;
+			}
+
+			// Giải mã chuỗi Base64 thành mảng byte
+			byte[] decodedBytes = Base64.getDecoder().decode(base64Image);
+
+			// Ghi lại ảnh vào file
+			File targetFile = new File(directoryPath + File.separator + fileName);
+			try (FileOutputStream fos = new FileOutputStream(targetFile)) {
+				fos.write(decodedBytes);
+			}
+
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	private String saveBase64Image(String base64Image, String productName, String color) throws IOException {
+
+		if (base64Image.startsWith("data:image")) {
+			base64Image = base64Image.split(",")[1]; // Loại bỏ prefix
+		}
+
+		// Giải mã chuỗi Base64 thành mảng byte
+		byte[] decodedBytes = Base64.getDecoder().decode(base64Image);
+
+		// Tạo tên file dựa trên tên sản phẩm và màu sắc
+		String fileName = productName.replaceAll(" ", "_") + "_" + color.replaceAll(" ", "_") + ".jpg";
+
+		String directoryPath = "E:\\Eclipse\\Do_An_Web\\src\\main\\webapp\\imgProduct";
+
+		// Đặt đường dẫn lưu hình ảnh
+		File directory = new File(directoryPath);
+		if (!directory.exists()) {
+			directory.mkdirs(); // Tạo thư mục nếu chưa tồn tại
+		}
+
+		// Lưu hình ảnh vào file
+		File imageFile = new File(directory, fileName);
+		try (FileOutputStream fos = new FileOutputStream(imageFile)) {
+			fos.write(decodedBytes);
+		}
+
+		// Trả về URL của hình ảnh đã lưu
+		return "http://localhost:8080/Ecommerce_Web/imgProduct/" + fileName;
 	}
 
 	// Find Product Sku by id
@@ -409,6 +580,7 @@ public class ProductService {
 				productResponse
 						.setSubCategory(productSku.getProductColorImage().getProduct().getSubCategory().getName());
 				productResponse.setPrice(productSku.getPrice());
+				productResponse.setDescription(productSku.getProductColorImage().getProduct().getDescription());
 				productResponse.setTypeProduct(productSku.getSize().getSizeType().getName());
 				productResponse.setProductSkus(new ArrayList<>());
 				productResponseMap.put(productId, productResponse);

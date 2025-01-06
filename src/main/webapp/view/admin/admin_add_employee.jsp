@@ -57,7 +57,7 @@
 
 
 			<!-- User Menu-->
-			<li><a class="app-nav__item" href="/index.html"><i
+			<li><a class="app-nav__item" href="${pageContext.request.contextPath}/logout"><i
 					class='bx bx-log-out bx-rotate-180'></i> </a></li>
 		</ul>
 	</header>
@@ -178,11 +178,10 @@
 
 
 	<script src="${pageContext.request.contextPath}/js/admin/main.js"></script>
-	<%-- 	<script
+		<script
 		src="${pageContext.request.contextPath}/js/admin/admin_add_product.js"></script>
 
 	<script type="text/javascript">
-	
 	
 	
 	// Lưu thông tin sản phẩm (SPU và SKU) dưới dạng JSON
@@ -194,8 +193,7 @@
 	    // Tạo form ẩn và gửi dữ liệu
 	    const form = document.createElement('form');
 	    form.method = 'POST';
-	    form.action = '<%=request.getContextPath()%>
-		/adminAddProduct';
+	    form.action = '<%=request.getContextPath()%>/adminAddProduct';
 
 			const inputJson = document.createElement('input');
 			inputJson.type = 'hidden';
@@ -207,7 +205,7 @@
 			form.submit();
 
 		}
-	</script> --%>
+	</script>
 
 
 </body>

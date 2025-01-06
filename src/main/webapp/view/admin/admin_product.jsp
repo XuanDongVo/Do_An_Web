@@ -43,7 +43,8 @@
 
 
 			<!-- User Menu-->
-			<li><a class="app-nav__item" href="/index.html"><i
+			<li><a class="app-nav__item"
+				href="${pageContext.request.contextPath}/logout"><i
 					class='bx bx-log-out bx-rotate-180'></i> </a></li>
 		</ul>
 	</header>
@@ -64,10 +65,12 @@
 				href="${pageContext.request.contextPath}/view/admin/admin.jsp"><i
 					class='app-menu__icon bx bx-tachometer'></i><span
 					class="app-menu__label">Bảng điều khiển</span></a></li>
-			<li><a class="app-menu__item " href="${pageContext.request.contextPath}/admin_employee"><i
+			<li><a class="app-menu__item "
+				href="${pageContext.request.contextPath}/admin_employee"><i
 					class='app-menu__icon bx bx-id-card'></i> <span
 					class="app-menu__label">Quản lý nhân viên</span></a></li>
-			<li><a class="app-menu__item" href="${pageContext.request.contextPath}/admin_customer"><i
+			<li><a class="app-menu__item"
+				href="${pageContext.request.contextPath}/admin_customer"><i
 					class='app-menu__icon bx bx-user-voice'></i><span
 					class="app-menu__label">Quản lý khách hàng</span></a></li>
 			<li><a class="app-menu__item "
@@ -121,7 +124,7 @@
 										<td>
 											<button class="btn btn-primary btn-sm print-file"
 												type="button" title="Chi tiết"
-												onclick="viewProductDetails(${product.productId})">
+												onclick="viewProductDetails( 'view', ${product.productId})">
 												<i class="fas fa-eye"></i>
 											</button>
 
@@ -130,8 +133,8 @@
 												<i class="fas fa-trash-alt"></i>
 											</button>
 											<button class="btn btn-primary btn-sm edit" type="button"
-												title="Sửa" id="show-emp" data-toggle="modal"
-												data-target="#ModalUP">
+												title="Sửa"
+												onclick="viewProductDetails( 'edit', ${product.productId})">
 												<i class="fas fa-edit"></i>
 											</button>
 										</td>

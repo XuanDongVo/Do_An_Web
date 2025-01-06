@@ -57,7 +57,7 @@
 
 
 			<!-- User Menu-->
-			<li><a class="app-nav__item" href="/index.html"><i
+			<li><a class="app-nav__item" href="${pageContext.request.contextPath}/logout"><i
 					class='bx bx-log-out bx-rotate-180'></i> </a></li>
 		</ul>
 	</header>
@@ -78,10 +78,12 @@
 				href="${pageContext.request.contextPath}/view/admin/admin.jsp"><i
 					class='app-menu__icon bx bx-tachometer'></i><span
 					class="app-menu__label">Bảng điều khiển</span></a></li>
-			<li><a class="app-menu__item " href="${pageContext.request.contextPath}/admin_employee"><i
+			<li><a class="app-menu__item "
+				href="${pageContext.request.contextPath}/admin_employee"><i
 					class='app-menu__icon bx bx-id-card'></i> <span
 					class="app-menu__label">Quản lý nhân viên</span></a></li>
-			<li><a class="app-menu__item" href="${pageContext.request.contextPath}/admin_customer"><i
+			<li><a class="app-menu__item"
+				href="${pageContext.request.contextPath}/admin_customer"><i
 					class='app-menu__icon bx bx-user-voice'></i><span
 					class="app-menu__label">Quản lý khách hàng</span></a></li>
 			<li><a class="app-menu__item "
@@ -188,9 +190,9 @@
 
 						<div class="mb-3">
 							<label for="productImage" class="form-label">URL hình ảnh
-								sản phẩm</label> <input type="text" class="form-control"
-								id="productImage" name="product_color_img"
-								placeholder="Nhập URL hình ảnh sản phẩm" required>
+								sản phẩm</label> <input type="file" class="form-control"
+								id="productImage" name="product_color_img" accept="image/*"
+								required>
 						</div>
 
 						<div class="mb-3">

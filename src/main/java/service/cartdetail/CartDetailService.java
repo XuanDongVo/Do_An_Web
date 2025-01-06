@@ -252,7 +252,6 @@ public class CartDetailService {
 		if (cartCookieValue != null && !cartCookieValue.isEmpty()) {
 			detailCarts = decodeCartDetailsFromCookie(cartCookieValue);
 		}
-
 		Optional<DetailCartResponse> existingCartDetail = detailCarts.stream()
 				.filter(cd -> cd.getCartId().equals(productSku.getId())).findFirst();
 

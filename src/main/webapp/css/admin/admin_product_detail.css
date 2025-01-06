@@ -13,13 +13,18 @@
 	border: 2px solid black;
 }
 
-.container {
+.container.view {
 	margin: 0 auto; /* Căn giữa theo chiều ngang */
 	padding: 20px; /* Thêm khoảng cách bên trong khung */
-	max-width: 800px; /* Đặt chiều rộng tối đa */
 	background-color: #ffffff; /* Màu nền trắng */
 	border: 1px solid #ddd; /* Tạo khung với viền mờ */
 	border-radius: 8px; /* Tạo góc bo tròn cho khung */
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Thêm hiệu ứng đổ bóng */
+}
+
+.container.edit {
+	margin: 0 auto; /* Căn giữa theo chiều ngang */
+	padding: 20px; /* Thêm khoảng cách bên trong khung */
+	background-color: #ffffff; /* Màu nền trắng */
 }
 

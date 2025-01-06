@@ -52,7 +52,7 @@
 
 
 			<!-- User Menu-->
-			<li><a class="app-nav__item" href="/index.html"><i
+			<li><a class="app-nav__item" href="${pageContext.request.contextPath}/logout"><i
 					class='bx bx-log-out bx-rotate-180'></i> </a></li>
 		</ul>
 	</header>
@@ -100,9 +100,7 @@
 			</div>
 
 		</div>
-		<div class="container ">
-
-
+		<div class="container view">
 			<c:set value="${productResponse}" var="product" />
 			<div class="row">
 				<!-- Left Section: Image Gallery -->
@@ -130,7 +128,7 @@
 						<c:forEach items="${product.productSkus}" var="sku">
 							<button class="btn btn-outline-primary color-btn"
 								style="background-color: ${sku.color};"
-								onclick="selectImage('${sku.img}', '${fn:escapeXml(sku.sizeAndStock)}' , '${sku.color}')" /></button>
+								onclick="selectImage(this,'${sku.img}', '${fn:escapeXml(sku.sizeAndStock)}' , '${sku.color}')" /></button>
 						</c:forEach>
 					</div>
 

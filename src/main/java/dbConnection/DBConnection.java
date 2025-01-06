@@ -16,14 +16,14 @@ public class DBConnection {
 		config.setUsername("root");
 		config.setPassword("dong14052004");
 
-		// Các cấu hình tối ưu hóa HikariCP
-		config.setMaximumPoolSize(90); // Số kết nối tối đa trong pool
-		config.setMinimumIdle(2); // Số kết nối tối thiểu trong trạng thái rảnh
-		config.setIdleTimeout(30000); // Thời gian rảnh tối đa trước khi bị loại bỏ
-		config.setMaxLifetime(1800000); // Thời gian sống tối đa của một kết nối
-		config.setConnectionTimeout(20000); // Thời gian chờ tối đa để lấy kết nối
-		 config.setDriverClassName("com.mysql.cj.jdbc.Driver");
+		config.setMaximumPoolSize(50); // Giảm để phù hợp với `max_connections`
+		config.setMinimumIdle(5); // Tăng số kết nối nhàn rỗi tối thiểu
+		config.setIdleTimeout(60000); // Giữ kết nối nhàn rỗi lâu hơn
+		config.setMaxLifetime(1800000); // Không thay đổi, nhưng đảm bảo `wait_timeout` đủ lớn
+		config.setConnectionTimeout(10000); // Giảm thời gian chờ lấy kết nối
+		config.setDriverClassName("com.mysql.cj.jdbc.Driver");
 		dataSource = new HikariDataSource(config);
+
 	}
 
 	// Phương thức lấy kết nối
@@ -39,8 +39,8 @@ public class DBConnection {
 	// Đóng kết nối (tự động trả về pool)
 	public static void closeConnection(Connection connection) {
 		try {
-			if (connection != null ) {
-				connection.close(); 
+			if (connection != null) {
+				connection.close();
 			}
 		} catch (SQLException e) {
 			System.out.println("Error closing connection: " + e.getMessage());
