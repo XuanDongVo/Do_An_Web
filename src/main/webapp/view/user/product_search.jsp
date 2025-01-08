@@ -94,7 +94,8 @@
 						</div>
 					</div>
 
-					<button class="reset-button">Xoá hết</button>
+					<button class="reset-button" onclick="resetChoose()">Xoá
+						hết</button>
 				</div> </i> <i class="sort-icon">⇅</i> <i class="view-icon">◻</i> <i
 				class="grid-icon">☷</i>
 		</div>

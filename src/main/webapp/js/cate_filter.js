@@ -77,20 +77,20 @@ function renderFilter(colors, sizes) {
 	const sizeContainer = document.querySelector('.size-options');
 	sizeContainer.innerHTML = ''; // Xóa nội dung cũ
 	sizes.forEach(size => {
-        const sizeLabel = document.createElement('label');
-        sizeLabel.className = ' size-label';
+		const sizeLabel = document.createElement('label');
+		sizeLabel.className = ' size-label';
 
-        const sizeInput = document.createElement('input');
-        sizeInput.type = 'checkbox';
-        sizeInput.className = 'btn-check';
-        sizeInput.dataset.sizeName = size.name;
-        sizeInput.onclick = () => updateSizeFilter(size.name.toUpperCase()); // Gọi hàm khi checkbox được nhấn
+		const sizeInput = document.createElement('input');
+		sizeInput.type = 'checkbox';
+		sizeInput.className = 'btn-check';
+		sizeInput.dataset.sizeName = size.name;
+		sizeInput.onclick = () => updateSizeFilter(size.name.toUpperCase()); // Gọi hàm khi checkbox được nhấn
 
-        sizeLabel.appendChild(sizeInput);
-        sizeLabel.appendChild(document.createTextNode(size.name)); // Hiển thị kích cỡ trên nhãn
+		sizeLabel.appendChild(sizeInput);
+		sizeLabel.appendChild(document.createTextNode(size.name)); // Hiển thị kích cỡ trên nhãn
 
-        sizeContainer.appendChild(sizeLabel);
-    });
+		sizeContainer.appendChild(sizeLabel);
+	});
 }
 
 function updateColorFilter(color) {
@@ -255,7 +255,7 @@ function renderProducts(response) {
 		const productLink = document.createElement('a');
 		productLink.href = `productDetail?id=${product.productId}`;
 
-		// Tạo container hình ảnh}
+		// Tạo container hình ảnh
 		const imageContainerDiv = document.createElement('div');
 		imageContainerDiv.classList.add('image-container');
 
@@ -269,7 +269,7 @@ function renderProducts(response) {
 		const hoverImage = document.createElement('img');
 		hoverImage.id = 'image-hover';
 		hoverImage.classList.add('image-hover');
-		hoverImage.src = product.productSkus[0].img; // Nếu có ảnh hover khác, thay đổi ở đây
+		hoverImage.src = product.productSkus[0].img;
 		hoverImage.alt = `${product.name} Hover Image`;
 
 		const addImage = document.createElement('img');
@@ -289,6 +289,7 @@ function renderProducts(response) {
 		// Tạo container cho kích thước
 		const sizeContainerDiv = document.createElement('div');
 		sizeContainerDiv.classList.add('size-container');
+
 		const sizeOptionsDiv = document.createElement('div');
 		sizeOptionsDiv.classList.add('size-options');
 		sizeOptionsDiv.id = 'size-options';
@@ -332,7 +333,7 @@ function renderProducts(response) {
 			const skuImage = document.createElement('img');
 			skuImage.src = sku.img;
 			skuImage.alt = `${sku.color} Image`;
-			skuImage.onclick = () => selectImage(sku.productColorImgId, sku.img, JSON.stringify(sku.sizeAndStock), product.typeProduct);
+			skuImage.onclick = () => selectImage(skuImage, sku.productColorImgId, sku.img, JSON.stringify(sku.sizeAndStock), product.typeProduct);
 			imageCateDiv.appendChild(skuImage);
 		});
 
@@ -340,20 +341,42 @@ function renderProducts(response) {
 
 		// Tạo tên sản phẩm và giá
 		const productName = document.createElement('p');
-		productName.textContent = product.name;
+		productName.className = "product-name";
+
+		// Tạo thẻ strong
+		const strongElement = document.createElement('strong');
+
+		// Tạo liên kết sản phẩm
+		const productNameLink = document.createElement('a');
+		productNameLink.href = `productDetail?id=${product.productId}`;
+		productNameLink.textContent = product.name;
+
+		// Thêm liên kết vào thẻ strong
+		strongElement.appendChild(productNameLink);
+
+		// Thêm thẻ strong vào thẻ p
+		productName.appendChild(strongElement);
+
 
 		const itemPriceDiv = document.createElement('div');
 		itemPriceDiv.classList.add('item-price-new');
-		itemPriceDiv.textContent = `$${product.price}`;
+		itemPriceDiv.textContent = `${formatPrice(product.price)} đ`;
 
 		// Thêm tên sản phẩm và giá vào collection item
-		collectionItemDiv.appendChild(productName);
 		collectionItemDiv.appendChild(itemPriceDiv);
+		collectionItemDiv.appendChild(productName);
+
 
 		// Thêm collection item vào collectionsDiv
 		collectionsDiv.appendChild(collectionItemDiv);
 	});
 }
+
+// Hàm format giá tiền
+function formatPrice(price) {
+	return new Intl.NumberFormat('vi-VN', { style: 'decimal' }).format(price);
+}
+
 
 function renderPagination(currentPage, totalPage) {
 	const navElement = document.querySelector('nav[aria-label="Page navigation"].mt-4');
@@ -416,7 +439,7 @@ function handPagination(pageNumber) {
 		method: "GET",
 		success: function(response) {
 			renderProducts(response.data);
-			renderPagination(response.currentPage , response.totalPages)
+			renderPagination(response.currentPage, response.totalPages)
 		},
 		error: function(xhr, status, error) {
 			console.error("Lỗi: ", error);

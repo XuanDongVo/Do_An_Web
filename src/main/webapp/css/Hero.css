@@ -207,7 +207,8 @@
 /* Ensure subcategories are shown on hover for both the parent (li) and subcategories */
 .nav-item:hover .subcategories,
 .subcategories:hover {
-    display: block;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Add some space between the items and the subcategories */

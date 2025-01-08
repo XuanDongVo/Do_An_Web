@@ -110,6 +110,8 @@ public class OrderRepository {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+			DBConnection.closeConnection(connection);
 		}
 		return list;
 	}
@@ -134,7 +136,9 @@ public class OrderRepository {
 	        } catch (SQLException e) {
 	            e.printStackTrace();
 	            return false;
-	        }
+	        }finally {
+				DBConnection.closeConnection(connection);
+			}
 	    }
 
 	 public AdminOrderResponse getOrderById(Long orderId) {
@@ -167,7 +171,10 @@ public class OrderRepository {
 		        }
 		    } catch (Exception e) {
 		        e.printStackTrace();
-		    }
+		    }finally {
+				DBConnection.closeConnection(connection);
+			}
+		    
 		    return orderResponse; // Trả về kết quả
 		}
 	 
@@ -193,7 +200,9 @@ public class OrderRepository {
 
 		    } catch (Exception e) {
 		        e.printStackTrace();
-		    }
+		    }finally {
+				DBConnection.closeConnection(connection);
+			}
 		}
 
 

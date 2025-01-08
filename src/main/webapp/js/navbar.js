@@ -89,7 +89,7 @@ function renderDataDropListCategoryHeader(dropListCategory) {
 			const subcategoriesDiv = document.createElement('div');
 			subcategoriesDiv.className = 'subcategories';
 			subcategoriesDiv.style.margin = '0';
-			subcategoriesDiv.style.width = '30rem';
+			subcategoriesDiv.style.width = '20rem';
 
 
 			// Duyệt qua subcategories của category hiện tại
@@ -99,23 +99,35 @@ function renderDataDropListCategoryHeader(dropListCategory) {
 					// Tạo liên kết cho subcategory
 					const subCategoryLink = document.createElement('a');
 
+					// Tạo thẻ div bao bọc cả subCategoryParagraph và toggleSpan
+					const subCategoryWrapper = document.createElement('div');
+					subCategoryWrapper.style.display = 'flex';
+					subCategoryWrapper.style.alignItems = 'center';
+
+					// Tạo thẻ p cho subCategory
 					const subCategoryParagraph = document.createElement('p');
-					subCategoryParagraph.style.display = 'inline';
+					subCategoryParagraph.style.margin = '0'; // Loại bỏ margin mặc định
 					subCategoryParagraph.innerText = subCategoryKey.toUpperCase();
+					subCategoryParagraph.style.cursor = 'pointer';
 					subCategoryParagraph.onclick = () => {
 						window.location.href = 'category?category=' + subCategoryKey;
-					}
-					subCategoryLink.appendChild(subCategoryParagraph);
+					};
 
-					// Thêm nút toggle cho subcategory
+					// Tạo nút toggle cho subcategory
 					const toggleSpan = document.createElement('span');
 					toggleSpan.style.color = 'red';
+					toggleSpan.style.marginLeft = '8px'; // Khoảng cách giữa p và span
 					toggleSpan.innerText = ' + ';
+					toggleSpan.style.cursor = 'pointer';
 					toggleSpan.onclick = () => toggleSubcategory(subCategoryKey);
 
-					// Thêm liên kết subcategory và nút toggle vào subcategoriesDiv
-					subcategoriesDiv.appendChild(subCategoryLink);
-					subcategoriesDiv.appendChild(toggleSpan);
+					// Thêm p và span vào div wrapper
+					subCategoryWrapper.appendChild(subCategoryParagraph);
+					subCategoryWrapper.appendChild(toggleSpan);
+
+					// Thêm wrapper vào subcategoriesDiv
+					subcategoriesDiv.appendChild(subCategoryWrapper);
+
 
 					// Tạo div chứa các extra subcategories
 					const extraSubcategoriesDiv = document.createElement('div');

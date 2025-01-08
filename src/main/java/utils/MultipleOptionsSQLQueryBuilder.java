@@ -51,7 +51,7 @@ public class MultipleOptionsSQLQueryBuilder {
 		List<Object> parameters = new ArrayList<>();
 
 		// Câu truy vấn để lấy tổng số sản phẩm
-		String sql = "SELECT COUNT(*)as total FROM product AS p "
+		String sql = "SELECT COUNT(DISTINCT p.name) AS total FROM product AS p "
 				+ "INNER JOIN sub_category AS sc ON p.sub_category_id = sc.id "
 				+ "INNER JOIN category AS c ON sc.category_id = c.id " + "INNER JOIN gender AS g ON c.gender_id = g.id "
 				+ "INNER JOIN product_color_img AS pci ON p.id = pci.product_id "
@@ -67,17 +67,16 @@ public class MultipleOptionsSQLQueryBuilder {
 		sql = addSubCategoryFilter(sql, options.getSubCategory(), parameters);
 		sql = addCategoryFilter(sql, options.getCategory(), parameters);
 
-		try {
-			PreparedStatement pst = connection.prepareStatement(sql);
-			setQueryParameters(pst, parameters); // Thiết lập tham số
-			ResultSet rs = pst.executeQuery();
-
-			if (rs.next()) {
-				total = rs.getInt("total");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		try (PreparedStatement pst = connection.prepareStatement(sql)) {
+	        setQueryParameters(pst, parameters);
+	        try (ResultSet rs = pst.executeQuery()) {
+	            if (rs.next()) {
+	                total = rs.getInt("total");
+	            }
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
 
 		return total;
 	}
@@ -85,7 +84,7 @@ public class MultipleOptionsSQLQueryBuilder {
 	// Hàm xây dựng câu truy vấn SQL từ các tùy chọn và phân trang
 	private static String buildSQLQuery(MultipleOptionsProductRequest options, List<Object> parameters,
 			int currentPage) {
-		String sql = "SELECT p.* FROM product AS p " + "INNER JOIN sub_category AS sc ON p.sub_category_id = sc.id "
+		String sql = "SELECT DISTINCT p.* FROM product AS p " + "INNER JOIN sub_category AS sc ON p.sub_category_id = sc.id "
 				+ "INNER JOIN category AS c ON sc.category_id = c.id " + "INNER JOIN gender AS g ON c.gender_id = g.id "
 				+ "INNER JOIN product_color_img AS pci ON p.id = pci.product_id "
 				+ "INNER JOIN color AS col ON pci.color_id = col.id "
@@ -196,18 +195,18 @@ public class MultipleOptionsSQLQueryBuilder {
 
 	// Hàm thực hiện truy vấn và trả về danh sách sản phẩm
 	private static List<Product> executeQuery(PreparedStatement pst) throws Exception {
-		List<Product> products = new ArrayList<>();
-		ResultSet rs = pst.executeQuery();
-
-		while (rs.next()) {
-			Product product = new Product();
-			product.setId(rs.getLong("id"));
-			product.setName(rs.getString("name"));
-			product.setDescription(rs.getString("description"));
-			products.add(product);
-		}
-
-		return products;
+	    List<Product> products = new ArrayList<>();
+	    try (ResultSet rs = pst.executeQuery()) {
+	        while (rs.next()) {
+	            Product product = new Product();
+	            product.setId(rs.getLong("id"));
+	            product.setName(rs.getString("name"));
+	            product.setDescription(rs.getString("description"));
+	            products.add(product);
+	        }
+	    }
+	    return products;
 	}
+
 
 }

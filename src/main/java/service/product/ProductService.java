@@ -527,6 +527,7 @@ public class ProductService {
 
 		// tính toán pagination
 		int totalItems = MultipleOptionsSQLQueryBuilder.totalProduct;
+		System.out.println(totalItems);
 		int pageSize = 12;
 		int totalPages = (int) Math.ceil((double) totalItems / pageSize);
 

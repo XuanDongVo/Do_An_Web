@@ -19,10 +19,10 @@ import com.auth0.jwt.algorithms.Algorithm;
 import repository.user.UserRepository;
 
 public class StringeeCallService {
-	private static final String API_KEY_SID = "SK.0.paBFPG4wGIUyXwjnoXEX3X276JL55Da";
-	private static final String API_KEY_SECRET = "aGZuQnNPOVF6NlNEenpJWjBYQ01yMHV0NHVMZVNFeA==";
+	private static final String API_KEY_SID = "SK.0.zNGzClyK69sXPRE3GCJ2PGCRKJiOntLp";
+	private static final String API_KEY_SECRET = "TXRpc0tBeUJaWlVzQkVBUmczN0xoUWlzR3BOYkJlOEQ=";
 	private static final String API_URL = "https://api.stringee.com/v1/call2/callout";
-	private static final String PHONE_NUMBER = "842871066445"; // Số điện thoại đã đăng ký
+	private static final String PHONE_NUMBER = "842473001546"; // Số điện thoại đã đăng ký
 	private UserRepository userRespository = new UserRepository();
 
 	// Hàm tạo JWT token

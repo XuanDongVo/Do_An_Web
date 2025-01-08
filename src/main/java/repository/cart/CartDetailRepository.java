@@ -294,6 +294,8 @@ public class CartDetailRepository {
 			// In ra lỗi ban đầu
 			e.printStackTrace();
 
+		}finally {
+			DBConnection.closeConnection(connection);
 		}
 	}
 
@@ -326,6 +328,8 @@ public class CartDetailRepository {
 			// In ra lỗi ban đầu
 			e.printStackTrace();
 
+		}finally {
+			DBConnection.closeConnection(connection);
 		}
 	}
 

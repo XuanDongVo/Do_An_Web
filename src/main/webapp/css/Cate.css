@@ -63,11 +63,18 @@
 	display: block;
 }
 
-.color-options, .size-options {
+.color-options {
 	display: flex;
-	/* flex-flow: row wrap; */
+	flex-flow: row wrap;
 	min-width: 0;
 	/* justify-content: space-between; */
+}
+
+ .size-options {
+	display: flex;
+	flex-flow: row wrap;
+	min-width: 0;
+	justify-content: space-between;
 }
 
 .border-border.active{

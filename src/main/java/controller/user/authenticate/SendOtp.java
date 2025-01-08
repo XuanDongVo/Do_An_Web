@@ -31,11 +31,11 @@ public class SendOtp extends HttpServlet {
 
 		try {
 			// Tạo OTP
-			int otp = stringee.generateRandomOtp();
-			String otpConvertString = stringee.convertOtpToWords(otp);
+			int otp = StringeeCallService.generateRandomOtp();
+			String otpConvertString = StringeeCallService.convertOtpToWords(otp);
 
 			// Gửi OTP qua Stringee
-			StringeeCallService.makeCall(phoneNumber, otpConvertString);
+			StringeeCallService.makeCall("84"+phoneNumber, otpConvertString);
 			System.out.println(otpConvertString);
 
 			// Lưu OTP và số điện thoại vào session
