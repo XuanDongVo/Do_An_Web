@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,7 +12,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- Main CSS-->
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/admin/main.css">
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/css/admin/main.css">
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
 <!-- or -->
@@ -35,8 +39,6 @@
 			aria-label="Hide Sidebar"></a>
 		<!-- Navbar Right Menu-->
 		<ul class="app-nav">
-
-
 			<!-- User Menu-->
 			<li><a class="app-nav__item" href="${pageContext.request.contextPath}/logout"><i
 					class='bx bx-log-out bx-rotate-180'></i> </a></li>
@@ -56,13 +58,15 @@
 		<hr>
 		<ul class="app-menu">
 			<li><a class="app-menu__item active"
-				href="${pageContext.request.contextPath}/view/admin/admin.jsp"><i
+				href="${pageContext.request.contextPath}/adminController"><i
 					class='app-menu__icon bx bx-tachometer'></i><span
 					class="app-menu__label">Bảng điều khiển</span></a></li>
-			<li><a class="app-menu__item " href="${pageContext.request.contextPath}/admin_employee"><i
+			<li><a class="app-menu__item "
+				href="${pageContext.request.contextPath}/admin_employee"><i
 					class='app-menu__icon bx bx-id-card'></i> <span
 					class="app-menu__label">Quản lý nhân viên</span></a></li>
-			<li><a class="app-menu__item" href="${pageContext.request.contextPath}/admin_customer"><i
+			<li><a class="app-menu__item"
+				href="${pageContext.request.contextPath}/admin_customer"><i
 					class='app-menu__icon bx bx-user-voice'></i><span
 					class="app-menu__label">Quản lý khách hàng</span></a></li>
 			<li><a class="app-menu__item "
@@ -73,6 +77,10 @@
 				href="${pageContext.request.contextPath}/order"><i
 					class='app-menu__icon bx bx-task'></i><span class="app-menu__label">Quản
 						lý đơn hàng</span></a></li>
+			<li><a class="app-menu__item "
+				href="${pageContext.request.contextPath}/inventory"><i
+					class='app-menu__icon bx bx-task'></i><span class="app-menu__label">Quản
+						lý hàng tồn kho</span></a></li>
 		</ul>
 	</aside>
 	<main class="app-content">
@@ -98,7 +106,7 @@
 							<div class="info">
 								<h4>Tổng khách hàng</h4>
 								<p>
-									<b>56 khách hàng</b>
+									<b>${list_customer.size()}</b>
 								</p>
 								<p class="info-tong">Tổng số khách hàng được quản lý.</p>
 							</div>
@@ -111,7 +119,7 @@
 							<div class="info">
 								<h4>Tổng sản phẩm</h4>
 								<p>
-									<b>1850 sản phẩm</b>
+									<b>${products.size()}</b>
 								</p>
 								<p class="info-tong">Tổng số sản phẩm được quản lý.</p>
 							</div>
@@ -124,7 +132,7 @@
 							<div class="info">
 								<h4>Tổng đơn hàng</h4>
 								<p>
-									<b>247 đơn hàng</b>
+									<b>${list_order.size()}</b>
 								</p>
 								<p class="info-tong">Tổng số hóa đơn bán hàng trong tháng.</p>
 							</div>
@@ -157,34 +165,18 @@
 											<th>Trạng thái</th>
 										</tr>
 									</thead>
-									<tbody>
-										<tr>
-											<td>AL3947</td>
-											<td>Phạm Thị Ngọc</td>
-											<td>19.770.000 đ</td>
-											<td><span class="badge bg-info">Chờ xử lý</span></td>
-										</tr>
-										<tr>
-											<td>ER3835</td>
-											<td>Nguyễn Thị Mỹ Yến</td>
-											<td>16.770.000 đ</td>
-											<td><span class="badge bg-warning">Đang vận
-													chuyển</span></td>
-										</tr>
-										<tr>
-											<td>MD0837</td>
-											<td>Triệu Thanh Phú</td>
-											<td>9.400.000 đ</td>
-											<td><span class="badge bg-success">Đã hoàn thành</span></td>
-										</tr>
-										<tr>
-											<td>MT9835</td>
-											<td>Đặng Hoàng Phúc</td>
-											<td>40.650.000 đ</td>
-											<td><span class="badge bg-danger">Đã hủy </span></td>
-										</tr>
-									</tbody>
+									<c:forEach var="order" items="${list_order}">
+										<tbody>
+											<tr>
+												<td>${order.id_order_admin}</td>
+												<td>${order.name_customer}</td>
+												<td>${order.price}đ</td>
+												<td><span class="badge bg-success">${order.status}</span></td>
+											</tr>
+										</tbody>
+									</c:forEach>
 								</table>
+
 							</div>
 							<!-- / div trống-->
 						</div>
@@ -200,36 +192,20 @@
 										<tr>
 											<th>ID</th>
 											<th>Tên khách hàng</th>
-											<th>Ngày sinh</th>
+											<th>Email</th>
 											<th>Số điện thoại</th>
 										</tr>
 									</thead>
-									<tbody>
-										<tr>
-											<td>#183</td>
-											<td>Hột vịt muối</td>
-											<td>21/7/1992</td>
-											<td><span class="tag tag-success">0921387221</span></td>
-										</tr>
-										<tr>
-											<td>#219</td>
-											<td>Bánh tráng trộn</td>
-											<td>30/4/1975</td>
-											<td><span class="tag tag-warning">0912376352</span></td>
-										</tr>
-										<tr>
-											<td>#627</td>
-											<td>Cút rang bơ</td>
-											<td>12/3/1999</td>
-											<td><span class="tag tag-primary">01287326654</span></td>
-										</tr>
-										<tr>
-											<td>#175</td>
-											<td>Hủ tiếu nam vang</td>
-											<td>4/12/20000</td>
-											<td><span class="tag tag-danger">0912376763</span></td>
-										</tr>
-									</tbody>
+									<c:forEach items="${list_customer}" var="customer">
+										<tbody>
+											<tr>
+												<td>${customer.user_id}</td>
+												<td>${customer.user_name}</td>
+												<td>${customer.email}</td>
+												<td>${customer.phone}</td>
+											</tr>
+										</tbody>
+									</c:forEach>
 								</table>
 							</div>
 
@@ -266,7 +242,7 @@
 
 
 	</main>
-	
+
 	<!--===============================================================================================-->
 	<script src="${pageContext.request.contextPath}/js/admin/main.js"></script>
 	<!--===============================================================================================-->

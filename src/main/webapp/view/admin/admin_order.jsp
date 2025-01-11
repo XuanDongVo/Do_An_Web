@@ -15,6 +15,12 @@
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/css/admin/main.css">
 
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+<!-- or -->
+<link rel="stylesheet"
+	href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+<!-- Font-icon css-->
 <link rel="stylesheet" type="text/css"
 	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <script
@@ -53,24 +59,30 @@
 		</div>
 		<hr>
 		<ul class="app-menu">
-			<li><a class="app-menu__item active"
-				href="${pageContext.request.contextPath}/view/admin/admin.jsp"><i
+			<li><a class="app-menu__item"
+				href="${pageContext.request.contextPath}/adminController"><i
 					class='app-menu__icon bx bx-tachometer'></i><span
 					class="app-menu__label">Bảng điều khiển</span></a></li>
-			<li><a class="app-menu__item " href="${pageContext.request.contextPath}/admin_employee"><i
+			<li><a class="app-menu__item "
+				href="${pageContext.request.contextPath}/admin_employee"><i
 					class='app-menu__icon bx bx-id-card'></i> <span
 					class="app-menu__label">Quản lý nhân viên</span></a></li>
-			<li><a class="app-menu__item" href="${pageContext.request.contextPath}/admin_customer"><i
+			<li><a class="app-menu__item"
+				href="${pageContext.request.contextPath}/admin_customer"><i
 					class='app-menu__icon bx bx-user-voice'></i><span
 					class="app-menu__label">Quản lý khách hàng</span></a></li>
 			<li><a class="app-menu__item "
 				href="${pageContext.request.contextPath}/adminProduct"><i
 					class='app-menu__icon bx bx-purchase-tag-alt'></i><span
 					class="app-menu__label">Quản lý sản phẩm</span></a></li>
-			<li><a class="app-menu__item "
+			<li><a class="app-menu__item active"
 				href="${pageContext.request.contextPath}/order"><i
 					class='app-menu__icon bx bx-task'></i><span class="app-menu__label">Quản
 						lý đơn hàng</span></a></li>
+			<li><a class="app-menu__item "
+				href="${pageContext.request.contextPath}/inventory"><i
+					class='app-menu__icon bx bx-task'></i><span class="app-menu__label">Quản
+						lý hàng tồn kho</span></a></li>
 		</ul>
 	</aside>
 	<main class="app-content">
@@ -135,7 +147,7 @@
 														title="Sửa">
 														<i class="fa fa-edit"></i>
 													</button>
-												</a>
+											</a>
 											</td>
 										</tr>
 									</c:forEach>

@@ -19,14 +19,6 @@ public class OrderDetail {
 		this.quantity = quantity;
 	}
 
-	public Long getProductSkuId() {
-		return productSkuId;
-	}
-
-	public void setProductSkuId(Long productSkuId) {
-		this.productSkuId = productSkuId;
-	}
-
 	public Long getId() {
 		return id;
 	}
@@ -41,6 +33,14 @@ public class OrderDetail {
 
 	public void setOrderId(Long orderId) {
 		this.orderId = orderId;
+	}
+
+	public Long getProductSkuId() {
+		return productSkuId;
+	}
+
+	public void setProductSkuId(Long productSkuId) {
+		this.productSkuId = productSkuId;
 	}
 
 	public double getPrice() {

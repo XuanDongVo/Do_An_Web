@@ -41,9 +41,9 @@ public class OrderService {
 				throw new RuntimeException("Cannot create order");
 			}
 			if (user == null) {
-				createOrderDetailForAnonymous(orderId, orderRequest, request, response);
+				createOrderDetailForAnonymous(connection, orderId, orderRequest, request, response);
 			} else {
-				createOrderDetailInDatabase(orderId, orderRequest.getIds());
+				createOrderDetailInDatabase(connection, orderId, orderRequest.getIds());
 			}
 			// Hoàn tất giao dịch
 			orderRepository.finalizeTransaction(connection);
@@ -55,7 +55,7 @@ public class OrderService {
 	}
 
 	// tao don dat hang cho nguoi dung da dang nhap
-	private void createOrderDetailInDatabase(Long orderId, String[] cartDetailIds) {
+	private void createOrderDetailInDatabase(Connection connection, Long orderId, String[] cartDetailIds) {
 		for (int i = 0; i < cartDetailIds.length; i++) {
 			Long cartId = Long.parseLong(cartDetailIds[i]);
 			CartDetail cartDetail = cartDetailRepository.findById(cartId).orElseThrow();
@@ -73,8 +73,8 @@ public class OrderService {
 			// cập nhật hàng tồn kho trong kho hàng
 			Inventory invetory = inventoryRepository.findByProductSkuId(productSku.getId()).get();
 			invetory.setStock(invetory.getStock() - cartDetail.getQuantity());
-			orderDetailRepository.save(orderDetail);
-			inventoryRepository.updateQuantityByInvetoryid(invetory.getId(), invetory.getStock());
+			orderDetailRepository.save(connection, orderDetail);
+			inventoryRepository.updateQuantityByInvetoryid(connection, invetory.getId(), invetory.getStock());
 
 			// xoa san pham trong gio hang
 			cartDetailRepository.deleteProductSkuInCartDetail(cartId);
@@ -82,8 +82,8 @@ public class OrderService {
 	}
 
 	// tao don dat hang cho nguoi an danh
-	private void createOrderDetailForAnonymous(Long orderId, OrderRequest orderRequest, HttpServletRequest request,
-			HttpServletResponse response) {
+	private void createOrderDetailForAnonymous(Connection connection, Long orderId, OrderRequest orderRequest,
+			HttpServletRequest request, HttpServletResponse response) {
 		// Lấy giỏ hàng từ cookie hiện tại (nếu có)
 		List<DetailCartResponse> detailCarts = new ArrayList<>();
 
@@ -115,8 +115,8 @@ public class OrderService {
 			// cập nhật hàng tồn kho trong kho hàng
 			Inventory invetory = inventoryRepository.findByProductSkuId(productSku.getId()).get();
 			invetory.setStock(invetory.getStock() - cartDetail.getQuantity());
-			orderDetailRepository.save(orderDetail);
-			inventoryRepository.updateQuantityByInvetoryid(invetory.getId(), invetory.getStock());
+			orderDetailRepository.save(connection, orderDetail);
+			inventoryRepository.updateQuantityByInvetoryid(connection, invetory.getId(), invetory.getStock());
 		});
 
 		detailCarts.removeAll(filteredDetailCarts);

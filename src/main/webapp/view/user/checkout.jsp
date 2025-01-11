@@ -207,35 +207,7 @@
 	</div>
 
 
-	<!-- Footer -->
-	<div class="footer">
-		<div class="footer-logo">
-			<img src="footer_logo.png" alt="" />
-			<p>SHOPPEE</p>
-		</div>
-		<ul class="footer-links">
-			<li>Company</li>
-			<li>Products</li>
-			<li>Offices</li>
-			<li>About</li>
-			<li>Contact</li>
-		</ul>
-		<div class="footer-social-icon">
-			<div class="footer-icons-container">
-				<img src="instagram.png" alt="" />
-			</div>
-			<div class="footer-icons-container">
-				<img src="pinterest.png" alt="" />
-			</div>
-			<div class="footer-icons-container">
-				<img src="whatsapp.png" alt="" />
-			</div>
-		</div>
-		<div class="footer-copyright">
-			<hr />
-			<p>© 2023 by Shoppee. Proudly created with Wix.com</p>
-		</div>
-	</div>
+<jsp:include page="footer.jsp"></jsp:include>
 
 	<c:if test="${not empty outOfStockProducts }">
 epty</c:if>

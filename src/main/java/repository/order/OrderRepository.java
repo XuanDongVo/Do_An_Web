@@ -93,13 +93,12 @@ public class OrderRepository {
 	public List<AdminOrderResponse> getAllOrderWithResponse() {
 		List<AdminOrderResponse> list = new ArrayList<>();
 		connection = DBConnection.getConection();
-		String sql = "SELECT o.id, u.name, p.name , od.quantity, o.total_price, o.order_status "
+		String sql = "SELECT o.id, o.customer_name, p.name , od.quantity, o.total_price, o.order_status "
 				+ " FROM ecommerce.order o "
-				+ " INNER JOIN ecommerce.user u ON o.user_id = u.id "
 				+ " INNER JOIN order_detail od ON od.order_id = o.id "
 				+ " INNER JOIN product_sku ps ON ps.id = od.product_sku_id "
 				+ " INNER JOIN product_color_img pci ON pci.id = ps.product_color_img_id "
-				+ " INNER JOIN product p ON p.id = pci.product_id;";
+				+ " INNER JOIN product p ON p.id = pci.product_id";
 		try {
 			pst = connection.prepareStatement(sql);
 			ResultSet rs = pst.executeQuery();
@@ -143,10 +142,9 @@ public class OrderRepository {
 
 	 public AdminOrderResponse getOrderById(Long orderId) {
 		    AdminOrderResponse orderResponse = null;
-		    String sql = "SELECT o.id, u.name AS user_name, p.name AS product_name, od.quantity, "
+		    String sql = "SELECT o.id, o.customer_name AS user_name, p.name AS product_name, od.quantity, "
 		               + "o.total_price, o.order_status "
 		               + "FROM ecommerce.order o "
-		               + "INNER JOIN ecommerce.user u ON o.user_id = u.id "
 		               + "INNER JOIN order_detail od ON od.order_id = o.id "
 		               + "INNER JOIN product_sku ps ON ps.id = od.product_sku_id "
 		               + "INNER JOIN product_color_img pci ON pci.id = ps.product_color_img_id "
@@ -204,18 +202,29 @@ public class OrderRepository {
 				DBConnection.closeConnection(connection);
 			}
 		}
+	 
+	 public String getEmailByOrderId(Long idConvert) {
+		 String res = null;
+		 String sql = "select o.customer_email "
+		 		+ " from ecommerce.order o "
+		 		+ "where  id = ?";
+
+	    try (Connection connection = DBConnection.getConection();
+	         PreparedStatement pst = connection.prepareStatement(sql)) {
+	         
+	        pst.setLong(1, idConvert); // Gán tham số orderId vào câu truy vấn
+	        try (ResultSet rs = pst.executeQuery()) {
+	            if (rs.next()) {
+	                res = rs.getString(1);
+	            }
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        res = null;
+	    }
+	    return res;
+		}
 
 
 	 
-	public static void main(String[] args) {
-//		List<AdminOrderResponse> list = new OrderRepository().getAllOrderWithResponse();
-//		for (AdminOrderResponse aor : list) {
-//			System.out.println(aor);
-//		}
-		
-		Long n = (long) 1;
-		new OrderRepository().updateOrderById(n, "Đã giao");
-//		System.out.println(new OrderRepository().getOrderById(n));
-//		System.out.println(new OrderRepository().deleteOrder(n));
-	}
 }

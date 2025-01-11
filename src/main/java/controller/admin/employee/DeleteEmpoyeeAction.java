@@ -12,6 +12,11 @@ import repository.user.UserRepository;
 public class DeleteEmpoyeeAction extends HttpServlet{
 	UserRepository userRespository = new UserRepository();
 	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		doPost(req, resp);
+	}
+	
+	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String userIdParam = req.getParameter("user_id"); // Lấy giá trị từ request
 		if (userIdParam != null && !userIdParam.isEmpty()) {

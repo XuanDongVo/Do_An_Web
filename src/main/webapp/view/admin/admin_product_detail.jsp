@@ -19,16 +19,15 @@
 <!-- or -->
 <link rel="stylesheet"
 	href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
-
 <!-- Font-icon css-->
 <link rel="stylesheet" type="text/css"
 	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
-<!-- <link rel="stylesheet"
+<link rel="stylesheet"
 	href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
 <link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css"> -->
+	href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 
 <!-- Bootstrap CSS -->
 <link rel="stylesheet"
@@ -69,7 +68,7 @@
 		</div>
 		<hr>
 		<ul class="app-menu">
-			<li><a class="app-menu__item active"
+			<li><a class="app-menu__item "
 				href="${pageContext.request.contextPath}/view/admin/admin.jsp"><i
 					class='app-menu__icon bx bx-tachometer'></i><span
 					class="app-menu__label">Bảng điều khiển</span></a></li>
@@ -79,7 +78,7 @@
 			<li><a class="app-menu__item" href="${pageContext.request.contextPath}/admin_customer"><i
 					class='app-menu__icon bx bx-user-voice'></i><span
 					class="app-menu__label">Quản lý khách hàng</span></a></li>
-			<li><a class="app-menu__item "
+			<li><a class="app-menu__item active"
 				href="${pageContext.request.contextPath}/adminProduct"><i
 					class='app-menu__icon bx bx-purchase-tag-alt'></i><span
 					class="app-menu__label">Quản lý sản phẩm</span></a></li>
@@ -87,6 +86,10 @@
 				href="${pageContext.request.contextPath}/order"><i
 					class='app-menu__icon bx bx-task'></i><span class="app-menu__label">Quản
 						lý đơn hàng</span></a></li>
+						<li><a class="app-menu__item "
+				href="${pageContext.request.contextPath}/inventory"><i
+					class='app-menu__icon bx bx-task'></i><span class="app-menu__label">Quản
+						lý hàng tồn kho</span></a></li>
 		</ul>
 	</aside>
 

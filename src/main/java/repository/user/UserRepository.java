@@ -9,6 +9,7 @@ import java.util.List;
 
 import dbConnection.DBConnection;
 import dto.response.AdminUserResponse;
+import entity.Role;
 import entity.User;
 
 public class UserRepository {
@@ -836,6 +837,96 @@ public class UserRepository {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	
+	public boolean addUser(String email, String phone, String address, String name) {
+	    PreparedStatement pstUser = null;
+
+	    try {
+	        connection = DBConnection.getConection();
+
+	        // Câu lệnh SQL để thêm user
+	        String sqlUser = "INSERT INTO ecommerce.user (email, phone, address, ecommerce.user.name, create_at) "
+	                + "VALUES (?, ?, ?, ?, DATE(NOW()))";
+	        pstUser = connection.prepareStatement(sqlUser);
+	        pstUser.setString(1, email);
+	        pstUser.setString(2, phone);
+	        pstUser.setString(3, address);
+	        pstUser.setString(4, name);
+	        int result = pstUser.executeUpdate();
+	        
+	        return result > 0; // Trả về true nếu thêm thành công
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        return false; // Nếu có lỗi, trả về false
+	    } finally {
+	        try {
+	            if (pstUser != null) pstUser.close();
+	            if (connection != null) DBConnection.closeConnection(connection);
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+	}
+
+	public boolean setRoleUser(Long userId, Long roleId) {
+	    PreparedStatement pstRole = null;
+
+	    try {
+	        connection = DBConnection.getConection();
+
+	        // Câu lệnh SQL để gán quyền
+	        String sqlRole = "INSERT INTO user_role (user_id, role_id) VALUES (?, ?)";
+	        pstRole = connection.prepareStatement(sqlRole);
+	        pstRole.setLong(1, userId);
+	        pstRole.setLong(2, roleId);
+	        int result = pstRole.executeUpdate();
+	        
+	        return result > 0; // Trả về true nếu gán quyền thành công
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        return false; // Nếu có lỗi, trả về false
+	    } finally {
+	        try {
+	            if (pstRole != null) pstRole.close();
+	            if (connection != null) DBConnection.closeConnection(connection);
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+	}
+	
+	public List<Role> getListRole(){
+		List<Role> list = new ArrayList<Role>();
+		connection = DBConnection.getConection();
+		try {
+			String sql = "SELECT id, name FROM ecommerce.role";
+			pst = connection.prepareStatement(sql);
+			ResultSet rs = pst.executeQuery();
+			while(rs.next()) {
+				list.add(new Role(rs.getInt(1), rs.getString(2)));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (pst != null) {
+				try {
+					pst.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			if (connection != null) {
+				try {
+					DBConnection.closeConnection(connection);
+					;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return list;
 	}
 
 }

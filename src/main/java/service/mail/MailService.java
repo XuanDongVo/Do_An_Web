@@ -18,11 +18,13 @@ import repository.user.UserRepository;
 public class MailService {
 	private UserRepository userRepository = new UserRepository();
 
-	static final String from = "ecommerce789789";
-	static final String password = "Ecom123456789";
+//	static final String from = "ecommerce789789";
+//	static final String password = "Ecom123456789";ickj olkg qgvl zcqp
+	static final String from = "voxuandong14052004";
+	static final String password = "ickjolkgqgvlzcqp";
 
 	// gửi email
-	private boolean sendEmail(String to, String subject, String content) {
+	public boolean sendEmail(String to, String subject, String content) {
 		// Properties for SMTP connection
 		Properties props = new Properties();
 		props.put("mail.smtp.host", "smtp.gmail.com");

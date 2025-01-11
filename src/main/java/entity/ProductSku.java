@@ -8,6 +8,11 @@ public class ProductSku {
 
 	public ProductSku() {
 	}
+	
+	public ProductSku(Long id) {
+		super();
+		this.id = id;
+	}
 
 	public ProductSku(Long id, ProductColorImage productColorImage, Size size, double price) {
 		this.id = id;

@@ -7,18 +7,17 @@ import dbConnection.DBConnection;
 import entity.OrderDetail;
 
 public class OrderDetailRepository {
-	private Connection connection = null;
 	private PreparedStatement pst = null;
 
 	// lưu giá trị orderdetail vào database
-	public void save(OrderDetail orderDetail) {
-		connection = DBConnection.getConection();
+	public void save(Connection connection, OrderDetail orderDetail) {
 		try {
-			String sql = "INSERT INTO order_detail (product_sku_id, price, quantity) VALUES (?, ?, ?)";
+			String sql = "INSERT INTO order_detail (order_id,product_sku_id, price, quantity) VALUES (?,?, ?, ?)";
 			pst = connection.prepareStatement(sql);
-			pst.setLong(1, orderDetail.getProductSkuId());
-			pst.setDouble(2, orderDetail.getPrice());
-			pst.setInt(3, orderDetail.getQuantity());
+			pst.setLong(1, orderDetail.getOrderId());
+			pst.setLong(2, orderDetail.getProductSkuId());
+			pst.setDouble(3, orderDetail.getPrice());
+			pst.setInt(4, orderDetail.getQuantity());
 
 			pst.executeUpdate();
 		} catch (Exception e) {

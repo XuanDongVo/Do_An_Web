@@ -32,4 +32,9 @@ public class UpdateOrderView extends HttpServlet{
 	        resp.sendRedirect(req.getContextPath() + "/order");
 	    }
 	}
+	
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		doGet(req, resp);
+	}
 }

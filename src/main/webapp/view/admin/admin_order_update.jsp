@@ -24,16 +24,15 @@
 <!-- or -->
 <link rel="stylesheet"
 	href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
-
 <!-- Font-icon css-->
 <link rel="stylesheet" type="text/css"
 	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
-<!-- <link rel="stylesheet"
+<link rel="stylesheet"
 	href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
 <link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css"> -->
+	href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 
 <!-- Bootstrap CSS -->
 <link rel="stylesheet"
@@ -74,14 +73,16 @@
 		</div>
 		<hr>
 		<ul class="app-menu">
-			<li><a class="app-menu__item active"
-				href="${pageContext.request.contextPath}/view/admin/admin.jsp"><i
+			<li><a class="app-menu__item"
+				href="${pageContext.request.contextPath}/adminController"><i
 					class='app-menu__icon bx bx-tachometer'></i><span
 					class="app-menu__label">Bảng điều khiển</span></a></li>
-			<li><a class="app-menu__item " href="${pageContext.request.contextPath}/admin_employee"><i
+			<li><a class="app-menu__item "
+				href="${pageContext.request.contextPath}/admin_employee"><i
 					class='app-menu__icon bx bx-id-card'></i> <span
 					class="app-menu__label">Quản lý nhân viên</span></a></li>
-			<li><a class="app-menu__item" href="${pageContext.request.contextPath}/admin_customer"><i
+			<li><a class="app-menu__item"
+				href="${pageContext.request.contextPath}/admin_customer"><i
 					class='app-menu__icon bx bx-user-voice'></i><span
 					class="app-menu__label">Quản lý khách hàng</span></a></li>
 			<li><a class="app-menu__item "
@@ -92,6 +93,10 @@
 				href="${pageContext.request.contextPath}/order"><i
 					class='app-menu__icon bx bx-task'></i><span class="app-menu__label">Quản
 						lý đơn hàng</span></a></li>
+			<li><a class="app-menu__item "
+				href="${pageContext.request.contextPath}/inventory"><i
+					class='app-menu__icon bx bx-task'></i><span class="app-menu__label">Quản
+						lý hàng tồn kho</span></a></li>
 		</ul>
 	</aside>
 
@@ -107,28 +112,19 @@
 						data-bs-target="#spu" type="button" role="tab">Thông Tin
 						Đơn Hàng</button>
 				</li>
-				<!-- <li class="nav-item">
-					<button class="nav-link disabled" id="sku-tab" data-bs-toggle="tab"
-						data-bs-target="#sku" type="button" role="tab">Thông Tin
-						Biến Thể (SKU)</button>
-				</li>
-				<li class="nav-item">
-					<button class="nav-link disabled" id="detail-sku-tab"
-						data-bs-toggle="tab" data-bs-target="#detailsku" type="button"
-						role="tab">Chi tiết Biến Thể (SKU)</button>
-				</li> -->
 			</ul>
 
 			<!-- Tab content -->
 			<div class="tab-content mt-4" id="productTabContent">
 				<div class="tab-pane fade show active" id="spu" role="tabpanel"
 					aria-labelledby="spu-tab">
-					<form action="${pageContext.request.contextPath}/update_order_action" method="POST">
+					<form
+						action="${pageContext.request.contextPath}/update_order_action"
+						method="POST">
 						<div class="mb-3">
-							<label for="orderCode" class="form-label">Mã đơn hàng</label> 
-							<input
-								type="text" class="form-control" id="orderCode" name="orderId" value = "${order.id_order_admin}"
-								readonly >
+							<label for="orderCode" class="form-label">Mã đơn hàng</label> <input
+								type="text" class="form-control" id="orderCode" name="orderId"
+								value="${order.id_order_admin}" readonly>
 						</div>
 						<div class="mb-3">
 							<label for="customerName" class="form-label">Tên khách
@@ -138,7 +134,7 @@
 						<div class="mb-3">
 							<label for="orderDetails" class="form-label">Đơn hàng</label> <input
 								type="text" class="form-control" id="orderDetails"
-								name="orderDetails"  value="${order.name_product}" readonly >
+								name="orderDetails" value="${order.name_product}" readonly>
 						</div>
 						<div class="mb-3">
 							<label for="quantity" class="form-label">Số lượng</label> <input
@@ -152,11 +148,11 @@
 						</div>
 						<div class="mb-3">
 							<label for="orderStatus" class="form-label">Tình trạng</label> <select
-								class="form-control" id="orderStatus" name="orderStatus" value="${order.status}"
-								required>
-								<option value="Đã hủy">Đã hủy</option>
-								<option value="Đang chờ">Đang chờ</option>
-								<option value="Đã giao">Đã giao</option>
+								class="form-control" id="orderStatus" name="orderStatus"
+								value="${order.status}" required>
+								<option value="ĐÃ_HỦY">Đã hủy</option>
+								<option value="ĐANG_CHỜ">Đang chờ</option>
+								<option value="ĐÃ_HOÀN_THÀNH">Đã giao</option>
 							</select>
 						</div>
 						<button type="submit" class="btn btn-primary" id="saveSpu">Lưu
@@ -165,81 +161,6 @@
 				</div>
 
 
-				<%-- 	<!-- SKU Form -->
-				<div class="tab-pane fade" id="sku" role="tabpanel"
-					aria-labelledby="sku-tab">
-					<form id="skuForm">
-						<div class="mb-3">
-							<label for="productColor" class="form-label">Màu sắc</label> <select
-								class="form-select" id="productColor" name="productColor"
-								required>
-								<option value="">Chọn màu sắc</option>
-								<c:forEach items="${colors}" var="color">
-									<option value="${color.name}">${color.name}</option>
-								</c:forEach>
-							</select>
-						</div>
-
-
-						<div class="mb-3">
-							<label for="productImage" class="form-label">URL hình ảnh
-								sản phẩm</label> <input type="text" class="form-control"
-								id="productImage" name="product_color_img"
-								placeholder="Nhập URL hình ảnh sản phẩm" required>
-						</div>
-
-						<div class="mb-3">
-							<label for="productSizeType" class="form-label">Loại sản
-								phẩm</label> <select class="form-select" id="productSizeType"
-								name="size" required onchange="updateSize(this)">
-								<option value="">Chọn loại quần áo</option>
-								<c:forEach var="entry" items="${sizeMap}">
-									<option value="${entry.key}"
-										data-type-size="${fn:escapeXml(entry.value)}">${entry.key}</option>
-								</c:forEach>
-
-							</select>
-						</div>
-
-						<div class="mb-3">
-							<label for="productSize" class="form-label">Kích Thước</label> <select
-								class="form-select" id="productSize" name="size" required
-								disabled>
-								<option value="">Chọn kích thước</option>
-
-							</select>
-						</div>
-						<div class="mb-3">
-							<label for="productStock" class="form-label">Số Lượng Tồn
-								Kho</label> <input type="number" class="form-control" id="productStock"
-								name="stock" required>
-						</div>
-						<button type="button" class="btn btn-success" id="addSku">Thêm
-							SKU</button>
-						<button type="button" class="btn btn-success fade" id="detailSku">Chi
-							tiết SKU</button>
-					</form>
-
-					<!-- Temporary SKU Table -->
-					<h5 class="mt-4">Danh Sách SKU</h5>
-					<table class="table table-bordered">
-						<thead>
-							<tr>
-								<th>Màu</th>
-								<th>Hình Ảnh</th>
-								<th>Kích Thước</th>
-								<th>Số Lượng</th>
-								<th>Hành Động</th>
-							</tr>
-						</thead>
-						<tbody id="skuTableBody">
-							<!-- Dữ liệu SKU sẽ được thêm vào đây -->
-						</tbody>
-					</table>
-					<button type="button" class="btn btn-success fade" id="saveSku"
-						onclick="saveProductSku()">Lưu sản phẩm</button>
-				</div>
-			</div> --%>
 			</div>
 	</main>
 

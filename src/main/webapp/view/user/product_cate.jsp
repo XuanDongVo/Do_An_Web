@@ -186,34 +186,57 @@
 		</div>
 		
 		<!-- Pagintion -->
-		<c:if test="${listResponses.totalPages > 1}">
-			<nav aria-label="Page navigation" class="mt-4">
-				<ul class="pagination justify-content-center custom-pagination">
-					<!-- Previous Button (disabled if on the first page) -->
-					<li
-						class="page-item ${listResponses.currentPage == 1 ? 'disabled' : ''}">
-						<button class="page-link"
-							onclick="navigatePage(${listResponses.currentPage - 1})"
-							tabindex="-1" aria-disabled="true">&laquo;</button>
-					</li>
+		<!-- Pagination -->
+<c:if test="${listResponses.totalPages > 1}">
+    <nav aria-label="Page navigation" class="mt-4">
+        <ul class="pagination justify-content-center custom-pagination">
+            <!-- Previous Button (disabled if on the first page) -->
+            <li class="page-item ${listResponses.currentPage == 1 ? 'disabled' : ''}">
+                <button class="page-link"
+                    onclick="navigatePage(${listResponses.currentPage - 1})"
+                    tabindex="-1" aria-disabled="true">&laquo;</button>
+            </li>
 
-					<!-- Page Numbers -->
-					<c:forEach var="page" begin="1" end="${listResponses.totalPages}">
-						<li
-							class="page-item ${listResponses.currentPage == page ? 'active' : ''}">
-							<button class="page-link" onclick="navigatePage(${page})">${page}</button>
-						</li>
-					</c:forEach>
+            <!-- Page Numbers -->
+            <c:forEach var="page" begin="1" end="${listResponses.totalPages}">
+                <c:choose>
+                    <c:when test="${page <= 3}">
+                        <li class="page-item ${listResponses.currentPage == page ? 'active' : ''}">
+                            <button class="page-link" onclick="navigatePage(${page})">${page}</button>
+                        </li>
+                    </c:when>
 
-					<!-- Next Button (disabled if on the last page) -->
-					<li
-						class="page-item ${listResponses.currentPage == listResponses.totalPages ? 'disabled' : ''}">
-						<button class="page-link"
-							onclick="navigatePage(${listResponses.currentPage + 1})">&raquo;</button>
-					</li>
-				</ul>
-			</nav>
-		</c:if>
+							<c:when test="${page == 4 && listResponses.currentPage > 5}">
+								<li class="page-item disabled"><span class="page-link">...</span></li>
+							</c:when>
+
+                    <c:when test="${page >= listResponses.currentPage - 1 && page <= listResponses.currentPage + 1}">
+                        <li class="page-item ${listResponses.currentPage == page ? 'active' : ''}">
+                            <button class="page-link" onclick="navigatePage(${page})">${page}</button>
+                        </li>
+                    </c:when>
+
+                    <c:when test="${page == listResponses.totalPages - 3 && listResponses.currentPage < listResponses.totalPages - 4}">
+                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                    </c:when>
+
+                    <c:when test="${page > listResponses.totalPages - 3}">
+                        <li class="page-item ${listResponses.currentPage == page ? 'active' : ''}">
+                            <button class="page-link" onclick="navigatePage(${page})">${page}</button>
+                        </li>
+                    </c:when>
+                </c:choose>
+            </c:forEach>
+
+            <!-- Next Button (disabled if on the last page) -->
+            <li class="page-item ${listResponses.currentPage == listResponses.totalPages ? 'disabled' : ''}">
+                <button class="page-link"
+                    onclick="navigatePage(${listResponses.currentPage + 1})">&raquo;</button>
+            </li>
+        </ul>
+    </nav>
+</c:if>
+
 
 
 

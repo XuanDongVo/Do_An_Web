@@ -10,6 +10,12 @@ public class Role {
 	public Role() {
 	}
 
+	public Role(int id, String nameRole) {
+		super();
+		this.id = id;
+		this.nameRole = nameRole;
+	}
+
 	public Role(int id, String nameRole, LocalDate date) {
 		this.id = id;
 		this.nameRole = nameRole;
