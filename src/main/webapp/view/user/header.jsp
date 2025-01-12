@@ -140,7 +140,7 @@
 	</script>
 
 
-	<script>
+<!-- 	<script>
 		// Hàm này sẽ được gọi khi người dùng nhấn Enter
 		function handleSearch() {
 			const searchInput = document.getElementById('searchInput');
@@ -152,7 +152,7 @@
 		function performSearch(term) {
 			window.location.href = 'search?search=' + term;
 		}
-	</script>
+	</script> -->
 
 
 </body>

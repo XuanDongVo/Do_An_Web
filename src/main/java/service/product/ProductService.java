@@ -83,8 +83,6 @@ public class ProductService {
 			connection.setAutoCommit(false); // Bắt đầu giao dịch
 			List<ProductSku> productSkus = productSkuRepository.findByProductId(productId);
 
-			List<Long> productSkuIds = productSkus.stream().map(ProductSku::getId).collect(Collectors.toList());
-
 			for (ProductSku productSku : productSkus) {
 				// xoa san pham trong inventory
 				inventoryRepository.removeByProductSkuId(connection, productSku.getId());
@@ -99,8 +97,14 @@ public class ProductService {
 			}
 			// xoa productcolorimg
 			productColorImgRepository.removeByProductId(connection, productId);
+			if (connection.isClosed()) {
+				System.out.println("close");
+			}
 			// xoa product
 			productRepository.removeById(connection, productId);
+			if (connection.isClosed()) {
+				System.out.println("close");
+			}
 
 			connection.setAutoCommit(true);
 

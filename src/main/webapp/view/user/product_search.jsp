@@ -313,6 +313,7 @@
 			method : "GET",
 			success : function(response) {
 				renderFilter(response.colors, response.sizes);
+				registerEvents()
 			},
 			error : function(xhr, status, error) {
 				console.error("Lỗi: ", error);

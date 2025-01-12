@@ -7,41 +7,72 @@ function toggleSubcategory(subcategoryId) {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-	const searchInput = document.getElementById('searchInput');
-
-	if (searchInput) {
-		searchInput.addEventListener('keydown', (event) => {
-			if (event.key === 'Enter') {
-				handleSearch();
-			}
-		});
-	}
+    // Gọi hàm đăng ký sự kiện khi DOM đã sẵn sàng
+    registerEvents()
+    // Xử lý sự kiện hiển thị menu người dùng
+    const userIcon = document.querySelector('.user-icon');
+    const userOptions = document.querySelector('.user-options');
+    if (userIcon && userOptions) {
+        userIcon.addEventListener('click', function() {
+            // Toggle hiển thị menu
+            if (userOptions.style.display === 'flex') {
+                userOptions.style.display = 'none';
+                userOptions.style.opacity = '0';
+            } else {
+                userOptions.style.display = 'flex';
+                userOptions.style.opacity = '1';
+            }
+        });
+    }
 });
 
+// Hàm đăng ký sự kiện (tìm kiếm và menu người dùng)
+function registerEvents() {
+    // Xử lý sự kiện tìm kiếm
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        // Đảm bảo rằng không có sự kiện cũ trước khi thêm mới
+        searchInput.removeEventListener('keydown', handleSearch); // Loại bỏ sự kiện cũ
+        searchInput.addEventListener('keydown', handleSearch); // Thêm sự kiện mới
+    }
+    
+    // Xử lý sự kiện hiển thị menu người dùng (đảm bảo không có sự kiện cũ)
+    const userIcon = document.querySelector('.user-icon');
+    const userOptions = document.querySelector('.user-options');
+    if (userIcon && userOptions) {
+        userIcon.removeEventListener('click', toggleUserMenu); // Loại bỏ sự kiện cũ
+        userIcon.addEventListener('click', toggleUserMenu);  // Thêm sự kiện mới
+    }
+}
 
-document.addEventListener("DOMContentLoaded", function() {
-	const userIcon = document.querySelector('.user-icon');
-	const userOptions = document.querySelector('.user-options');
+// Định nghĩa hàm toggleUserMenu
+function toggleUserMenu() {
+    const userOptions = document.querySelector('.user-options');
+    if (userOptions.style.display === 'flex') {
+        userOptions.style.display = 'none';
+        userOptions.style.opacity = '0';
+    } else {
+        userOptions.style.display = 'flex';
+        userOptions.style.opacity = '1';
+    }
+}
 
-	userIcon.addEventListener('click', function() {
-		// Toggle hiển thị menu
-		if (userOptions.style.display === 'flex') {
-			userOptions.style.display = 'none';
-			userOptions.style.opacity = '0';
-		} else {
-			userOptions.style.display = 'flex';
-			userOptions.style.opacity = '1';
-		}
-	});
+// Hàm này sẽ được gọi khi người dùng nhấn Enter
+function handleSearch(event) {
+    if (event && event.key !== 'Enter') return;  // Chỉ thực thi khi nhấn Enter
 
-	// Đóng menu nếu click ra bên ngoài
-	/*document.addEventListener('click', function(event) {
-		if (!userMenu.contains(event.target)) {
-			userOptions.style.display = 'none';
-			userOptions.style.opacity = '0';
-		}
-	});*/
-});
+    const searchInput = document.getElementById('searchInput');
+    const searchTerm = searchInput.value.trim(); // Lấy giá trị từ input và loại bỏ khoảng trắng
+
+    if (searchTerm) {
+        performSearch(searchTerm); // Thực hiện tìm kiếm
+    }
+}
+
+// Gọi controller tìm kiếm
+function performSearch(term) {
+    window.location.href = 'search?search=' + encodeURIComponent(term);  // Đảm bảo mã hóa từ khóa tìm kiếm
+}
 
 
 

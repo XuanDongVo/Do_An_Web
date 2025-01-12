@@ -122,9 +122,22 @@
 	background-color: #f0f0f0;
 }
 
-.size-btn.size-unavailable:hover {
-	cursor: not-allowed;
+.size-btn.size-unavailable {
+    background-color: #e0e0e0; /* Màu nền khi hết hàng */
+    color: #999; /* Màu chữ khi hết hàng */
+    text-decoration: line-through; /* Dấu gạch chéo */
+    cursor: not-allowed; /* Thay đổi con trỏ chuột khi hover */
 }
+
+.size-btn.size-unavailable:hover {
+    background-color: #e0e0e0 !important; /* Không thay đổi màu khi hover */
+    color: #999 ; /* Không thay đổi màu chữ khi hover */
+}
+
+
+/* .size-btn.size-unavailable:hover {
+	cursor: not-allowed;
+} */
 
 .size-btn.selected {
 	background-color: #171717;

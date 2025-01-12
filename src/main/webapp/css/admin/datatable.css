@@ -1,0 +1,97 @@
+
+
+.dt-search {
+    display: flex;
+    align-items: center; /* Căn giữa theo chiều dọc */
+    gap: 10px; /* Khoảng cách giữa label và input */
+    background-color: #f8f9fa; /* Màu nền nhẹ */
+    padding: 8px 12px; /* Khoảng cách xung quanh */
+    border-radius: 4px; /* Bo góc nhẹ */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ cho đẹp */
+}
+
+.dt-label {
+    font-size: 14px; /* Kích thước chữ nhỏ */
+    color: #495057; /* Màu chữ */
+    margin-right: 10px; /* Khoảng cách giữa label và input */
+}
+
+.dt-input {
+    flex: 1; /* Chiếm hết không gian còn lại */
+    padding: 8px 12px; /* Khoảng cách trong input */
+    border: 1px solid #ced4da; /* Đường viền mờ */
+    border-radius: 4px; /* Bo góc cho input */
+    font-size: 14px; /* Kích thước chữ trong input */
+}
+
+.dt-input:focus {
+    border-color: #80bdff; /* Đổi màu viền khi focus */
+    outline: none; /* Bỏ viền ngoài khi focus */
+}
+
+
+.pagination-wrapper {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+/* Tổng thể pagination */
+.pagination-wrapper .dt-paging {
+	display: flex;
+	justify-content: flex-start; /* Căn trái */
+	gap: 5px; /* Khoảng cách giữa các nút */
+	align-items: center;
+	margin-top: 10px;
+}
+
+/* Nút pagination cơ bản */
+.pagination-wrapper .dt-paging-button {
+	background-color: #f8f9fa; /* Màu nền nút */
+	color: #007bff; /* Màu chữ */
+	border: 1px solid #dee2e6; /* Viền */
+	border-radius: 5px; /* Bo tròn nút */
+	padding: 5px 10px; /* Khoảng cách trong nút */
+	font-size: 14px;
+	cursor: pointer;
+	transition: background-color 0.3s, color 0.3s;
+}
+
+/* Nút hover */
+.pagination-wrapper .dt-paging-button:hover {
+	background-color: #007bff; /* Màu nền khi hover */
+	color: white; /* Màu chữ khi hover */
+}
+
+/* Nút active (current page) */
+.pagination-wrapper .dt-paging-button.current {
+	background-color: #007bff; /* Màu nền nút hiện tại */
+	color: white; /* Màu chữ */
+	font-weight: bold;
+	cursor: default;
+}
+
+/* Nút disabled */
+.pagination-wrapper .dt-paging-button.disabled {
+	background-color: #e9ecef; /* Màu nền nút bị vô hiệu */
+	color: #6c757d; /* Màu chữ nút bị vô hiệu */
+	cursor: not-allowed;
+}
+
+/* Dấu chấm (ellipsis) */
+.pagination-wrapper .ellipsis {
+	color: #6c757d; /* Màu chữ cho ellipsis */
+	font-size: 14px;
+	padding: 0 5px;
+}
+
+/* Tùy chỉnh nút "First" và "Last" */
+.pagination-wrapper .dt-paging-button.first, .pagination-wrapper .dt-paging-button.last
+	{
+	font-weight: bold; /* In đậm */
+}
+
+/* Tùy chỉnh nút "Previous" và "Next" */
+.pagination-wrapper .dt-paging-button.previous, .pagination-wrapper .dt-paging-button.next
+	{
+	font-style: italic; /* Nghiêng chữ */
+}

@@ -35,14 +35,7 @@ public class CartDetailRepository {
 					e.printStackTrace();
 				}
 			}
-			if (connection != null) {
-				try {
-					DBConnection.closeConnection(connection);
-					;
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
+			
 		}
 	}
 

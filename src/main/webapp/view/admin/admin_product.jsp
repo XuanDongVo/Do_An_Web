@@ -13,7 +13,9 @@
 <!-- Main CSS-->
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/css/admin/main.css">
-
+	
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/css/admin/datatable.css">
 
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
@@ -32,7 +34,6 @@
 
 <script
 	src="${pageContext.request.contextPath}/adding/bootstrap/bootstrap.bundle.min.js"></script>
-
 </head>
 
 <body onload="time()" class="app sidebar-mini rtl">
@@ -46,7 +47,8 @@
 
 
 			<!-- User Menu-->
-			<li><a class="app-nav__item" href="${pageContext.request.contextPath}/logout"><i
+			<li><a class="app-nav__item"
+				href="${pageContext.request.contextPath}/logout"><i
 					class='bx bx-log-out bx-rotate-180'></i> </a></li>
 		</ul>
 	</header>
@@ -83,7 +85,7 @@
 				href="${pageContext.request.contextPath}/order"><i
 					class='app-menu__icon bx bx-task'></i><span class="app-menu__label">Quản
 						lý đơn hàng</span></a></li>
-						<li><a class="app-menu__item "
+			<li><a class="app-menu__item "
 				href="${pageContext.request.contextPath}/inventory"><i
 					class='app-menu__icon bx bx-task'></i><span class="app-menu__label">Quản
 						lý hàng tồn kho</span></a></li>
@@ -109,7 +111,7 @@
 							</div>
 
 						</div>
-						<table class="table table-hover table-bordered" id="sampleTable">
+						<table class="table table-hover table-bordered" id="productTable">
 							<thead>
 								<tr>
 									<th>Mã sản phẩm</th>
@@ -224,6 +226,31 @@
 			}
 		}
 	</script>
+
+	<!-- DataTables JS -->
+	<script type="text/javascript"
+		src="https://cdn.datatables.net/2.2.1/css/dataTables.dataTables.css"></script>
+	<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+	<script src="//cdn.datatables.net/2.0.2/js/dataTables.min.js"></script>
+	<script>
+    $(document).ready(function () {
+        $('#productTable').DataTable({
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/vi.json'
+            },
+            pageLength: 10,
+            lengthMenu: [
+                [10, 25, 50, -1],
+                [10, 25, 50, "Tất cả"]	
+            ],
+            dom: '<"row"<"col-sm-6"l><"col-sm-6"f>>t<"row"<"col-sm-6"i><"col-sm-6 pagination-wrapper"p>>',
+        });
+
+        // Move pagination to the left
+        $('.pagination-wrapper').addClass('d-flex justify-content-start');
+    });
+
+    </script>
 
 </body>
 

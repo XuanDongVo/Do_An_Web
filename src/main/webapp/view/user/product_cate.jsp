@@ -11,23 +11,16 @@
 <title>Document</title>
 <link rel="stylesheet" href="css/Navbar_procate.css">
 <link rel="stylesheet" href="css/Hero_procate.css">
-<!-- <link rel="stylesheet" href="css/SearchBar.css"> -->
-<!-- <link rel="stylesheet" href="css/Popular.css"> -->
-<!-- <link rel="stylesheet" href="css/Item.css"> -->
+<link rel="stylesheet" href="css/SearchBar.css">
+<link rel="stylesheet" href="css/Popular.css">
+<link rel="stylesheet" href="css/Item.css">
 <link rel="stylesheet" href="css/NewCollections.css">
-<!-- <link rel="stylesheet" href="css/NewLetter.css"> -->
-<link rel="stylesheet" href="css/Footer.css">
+<link rel="stylesheet" href="css/NewLetter.css">
+
 <link rel="stylesheet" href="css/Cate.css">
-
-
-<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="css/Cart.css">
 <link rel="stylesheet" href="adding/bootstrap/boostrap.min.css">
 
-<script src="adding/bootstrap/bootstrap.bundle.min.js"></script>
-
-<script src="js/cate_filter.js"></script>
-<script src="js/product_collection.js"></script>
-<script src="js/navbar.js"></script>
 </head>
 
 <body>
@@ -185,7 +178,6 @@
 			</c:forEach>
 		</div>
 		
-		<!-- Pagintion -->
 		<!-- Pagination -->
 <c:if test="${listResponses.totalPages > 1}">
     <nav aria-label="Page navigation" class="mt-4">
@@ -245,6 +237,17 @@
 
 	<jsp:include page="footer.jsp"></jsp:include>
 
+	<!-- Bootstrap CSS -->
+	<!-- 	<script src="adding/jquery/jquery-3.4.1.min.js"></script> -->
+	<script src="adding/popper/poper.min.js"></script>
+	<script src="adding/bootstrap/bootstrap.min.js"></script>
+	<script src="adding/bootstrap/bootstrap.bundle.min.js"></script>
+	
+		
+	<script src="js/navbar.js"></script>
+<script src="js/cate_filter.js"></script>
+<script src="js/product_collection.js"></script>
+
 
 	<script type="text/javascript">
 		$.ajax({
@@ -252,6 +255,7 @@
 			method : "GET",
 			success : function(response) {
 				renderFilter(response.colors, response.sizes);
+				registerEvents()
 			},
 			error : function(xhr, status, error) {
 				console.error("Lỗi: ", error);
@@ -262,5 +266,4 @@
 
 </body>
 
-</html>
 </html>

@@ -93,7 +93,7 @@
 				href="${pageContext.request.contextPath}/order"><i
 					class='app-menu__icon bx bx-task'></i><span class="app-menu__label">Quản
 						lý đơn hàng</span></a></li>
-			<li><a class="app-menu__item "
+			<li><a class="app-menu__item active"
 				href="${pageContext.request.contextPath}/inventory"><i
 					class='app-menu__icon bx bx-task'></i><span class="app-menu__label">Quản
 						lý hàng tồn kho</span></a></li>
