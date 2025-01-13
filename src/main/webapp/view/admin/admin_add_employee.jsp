@@ -66,7 +66,11 @@
 		<div class="app-sidebar__user">
 			<div>
 				<p class="app-sidebar__user-name">
+<<<<<<< HEAD
 					<b>Võ Trường</b>
+=======
+					<b>${user.name}</b>
+>>>>>>> 66771eb (commit all)
 				</p>
 				<p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
 			</div>
@@ -146,6 +150,14 @@
 								name="address_employee">
 						</div>
 						<div class="mb-3">
+<<<<<<< HEAD
+=======
+							<label for="quantity" class="form-label">Mật khẩu</label> <input
+								type="text" class="form-control" id="password_employee"
+								name="password_employee">
+						</div>
+						<div class="mb-3">
+>>>>>>> 66771eb (commit all)
 							<label for="quantity" class="form-label">Tên nhân viên</label> <input
 								type="text" class="form-control" id="name_employee"
 								name="name_employee">

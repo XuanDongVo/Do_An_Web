@@ -14,7 +14,11 @@ public class DBConnection {
 		HikariConfig config = new HikariConfig();
 		config.setJdbcUrl("jdbc:mysql://localhost:3306/ecommerce");
 		config.setUsername("root");
+<<<<<<< HEAD
 		config.setPassword("dong14052004");
+=======
+		config.setPassword("");
+>>>>>>> 66771eb (commit all)
 
 		config.setMaximumPoolSize(50); // Giảm để phù hợp với `max_connections`
 		config.setMinimumIdle(5); // Tăng số kết nối nhàn rỗi tối thiểu
@@ -46,5 +50,12 @@ public class DBConnection {
 			System.out.println("Error closing connection: " + e.getMessage());
 		}
 	}
+<<<<<<< HEAD
+=======
+	
+	public static void main(String[] args) {
+		System.out.println(new DBConnection().getConection() == null ? "False" : "True");
+	}
+>>>>>>> 66771eb (commit all)
 
 }

@@ -52,7 +52,11 @@
 		<div class="app-sidebar__user">
 			<div>
 				<p class="app-sidebar__user-name">
+<<<<<<< HEAD
 					<b>Võ Trường</b>
+=======
+					<b>${user.name}</b>
+>>>>>>> 66771eb (commit all)
 				</p>
 				<p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
 			</div>
@@ -138,6 +142,10 @@
 												<!-- Nút Xóa sẽ gửi ID đơn hàng qua POST --> <input
 												type="hidden" name="order_id"
 												value="${order.id_order_admin}">
+<<<<<<< HEAD
+=======
+												<c:if test="${sessionScope.role == 'ADMIN'}">
+>>>>>>> 66771eb (commit all)
 												<button class="btn btn-primary btn-sm trash" type="submit"
 													title="Xóa">
 													<i class="fas fa-trash-alt"></i>
@@ -147,6 +155,10 @@
 														title="Sửa">
 														<i class="fa fa-edit"></i>
 													</button>
+<<<<<<< HEAD
+=======
+												</c:if>
+>>>>>>> 66771eb (commit all)
 											</a>
 											</td>
 										</tr>

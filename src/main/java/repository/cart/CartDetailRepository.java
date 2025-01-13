@@ -27,6 +27,7 @@ public class CartDetailRepository {
 			pst.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
+<<<<<<< HEAD
 		} finally {
 			if (pst != null) {
 				try {
@@ -37,6 +38,9 @@ public class CartDetailRepository {
 			}
 			
 		}
+=======
+		} 
+>>>>>>> 66771eb (commit all)
 	}
 
 	// lấy ra những sản phẩm mà khách hàng chọn để checkout

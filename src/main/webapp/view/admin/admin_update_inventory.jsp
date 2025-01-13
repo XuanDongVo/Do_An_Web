@@ -66,7 +66,11 @@
 		<div class="app-sidebar__user">
 			<div>
 				<p class="app-sidebar__user-name">
+<<<<<<< HEAD
 					<b>Võ Trường</b>
+=======
+					<b>${user.name}</b>
+>>>>>>> 66771eb (commit all)
 				</p>
 				<p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
 			</div>
@@ -93,7 +97,11 @@
 				href="${pageContext.request.contextPath}/order"><i
 					class='app-menu__icon bx bx-task'></i><span class="app-menu__label">Quản
 						lý đơn hàng</span></a></li>
+<<<<<<< HEAD
 			<li><a class="app-menu__item active"
+=======
+			<li><a class="app-menu__item "
+>>>>>>> 66771eb (commit all)
 				href="${pageContext.request.contextPath}/inventory"><i
 					class='app-menu__icon bx bx-task'></i><span class="app-menu__label">Quản
 						lý hàng tồn kho</span></a></li>

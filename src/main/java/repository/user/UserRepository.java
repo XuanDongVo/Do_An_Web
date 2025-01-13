@@ -654,7 +654,11 @@ public class UserRepository {
 		try {
 			String sql = "select u.id, u.email, u.phone, u.name, u.address, u.create_at, r.name "
 					+ " from ecommerce.user u " + " inner join ecommerce.user_role  ur on  u.id = ur.user_id "
+<<<<<<< HEAD
 					+ " inner join ecommerce.role r on ur.role_id = r.id " + " where r.id = 2";
+=======
+					+ " inner join ecommerce.role r on ur.role_id = r.id " + " where r.name = 'STAFF' ";
+>>>>>>> 66771eb (commit all)
 			pst = connection.prepareStatement(sql);
 			ResultSet rs = pst.executeQuery();
 
@@ -695,7 +699,11 @@ public class UserRepository {
 		try {
 			String sql = "select u.id, u.email, u.phone, u.name, u.address,u.create_at, r.name "
 					+ " from ecommerce.user u " + " inner join ecommerce.user_role  ur on  u.id = ur.user_id "
+<<<<<<< HEAD
 					+ " inner join ecommerce.role r on ur.role_id = r.id " + " where r.id = 3";
+=======
+					+ " inner join ecommerce.role r on ur.role_id = r.id " + " where r.name = 'USER'";
+>>>>>>> 66771eb (commit all)
 			pst = connection.prepareStatement(sql);
 			ResultSet rs = pst.executeQuery();
 
@@ -840,20 +848,34 @@ public class UserRepository {
 	}
 	
 	
+<<<<<<< HEAD
 	public boolean addUser(String email, String phone, String address, String name) {
+=======
+	public boolean addUser(String email, String phone, String address, String password, String name) {
+>>>>>>> 66771eb (commit all)
 	    PreparedStatement pstUser = null;
 
 	    try {
 	        connection = DBConnection.getConection();
 
 	        // Câu lệnh SQL để thêm user
+<<<<<<< HEAD
 	        String sqlUser = "INSERT INTO ecommerce.user (email, phone, address, ecommerce.user.name, create_at) "
 	                + "VALUES (?, ?, ?, ?, DATE(NOW()))";
+=======
+	        String sqlUser = "INSERT INTO ecommerce.user (email, phone, address, password, ecommerce.user.name, create_at) "
+	                + "VALUES (?, ?, ?, ?, ?, DATE(NOW()))";
+>>>>>>> 66771eb (commit all)
 	        pstUser = connection.prepareStatement(sqlUser);
 	        pstUser.setString(1, email);
 	        pstUser.setString(2, phone);
 	        pstUser.setString(3, address);
+<<<<<<< HEAD
 	        pstUser.setString(4, name);
+=======
+	        pstUser.setString(4, password);
+	        pstUser.setString(5, name);
+>>>>>>> 66771eb (commit all)
 	        int result = pstUser.executeUpdate();
 	        
 	        return result > 0; // Trả về true nếu thêm thành công
@@ -929,4 +951,46 @@ public class UserRepository {
 		return list;
 	}
 
+<<<<<<< HEAD
+=======
+	public String getRoleById(long id) {
+		String res = "";
+		connection = DBConnection.getConection();
+		try {
+			String sql = "SELECT r.name FROM role r "
+					+ " INNER JOIN user_role ur ON r.id = ur.role_id "
+					+ " WHERE ur.user_id = ?";
+			pst = connection.prepareStatement(sql);
+			pst.setLong(1, id);
+			ResultSet rs = pst.executeQuery();
+			if(rs.next()) res += rs.getString(1);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (pst != null) {
+				try {
+					pst.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			if (connection != null) {
+				try {
+					DBConnection.closeConnection(connection);
+					;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return res;
+	}
+	
+	public static void main(String[] args) {
+//		System.out.println(new UserRepository().getRoleById( (long) 5));
+		
+		new UserRepository().addUser("l@gmail.com", "84892892892", "abc", null, null);
+	}
+
+>>>>>>> 66771eb (commit all)
 }

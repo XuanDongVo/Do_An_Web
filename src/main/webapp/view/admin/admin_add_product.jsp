@@ -67,7 +67,11 @@
 		<div class="app-sidebar__user">
 			<div>
 				<p class="app-sidebar__user-name">
+<<<<<<< HEAD
 					<b>Võ Trường</b>
+=======
+					<b>${user.name}</b>
+>>>>>>> 66771eb (commit all)
 				</p>
 				<p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
 			</div>
@@ -351,8 +355,12 @@
 	    // Tạo form ẩn và gửi dữ liệu
 	    const form = document.createElement('form');
 	    form.method = 'POST';
+<<<<<<< HEAD
 	    form.action = '<%=request.getContextPath()%>
 		/adminAddProduct';
+=======
+	    form.action = '<%=request.getContextPath()%>/adminAddProduct';
+>>>>>>> 66771eb (commit all)
 
 			const inputJson = document.createElement('input');
 			inputJson.type = 'hidden';

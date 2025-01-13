@@ -31,12 +31,24 @@ public class AdminLoginController extends HttpServlet {
 			String error = "Tài khoản không tồn tại";
 			req.setAttribute("message", error);
 			req.getRequestDispatcher( "/view/admin/admin_login.jsp").forward(req, resp);
+<<<<<<< HEAD
 		}
 
 		req.getSession().setAttribute("user", user);
 
 		// Forward đến trang admin
 		resp.sendRedirect(req.getContextPath() + "/view/admin/admin.jsp");
+=======
+		}else {
+			String role = userRepository.getRoleById(user.getId());
+			req.getSession().setAttribute("user", user);
+			req.getSession().setAttribute("role", role);
+			// Forward đến trang admin
+			resp.sendRedirect(req.getContextPath() + "/adminController");
+		}
+
+		
+>>>>>>> 66771eb (commit all)
 	}
 
 }

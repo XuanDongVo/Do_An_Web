@@ -24,7 +24,11 @@ public class ProductColorImgRepository {
 			pst.setLong(1, colorId);
 			pst.setLong(2, productColorImgId);
 			return pst.executeUpdate();
+<<<<<<< HEAD
 		}
+=======
+		} 
+>>>>>>> 66771eb (commit all)
 	}
 
 	public long addProductColorImg(Connection connection, ProductColorImage productColorImage) throws SQLException {
@@ -43,7 +47,11 @@ public class ProductColorImgRepository {
 					}
 				}
 			}
+<<<<<<< HEAD
 		}
+=======
+		} 
+>>>>>>> 66771eb (commit all)
 		return productColorImgId;
 	}
 
@@ -99,7 +107,11 @@ public class ProductColorImgRepository {
 			pst.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
+<<<<<<< HEAD
 		}
+=======
+		} 
+>>>>>>> 66771eb (commit all)
 	}
 
 }

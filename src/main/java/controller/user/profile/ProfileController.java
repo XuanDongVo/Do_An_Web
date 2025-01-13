@@ -27,6 +27,7 @@ public class ProfileController extends HttpServlet {
 		String idUser = req.getParameter("userId");
 		try {
 			long idUser_convert = Long.parseLong(idUser);
+<<<<<<< HEAD
 			
 			if (phone != null && !phone.startsWith("84")) {
 				phone = "84" + phone; // Thêm mã vùng 84
@@ -43,6 +44,30 @@ public class ProfileController extends HttpServlet {
 			resp.sendRedirect(req.getContextPath() + "/profile");
 //			req.getRequestDispatcher(req.getContextPath() + "/profile").forward(req, resp);
 		}catch(NumberFormatException nfe) {
+=======
+
+			if (phone != null && !phone.startsWith("84")) {
+				phone = "84" + phone; // Thêm mã vùng 84
+				session.setAttribute("userId", idUser);
+				session.setAttribute("name", name);
+				session.setAttribute("phone", phone);
+				session.setAttribute("email", email);
+				session.setAttribute("address", address);
+			} else {
+				session.setAttribute("userId", idUser);
+				session.setAttribute("name", name);
+				session.setAttribute("phone", phone);
+				session.setAttribute("email", email);
+				session.setAttribute("address", address);
+			}
+
+			req.getRequestDispatcher("/sendOtpProfile").forward(req, resp);
+			System.out.println(idUser);
+			System.out.println(phone);
+
+//			req.getRequestDispatcher(req.getContextPath() + "/profile").forward(req, resp);
+		} catch (NumberFormatException nfe) {
+>>>>>>> 66771eb (commit all)
 			nfe.printStackTrace();
 		}
 	}

@@ -56,7 +56,11 @@
 						<c:choose>
 							<c:when test="${not empty user}">
 								<!-- Nút Profile và Logout -->
+<<<<<<< HEAD
 								<a href = "<%=request.getContextPath()%>/view/user/profile.jsp"><button
+=======
+								<a href = "<%=request.getContextPath()%>/profile"><button
+>>>>>>> 66771eb (commit all)
 									style="color: white; width: 100%; height: 40px; margin-bottom: 0.5rem; font-size: 15px; background-color: black;">
 									Profile</button></a>
 								<a href = "<c:url value='/logout' />"><button
@@ -140,7 +144,11 @@
 	</script>
 
 
+<<<<<<< HEAD
 <!-- 	<script>
+=======
+	<script>
+>>>>>>> 66771eb (commit all)
 		// Hàm này sẽ được gọi khi người dùng nhấn Enter
 		function handleSearch() {
 			const searchInput = document.getElementById('searchInput');
@@ -152,7 +160,11 @@
 		function performSearch(term) {
 			window.location.href = 'search?search=' + term;
 		}
+<<<<<<< HEAD
 	</script> -->
+=======
+	</script>
+>>>>>>> 66771eb (commit all)
 
 
 </body>

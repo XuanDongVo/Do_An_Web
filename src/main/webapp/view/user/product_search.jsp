@@ -313,7 +313,10 @@
 			method : "GET",
 			success : function(response) {
 				renderFilter(response.colors, response.sizes);
+<<<<<<< HEAD
 				registerEvents()
+=======
+>>>>>>> 66771eb (commit all)
 			},
 			error : function(xhr, status, error) {
 				console.error("Lỗi: ", error);

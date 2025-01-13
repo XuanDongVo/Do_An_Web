@@ -122,6 +122,7 @@
 	background-color: #f0f0f0;
 }
 
+<<<<<<< HEAD
 .size-btn.size-unavailable {
     background-color: #e0e0e0; /* Màu nền khi hết hàng */
     color: #999; /* Màu chữ khi hết hàng */
@@ -138,6 +139,11 @@
 /* .size-btn.size-unavailable:hover {
 	cursor: not-allowed;
 } */
+=======
+.size-btn.size-unavailable:hover {
+	cursor: not-allowed;
+}
+>>>>>>> 66771eb (commit all)
 
 .size-btn.selected {
 	background-color: #171717;

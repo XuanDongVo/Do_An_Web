@@ -13,9 +13,13 @@
 <!-- Main CSS-->
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/css/admin/main.css">
+<<<<<<< HEAD
 	
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/css/admin/datatable.css">
+=======
+
+>>>>>>> 66771eb (commit all)
 
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
@@ -34,6 +38,10 @@
 
 <script
 	src="${pageContext.request.contextPath}/adding/bootstrap/bootstrap.bundle.min.js"></script>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 66771eb (commit all)
 </head>
 
 <body onload="time()" class="app sidebar-mini rtl">
@@ -58,7 +66,11 @@
 		<div class="app-sidebar__user">
 			<div>
 				<p class="app-sidebar__user-name">
+<<<<<<< HEAD
 					<b>Võ Trường</b>
+=======
+					<b>${user.name}</b>
+>>>>>>> 66771eb (commit all)
 				</p>
 				<p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
 			</div>
@@ -105,6 +117,7 @@
 					<div class="tile-body">
 						<div class="row element-button">
 							<div class="col-sm-2">
+<<<<<<< HEAD
 								<a class="btn btn-add btn-sm"
 									href="<%=request.getContextPath()%>/adminAddProduct?action=view"
 									title="Thêm"><i class="fas fa-plus"></i> Tạo mới sản phẩm</a>
@@ -112,6 +125,17 @@
 
 						</div>
 						<table class="table table-hover table-bordered" id="productTable">
+=======
+								<c:if test="${sessionScope.role == 'ADMIN'}">
+									<a class="btn btn-add btn-sm"
+										href="<%=request.getContextPath()%>/adminAddProduct?action=view"
+										title="Thêm"><i class="fas fa-plus"></i> Tạo mới sản phẩm</a>
+								</c:if>
+							</div>
+
+						</div>
+						<table class="table table-hover table-bordered" id="sampleTable">
+>>>>>>> 66771eb (commit all)
 							<thead>
 								<tr>
 									<th>Mã sản phẩm</th>
@@ -134,6 +158,7 @@
 												type="button" title="Chi tiết"
 												onclick="viewProductDetails( 'view', ${product.productId})">
 												<i class="fas fa-eye"></i>
+<<<<<<< HEAD
 											</button>
 
 											<button class="btn btn-primary btn-sm trash" type="button"
@@ -145,6 +170,19 @@
 												onclick="viewProductDetails( 'edit', ${product.productId})">
 												<i class="fas fa-edit"></i>
 											</button>
+=======
+											</button> <c:if test="${sessionScope.role == 'ADMIN'}">
+												<button class="btn btn-primary btn-sm trash" type="button"
+													title="Xóa" onclick="deleteProduct(${product.productId})">
+													<i class="fas fa-trash-alt"></i>
+												</button>
+												<button class="btn btn-primary btn-sm edit" type="button"
+													title="Sửa"
+													onclick="viewProductDetails( 'edit', ${product.productId})">
+													<i class="fas fa-edit"></i>
+												</button>
+											</c:if>
+>>>>>>> 66771eb (commit all)
 										</td>
 									</tr>
 								</c:forEach>
@@ -227,6 +265,7 @@
 		}
 	</script>
 
+<<<<<<< HEAD
 	<!-- DataTables JS -->
 	<script type="text/javascript"
 		src="https://cdn.datatables.net/2.2.1/css/dataTables.dataTables.css"></script>
@@ -252,6 +291,8 @@
 
     </script>
 
+=======
+>>>>>>> 66771eb (commit all)
 </body>
 
 </html>

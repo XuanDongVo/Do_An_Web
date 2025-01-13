@@ -55,7 +55,11 @@
 		<div class="app-sidebar__user">
 			<div>
 				<p class="app-sidebar__user-name">
+<<<<<<< HEAD
 					<b>Võ Trường</b>
+=======
+					<b>${user.name}</b>
+>>>>>>> 66771eb (commit all)
 				</p>
 				<p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
 			</div>
@@ -102,9 +106,17 @@
 					<div class="tile-body">
 						<div class="row element-button">
 							<div class="col-sm-2">
+<<<<<<< HEAD
 								<a class="btn btn-add btn-sm"
 									href="<%=request.getContextPath()%>/add_inventory_view"
 									title="Thêm"><i class="fas fa-plus"></i> Thêm sản phẩm</a>
+=======
+							<c:if test="${not empty error}">
+								<a class="btn btn-add btn-sm"
+									href="<%=request.getContextPath()%>/add_inventory_view"
+									title="Thêm"><i class="fas fa-plus"></i> Thêm sản phẩm</a>
+							</c:if>
+>>>>>>> 66771eb (commit all)
 							</div>
 							<c:if test="${not empty error}">
 								<div class="alert alert-danger" role="alert">${error}</div>
@@ -132,6 +144,10 @@
 										<td>${inventory.price }</td>
 										<td>${inventory.stock }</td>
 										<td>
+<<<<<<< HEAD
+=======
+										<c:if test="${not empty error}">
+>>>>>>> 66771eb (commit all)
 											<form
 												action="${pageContext.request.contextPath}/delete_inventory"
 												method="POST">
@@ -148,6 +164,10 @@
 													<i class="fas fa-edit"></i>
 												</button>
 										</a>
+<<<<<<< HEAD
+=======
+										</c:if>
+>>>>>>> 66771eb (commit all)
 										</td>
 									</tr>
 								</c:forEach>

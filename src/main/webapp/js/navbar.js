@@ -7,6 +7,7 @@ function toggleSubcategory(subcategoryId) {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
+<<<<<<< HEAD
     // Gọi hàm đăng ký sự kiện khi DOM đã sẵn sàng
     registerEvents()
     // Xử lý sự kiện hiển thị menu người dùng
@@ -73,6 +74,43 @@ function handleSearch(event) {
 function performSearch(term) {
     window.location.href = 'search?search=' + encodeURIComponent(term);  // Đảm bảo mã hóa từ khóa tìm kiếm
 }
+=======
+	const searchInput = document.getElementById('searchInput');
+
+	if (searchInput) {
+		searchInput.addEventListener('keydown', (event) => {
+			if (event.key === 'Enter') {
+				handleSearch();
+			}
+		});
+	}
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+	const userIcon = document.querySelector('.user-icon');
+	const userOptions = document.querySelector('.user-options');
+
+	userIcon.addEventListener('click', function() {
+		// Toggle hiển thị menu
+		if (userOptions.style.display === 'flex') {
+			userOptions.style.display = 'none';
+			userOptions.style.opacity = '0';
+		} else {
+			userOptions.style.display = 'flex';
+			userOptions.style.opacity = '1';
+		}
+	});
+
+	// Đóng menu nếu click ra bên ngoài
+	/*document.addEventListener('click', function(event) {
+		if (!userMenu.contains(event.target)) {
+			userOptions.style.display = 'none';
+			userOptions.style.opacity = '0';
+		}
+	});*/
+});
+>>>>>>> 66771eb (commit all)
 
 
 

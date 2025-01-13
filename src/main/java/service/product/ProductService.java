@@ -83,6 +83,7 @@ public class ProductService {
 			connection.setAutoCommit(false); // Bắt đầu giao dịch
 			List<ProductSku> productSkus = productSkuRepository.findByProductId(productId);
 
+<<<<<<< HEAD
 			for (ProductSku productSku : productSkus) {
 				// xoa san pham trong inventory
 				inventoryRepository.removeByProductSkuId(connection, productSku.getId());
@@ -90,10 +91,34 @@ public class ProductService {
 				orderDetailRepository.removeByProductSkuId(connection, productSku.getId());
 				// xoa trong cartDetail
 				cartDetailRepository.removeByProductSkuId(connection, productSku.getId());
+=======
+			List<Long> productSkuIds = productSkus.stream().map(ProductSku::getId).collect(Collectors.toList());
+
+			for (ProductSku productSku : productSkus) {
+				// xoa san pham trong inventory
+				if (connection.isClosed()) {
+
+				}
+				inventoryRepository.removeByProductSkuId(connection, productSku.getId());
+				if (connection.isClosed()) {
+
+				}
+				// xoa trong orderDetail
+				orderDetailRepository.removeByProductSkuId(connection, productSku.getId());
+				if (connection.isClosed()) {
+
+				}
+				// xoa trong cartDetail
+				cartDetailRepository.removeByProductSkuId(connection, productSku.getId());
+				if (connection.isClosed()) {
+
+				}
+>>>>>>> 66771eb (commit all)
 				// xoa trong cookies neu ton tai
 
 				// xoa sku
 				productSkuRepository.removeByProductSkuId(connection, productSku.getId());
+<<<<<<< HEAD
 			}
 			// xoa productcolorimg
 			productColorImgRepository.removeByProductId(connection, productId);
@@ -104,6 +129,21 @@ public class ProductService {
 			productRepository.removeById(connection, productId);
 			if (connection.isClosed()) {
 				System.out.println("close");
+=======
+				if (connection.isClosed()) {
+
+				}
+			}
+			// xoa productcolorimg
+			productColorImgRepository.removeByProductId(connection, productId);
+			if(connection.isClosed()) {
+				
+			}
+			// xoa product
+			productRepository.removeById(connection, productId);
+			if(connection.isClosed()) {
+				
+>>>>>>> 66771eb (commit all)
 			}
 
 			connection.setAutoCommit(true);
@@ -307,7 +347,11 @@ public class ProductService {
 			}
 
 			// Đường dẫn thư mục lưu trữ ảnh
+<<<<<<< HEAD
 			String directoryPath = "E:\\Eclipse\\Do_An_Web\\src\\main\\webapp\\imgProduct";
+=======
+			String directoryPath = "E:\\Ecommerce_Web\\Do_An_Web\\src\\main\\webapp\\imgProduct";
+>>>>>>> 66771eb (commit all)
 
 			// Lấy fileName từ currentImg
 			String fileName = currentImg.substring(currentImg.lastIndexOf("/") + 1);
@@ -361,7 +405,11 @@ public class ProductService {
 		// Tạo tên file dựa trên tên sản phẩm và màu sắc
 		String fileName = productName.replaceAll(" ", "_") + "_" + color.replaceAll(" ", "_") + ".jpg";
 
+<<<<<<< HEAD
 		String directoryPath = "E:\\Eclipse\\Do_An_Web\\src\\main\\webapp\\imgProduct";
+=======
+		String directoryPath = "E:\\Ecommerce_Web\\Do_An_Web\\src\\main\\webapp\\imgProduct";
+>>>>>>> 66771eb (commit all)
 
 		// Đặt đường dẫn lưu hình ảnh
 		File directory = new File(directoryPath);
