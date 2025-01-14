@@ -141,7 +141,7 @@ public class ProductRepository {
 		int offset = (currentPage) * itemsPerPage;
 		try {
 			// Lấy tổng số sản phẩm
-			sql = "SELECT COUNT(*) " + "FROM ecommerce.product " + "INNER JOIN sub_category AS sc "
+			sql = "SELECT COUNT(*) " + "FROM product " + "INNER JOIN sub_category AS sc "
 					+ "ON sc.id = product.sub_category_id " + "WHERE sc.name = ?";
 			pst = connection.prepareStatement(sql);
 			pst.setString(1, subCategory);
@@ -150,7 +150,7 @@ public class ProductRepository {
 				totalProduct = rs.getInt(1);
 			}
 
-			sql = "SELECT product.*" + "FROM ecommerce.product " + "INNER JOIN sub_category AS sc "
+			sql = "SELECT product.*" + "FROM product " + "INNER JOIN sub_category AS sc "
 					+ "ON sc.id = product.sub_category_id " + "WHERE sc.name = ? " + "LIMIT ? OFFSET ?";
 			pst = connection.prepareStatement(sql);
 			pst.setString(1, subCategory);
@@ -193,7 +193,7 @@ public class ProductRepository {
 		int offset = (currentPage) * itemsPerPage;
 
 		try {
-			sql = "SELECT COUNT(*) " + "FROM ecommerce.product " + "INNER JOIN sub_category AS sc "
+			sql = "SELECT COUNT(*) " + "FROM product " + "INNER JOIN sub_category AS sc "
 					+ "ON sc.id = product.sub_category_id " + "INNER JOIN category AS c " + "ON c.id = sc.category_id "
 					+ "WHERE c.id = ?";
 
@@ -204,7 +204,7 @@ public class ProductRepository {
 				totalProduct = rs.getInt(1); // Lưu tổng số sản phẩm vào biến totalProduct
 			}
 
-			sql = "SELECT product.*" + "FROM ecommerce.product " + "INNER JOIN sub_category AS sc "
+			sql = "SELECT product.*" + "FROM product " + "INNER JOIN sub_category AS sc "
 					+ "ON sc.id = product.sub_category_id " + "INNER JOIN category AS c " + "ON c.id = sc.category_id "
 					+ "WHERE c.id = ? " + "LIMIT ? OFFSET ?";
 			pst = connection.prepareStatement(sql);
@@ -249,7 +249,7 @@ public class ProductRepository {
 
 		try {
 			// Lấy tổng số sản phẩm
-			String countSql = "SELECT COUNT(*) FROM ecommerce.product AS p "
+			String countSql = "SELECT COUNT(*) FROM product AS p "
 					+ "INNER JOIN sub_category AS sc ON sc.id = p.sub_category_id "
 					+ "INNER JOIN category AS c ON c.id = sc.category_id "
 					+ "INNER JOIN gender ON gender.id = c.gender_id " + "WHERE gender.name = ?";
@@ -262,7 +262,7 @@ public class ProductRepository {
 			}
 
 			// Lấy sản phẩm theo phân trang
-			sql = "SELECT p.* FROM ecommerce.product AS p "
+			sql = "SELECT p.* FROM product AS p "
 					+ "INNER JOIN sub_category AS sc ON sc.id = p.sub_category_id "
 					+ "INNER JOIN category AS c ON c.id = sc.category_id "
 					+ "INNER JOIN gender ON gender.id = c.gender_id " + "WHERE gender.name = ? " + "LIMIT ? OFFSET ?";
@@ -301,6 +301,10 @@ public class ProductRepository {
 
 	public int getTotalProduct() {
 		return totalProduct;
+	}
+	
+	public static void main(String[] args) {
+		new ProductRepository().findByGender("nữ", 0);
 	}
 
 }

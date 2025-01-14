@@ -44,7 +44,7 @@ public class InventoryRepository {
 
 	public Optional<Inventory> findByProductSkuId(Long id) {
 		Connection connection = DBConnection.getConection();
-		String sql = "SELECT i.id, i.stock, p.name FROM ecommerce.inventory i "
+		String sql = "SELECT i.id, i.stock, p.name FROM inventory i "
 				+ "INNER JOIN product_sku pu ON pu.id = i.product_sku_id "
 				+ "INNER JOIN product_color_img pci ON pu.product_color_img_id = pci.id "
 				+ "INNER JOIN product p ON pci.product_id = p.id " + "WHERE i.product_sku_id = ?";
@@ -94,7 +94,7 @@ public class InventoryRepository {
 
 	public Optional<Inventory> findByProductName(String name) {
 		Connection connection = DBConnection.getConection();
-		String sql = "SELECT i.id, i.stock, p.name FROM ecommerce.inventory i "
+		String sql = "SELECT i.id, i.stock, p.name FROM inventory i "
 				+ "INNER JOIN product_sku pu ON pu.id = i.product_sku_id "
 				+ "INNER JOIN product_color_img pci ON pu.product_color_img_id = pci.id "
 				+ "INNER JOIN product p ON pci.product_id = p.id " + "WHERE p.name = ?";
@@ -197,7 +197,7 @@ public class InventoryRepository {
 	public List<ProductSku> getAllProductSku() {
 		List<ProductSku> list = new ArrayList<ProductSku>();
 		connection = DBConnection.getConection();
-		String sql = "select id from ecommerce.product_sku";
+		String sql = "select id from product_sku";
 
 		try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 

@@ -13,7 +13,8 @@
 <!-- Main CSS-->
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/css/admin/main.css">
-
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/css/admin/datatable.css">
 
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
@@ -45,8 +46,7 @@
 		<ul class="app-nav">
 
 
-			<!-- User Menu-->
-			<li><a class="app-nav__item" href="${pageContext.request.contextPath}/logout"><i
+		<li><a class="app-nav__item" href="${pageContext.request.contextPath}/logout"><i
 					class='bx bx-log-out bx-rotate-180'></i> </a></li>
 		</ul>
 	</header>
@@ -56,7 +56,7 @@
 		<div class="app-sidebar__user">
 			<div>
 				<p class="app-sidebar__user-name">
-					<b>Võ Trường</b>
+					<b>${user.name}</b>
 				</p>
 				<p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
 			</div>
@@ -108,7 +108,7 @@
 							</div>
 
 						</div>
-						<table class="table table-hover table-bordered" id="sampleTable">
+						<table class="table table-hover table-bordered" id="productTable">
 							<thead>
 								<tr>
 									<th>Mã khách hàng</th>
@@ -139,12 +139,6 @@
 											<td>${customer.address}</td>
 											<td>${customer.create_at}</td>
 											<td>${customer.role_name}</td>
-											<td>
-												<button class="btn btn-primary btn-sm trash" type="submit"
-													title="Xóa">
-													<i class="fas fa-trash-alt"></i>
-												</button>
-											</td>
 										</tr>
 									</c:forEach>
 								</form>
@@ -226,6 +220,31 @@
 			}
 		}
 	</script>
+	
+	<!-- DataTables JS -->
+	<script type="text/javascript"
+		src="https://cdn.datatables.net/2.2.1/css/dataTables.dataTables.css"></script>
+	<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+	<script src="//cdn.datatables.net/2.0.2/js/dataTables.min.js"></script>
+	<script>
+    $(document).ready(function () {
+        $('#productTable').DataTable({
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/vi.json'
+            },
+            pageLength: 10,
+            lengthMenu: [
+                [10, 25, 50, -1],
+                [10, 25, 50, "Tất cả"]	
+            ],
+            dom: '<"row"<"col-sm-6"l><"col-sm-6"f>>t<"row"<"col-sm-6"i><"col-sm-6 pagination-wrapper"p>>',
+        });
+
+        // Move pagination to the left
+        $('.pagination-wrapper').addClass('d-flex justify-content-start');
+    });
+
+    </script>
 
 </body>
 

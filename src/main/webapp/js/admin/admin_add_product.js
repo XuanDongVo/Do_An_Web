@@ -137,10 +137,8 @@ function updateDetailButton() {
 	const saveButton = document.getElementById('saveSku');
 
 	if (productSpu.skus && productSpu.skus.length > 0) {
-		detailButton.classList.remove('fade');
 		saveButton.classList.remove('fade');
 	} else {
-		detailButton.classList.add('fade');
 		saveButton.classList.add('fade');
 	}
 }

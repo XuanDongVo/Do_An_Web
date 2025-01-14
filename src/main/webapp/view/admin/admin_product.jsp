@@ -46,9 +46,7 @@
 		<ul class="app-nav">
 
 
-			<!-- User Menu-->
-			<li><a class="app-nav__item"
-				href="${pageContext.request.contextPath}/logout"><i
+			<li><a class="app-nav__item" href="${pageContext.request.contextPath}/logout"><i
 					class='bx bx-log-out bx-rotate-180'></i> </a></li>
 		</ul>
 	</header>
@@ -58,7 +56,7 @@
 		<div class="app-sidebar__user">
 			<div>
 				<p class="app-sidebar__user-name">
-					<b>Võ Trường</b>
+					<b>${user.name}</b>
 				</p>
 				<p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
 			</div>
@@ -66,7 +64,7 @@
 		<hr>
 		<ul class="app-menu">
 			<li><a class="app-menu__item "
-				href="${pageContext.request.contextPath}/view/admin/admin.jsp"><i
+				href="${pageContext.request.contextPath}/adminController"><i
 					class='app-menu__icon bx bx-tachometer'></i><span
 					class="app-menu__label">Bảng điều khiển</span></a></li>
 			<li><a class="app-menu__item "
@@ -105,9 +103,11 @@
 					<div class="tile-body">
 						<div class="row element-button">
 							<div class="col-sm-2">
+							<c:if test="${sessionScope.role == 'ADMIN'}">
 								<a class="btn btn-add btn-sm"
 									href="<%=request.getContextPath()%>/adminAddProduct?action=view"
 									title="Thêm"><i class="fas fa-plus"></i> Tạo mới sản phẩm</a>
+							</c:if>
 							</div>
 
 						</div>
@@ -135,7 +135,7 @@
 												onclick="viewProductDetails( 'view', ${product.productId})">
 												<i class="fas fa-eye"></i>
 											</button>
-
+										<c:if test="${sessionScope.role == 'ADMIN'}">
 											<button class="btn btn-primary btn-sm trash" type="button"
 												title="Xóa" onclick="deleteProduct(${product.productId})">
 												<i class="fas fa-trash-alt"></i>
@@ -145,6 +145,7 @@
 												onclick="viewProductDetails( 'edit', ${product.productId})">
 												<i class="fas fa-edit"></i>
 											</button>
+										</c:if>
 										</td>
 									</tr>
 								</c:forEach>

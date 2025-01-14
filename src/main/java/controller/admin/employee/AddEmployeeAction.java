@@ -26,13 +26,18 @@ public class AddEmployeeAction extends HttpServlet {
 		String phone_employee = req.getParameter("phone_employee");
 		String address_employee = req.getParameter("address_employee");
 		String name_employee = req.getParameter("name_employee");
+		String passwword_employee = req.getParameter("password_employee");
 		String role = req.getParameter("role_id");
 		try {
 			// Chuyển đổi dữ liệu từ String sang kiểu dữ liệu phù hợp
 			Long roleConverted = Long.parseLong(role);
-
+			if(userRepository.checkUserByPhone(phone_employee) && userRepository.checkUserByEmail(email_employee)) {
+				req.setAttribute("error", "Mail hoặc phone đã bị trùng");
+				req.getRequestDispatcher(req.getContextPath() + "/addEmployeeView").forward(req, resp);
+				return;
+			}
 			// Gọi repository để thêm nhân viên và set quyền
-			boolean isSuccess = userRepository.addUser(email_employee, phone_employee, address_employee,
+			boolean isSuccess = userRepository.addUser(email_employee, phone_employee, address_employee, passwword_employee, 
 					name_employee);
 
 			// Kiểm tra kết quả và phản hồi

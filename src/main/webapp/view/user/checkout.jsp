@@ -33,9 +33,7 @@
 
 <script src="adding/bootstrap/bootstrap.bundle.min.js"></script>
 
-<script src="js/cate_filter.js"></script>
-<script src="js/product_collection.js"></script>
-<script src="js/navbar.js"></script>
+
 </head>
 <body>
 
@@ -74,18 +72,18 @@
 							<label for="fullName" class="form-label">Họ và tên *</label> <input
 								type="text" id="fullName" name="customerName"
 								class="form-control" placeholder="Nhập đầy đủ họ và tên của bạn"
-								required value=${user.name }> <label for="address"
+								required value="${user.name}"> <label for="address"
 								class="form-label mt-3">Địa chỉ *</label> <input type="text"
 								id="address" name="address" class="form-control"
 								placeholder="Ví dụ: Số xx Ngõ xx Phú Kiều, Bắc Từ Liêm, Hà Nội"
-								required value=${user.address }> <label for="phoneNumber"
+								required value="${user.address }"> <label for="phoneNumber"
 								class="form-label mt-3">Số điện thoại *</label> <input
 								type="text" id="phoneNumber" name="customerPhone"
-								class="form-control " required value=${user.phone }> <label
+								class="form-control " required value="${user.phone }"> <label
 								for="email" class="form-label mt-3">Email (tuỳ chọn)</label> <input
 								type="email" id="email" name="customerEmail"
 								class="form-control" placeholder="Nhập Email của bạn"
-								value=${user.email }>
+								value="${user.email}">
 						</div>
 					</div>
 
@@ -206,11 +204,10 @@
 		</div>
 	</div>
 
-
 <jsp:include page="footer.jsp"></jsp:include>
 
-	<c:if test="${not empty outOfStockProducts }">
-epty</c:if>
+<script src="js/cate_filter.js"></script>
+<script src="js/product_collection.js"></script>
 
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

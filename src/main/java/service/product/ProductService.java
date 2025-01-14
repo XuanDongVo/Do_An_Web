@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import dbConnection.DBConnection;
 import dto.request.AddProductInDatabaseRequest;
@@ -25,7 +24,6 @@ import entity.Product;
 import entity.ProductColorImage;
 import entity.ProductSku;
 import entity.SubCategory;
-import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import repository.cart.CartDetailRepository;
@@ -38,7 +36,6 @@ import repository.product.ProductColorImgRepository;
 import repository.product.ProductRepository;
 import repository.product.ProductSkuRepository;
 import repository.size.SizeRepository;
-import service.cartdetail.CartDetailService;
 import utils.MultipleOptionsSQLQueryBuilder;
 
 public class ProductService {
@@ -53,7 +50,6 @@ public class ProductService {
 	private SizeRepository sizeRepository = new SizeRepository();
 	private OrderDetailRepository orderDetailRepository = new OrderDetailRepository();
 	private CartDetailRepository cartDetailRepository = new CartDetailRepository();
-	private CartDetailService cartDetailService = new CartDetailService();
 
 	// lay ra tat ca san pham
 	public List<ProductDetailResponse> getAllProduct() {
@@ -97,14 +93,8 @@ public class ProductService {
 			}
 			// xoa productcolorimg
 			productColorImgRepository.removeByProductId(connection, productId);
-			if (connection.isClosed()) {
-				System.out.println("close");
-			}
 			// xoa product
 			productRepository.removeById(connection, productId);
-			if (connection.isClosed()) {
-				System.out.println("close");
-			}
 
 			connection.setAutoCommit(true);
 
@@ -118,13 +108,7 @@ public class ProductService {
 			}
 			throw new RuntimeException("Giao dịch thất bại: " + e.getMessage(), e);
 		} finally {
-			if (connection != null) {
-				try {
-					connection.close(); // Đóng kết nối
-				} catch (SQLException closeEx) {
-					closeEx.printStackTrace();
-				}
-			}
+			DBConnection.closeConnection(connection);
 		}
 
 	}
@@ -162,9 +146,7 @@ public class ProductService {
 			}
 			throw new RuntimeException("Giao dịch thất bại: " + e.getMessage(), e);
 		} finally {
-			if (connection != null) {
-				DBConnection.closeConnection(connection); // Đóng kết nối
-			}
+			DBConnection.closeConnection(connection); // Đóng kết nối
 		}
 	}
 
@@ -245,13 +227,7 @@ public class ProductService {
 			}
 			throw new RuntimeException("Giao dịch thất bại: " + e.getMessage(), e);
 		} finally {
-			if (connection != null) {
-				try {
-					connection.close(); // Đóng kết nối
-				} catch (SQLException closeEx) {
-					closeEx.printStackTrace();
-				}
-			}
+			DBConnection.closeConnection(connection);
 		}
 	}
 
@@ -531,7 +507,6 @@ public class ProductService {
 
 		// tính toán pagination
 		int totalItems = MultipleOptionsSQLQueryBuilder.totalProduct;
-		System.out.println(totalItems);
 		int pageSize = 12;
 		int totalPages = (int) Math.ceil((double) totalItems / pageSize);
 
@@ -627,10 +602,6 @@ public class ProductService {
 			// Thêm SKU mới vào danh sách SKUs của product
 			productResponse.getProductSkus().add(skuResponse);
 		}
-	}
-
-	public static void main(String[] args) {
-		new ProductService().deleteProduct(36L, null, null);
 	}
 
 }

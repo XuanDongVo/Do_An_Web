@@ -45,7 +45,7 @@
 </head>
 
 
-<body  class="app sidebar-mini rtl">
+<body class="app sidebar-mini rtl">
 	<!-- Navbar-->
 	<header class="app-header">
 		<!-- Sidebar toggle button-->
@@ -55,8 +55,8 @@
 		<ul class="app-nav">
 
 
-			<!-- User Menu-->
-			<li><a class="app-nav__item" href="${pageContext.request.contextPath}/logout"><i
+			<li><a class="app-nav__item"
+				href="${pageContext.request.contextPath}/logout"><i
 					class='bx bx-log-out bx-rotate-180'></i> </a></li>
 		</ul>
 	</header>
@@ -66,7 +66,7 @@
 		<div class="app-sidebar__user">
 			<div>
 				<p class="app-sidebar__user-name">
-					<b>Võ Trường</b>
+					<b>${user.name}</b>
 				</p>
 				<p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
 			</div>
@@ -144,6 +144,11 @@
 							<label for="orderDetails" class="form-label">Địa chỉ</label> <input
 								type="text" class="form-control" id="address_employee"
 								name="address_employee">
+						</div>
+						<div class="mb-3">
+							<label for="quantity" class="form-label">Mật khẩu</label> <input
+								type="text" class="form-control" id="password_employee"
+								name="password_employee">
 						</div>
 						<div class="mb-3">
 							<label for="quantity" class="form-label">Tên nhân viên</label> <input

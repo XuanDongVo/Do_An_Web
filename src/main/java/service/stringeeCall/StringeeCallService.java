@@ -23,7 +23,6 @@ public class StringeeCallService {
 	private static final String API_KEY_SECRET = "TXRpc0tBeUJaWlVzQkVBUmczN0xoUWlzR3BOYkJlOEQ=";
 	private static final String API_URL = "https://api.stringee.com/v1/call2/callout";
 	private static final String PHONE_NUMBER = "842473001546"; // Số điện thoại đã đăng ký
-	private UserRepository userRespository = new UserRepository();
 
 	// Hàm tạo JWT token
 	private static String getAccessToken() {

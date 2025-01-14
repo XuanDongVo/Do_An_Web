@@ -41,7 +41,6 @@
 <script
 	src="${pageContext.request.contextPath}/adding/bootstrap/bootstrap.bundle.min.js"></script>
 
-
 </head>
 
 
@@ -54,8 +53,6 @@
 		<!-- Navbar Right Menu-->
 		<ul class="app-nav">
 
-
-			<!-- User Menu-->
 			<li><a class="app-nav__item" href="${pageContext.request.contextPath}/logout"><i
 					class='bx bx-log-out bx-rotate-180'></i> </a></li>
 		</ul>
@@ -66,7 +63,7 @@
 		<div class="app-sidebar__user">
 			<div>
 				<p class="app-sidebar__user-name">
-					<b>Võ Trường</b>
+					<b>${user.name}</b>
 				</p>
 				<p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
 			</div>
@@ -93,11 +90,10 @@
 				href="${pageContext.request.contextPath}/order"><i
 					class='app-menu__icon bx bx-task'></i><span class="app-menu__label">Quản
 						lý đơn hàng</span></a></li>
-			<li><a class="app-menu__item active"
+			<li><a class="app-menu__item "
 				href="${pageContext.request.contextPath}/inventory"><i
 					class='app-menu__icon bx bx-task'></i><span class="app-menu__label">Quản
 						lý hàng tồn kho</span></a></li>
-						
 		</ul>
 	</aside>
 
@@ -110,21 +106,12 @@
 			<ul class="nav nav-tabs" id="productTab" role="tablist">
 				<li class="nav-item">
 					<button class="nav-link active" id="spu-tab" data-bs-toggle="tab"
-						data-bs-target="#spu" type="button" role="tab">Sửa sản phẩm trong kho</button>
+						data-bs-target="#spu" type="button" role="tab">Sửa sản
+						phẩm trong kho</button>
 				</li>
 				<c:if test="${not empty error}">
 					<div class="alert alert-danger" role="alert">${error}</div>
 				</c:if>
-				<!-- <li class="nav-item">
-					<button class="nav-link disabled" id="sku-tab" data-bs-toggle="tab"
-						data-bs-target="#sku" type="button" role="tab">Thông Tin
-						Biến Thể (SKU)</button>
-				</li>
-				<li class="nav-item">
-					<button class="nav-link disabled" id="detail-sku-tab"
-						data-bs-toggle="tab" data-bs-target="#detailsku" type="button"
-						role="tab">Chi tiết Biến Thể (SKU)</button>
-				</li> -->
 			</ul>
 
 			<!-- Tab content -->
@@ -134,29 +121,24 @@
 					<form action="${pageContext.request.contextPath}/update_inventory"
 						method="POST">
 						<div class="mb-3">
-							<label for="role" class="form-label">Mã sản phẩm trong kho</label> 
-							<input type="number" class="form-control" id="skuId"
-								name=inventoryId value = "${param.inventory_id}" readonly>
+							<label for="role" class="form-label">Mã sản phẩm trong
+								kho</label> <input type="number" class="form-control" id="skuId"
+								name=inventoryId value="${param.inventory_id}" readonly>
 						</div>
 						<div class="mb-3">
 							<label for="stock" class="form-label">Số lượng hàng tồn
 								kho</label> <input type="number" class="form-control" id="stock"
-								name="stock">
+								name="stock" >
 						</div>
 
-						<button type="submit" class="btn btn-primary" id="saveStock">Sửa sản phẩm</button>
+						<button type="submit" class="btn btn-primary" id="saveStock">Sửa
+							sản phẩm</button>
 					</form>
 				</div>
-
-
 			</div>
+		</div>
 	</main>
 
-
-
 	<script src="${pageContext.request.contextPath}/js/admin/main.js"></script>
-
-
 </body>
 </html>
-

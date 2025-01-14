@@ -29,7 +29,6 @@
     <script src="adding/bootstrap/boostrap.min.js"></script>  -->
 
 <script src="adding/bootstrap/bootstrap.bundle.min.js"></script>
-<script src="js/navbar.js"></script>
 </head>
 
 <body>
@@ -92,9 +91,8 @@
 							onclick="selectImage('${sku.productColorImgId}', '${sku.img}', '${fn:escapeXml(sku.sizeAndStock)}', '${product.typeProduct}' , '${sku.color}')" /></button>
 					</c:forEach>
 				</div>
-				
-				<div class="size-message">
-				</div>
+
+				<div class="size-message"></div>
 
 				<!-- Size Selector -->
 				<div class="size-options mt-3 mb-3" id="size-options"
@@ -179,10 +177,11 @@
 	</div>
 
 
-
 	<jsp:include page="footer.jsp"></jsp:include>
+
+	<script type="text/javascript" src="js/product_detail.js"></script>
 </body>
 
-<script type="text/javascript" src="js/product_detail.js"></script>
+
 
 </html>

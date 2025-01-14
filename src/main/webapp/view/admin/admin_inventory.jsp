@@ -42,10 +42,7 @@
 		<!-- Navbar Right Menu-->
 		<ul class="app-nav">
 
-
-			<!-- User Menu-->
-			<li><a class="app-nav__item"
-				href="${pageContext.request.contextPath}/logout"><i
+<li><a class="app-nav__item" href="${pageContext.request.contextPath}/logout"><i
 					class='bx bx-log-out bx-rotate-180'></i> </a></li>
 		</ul>
 	</header>
@@ -55,7 +52,7 @@
 		<div class="app-sidebar__user">
 			<div>
 				<p class="app-sidebar__user-name">
-					<b>Võ Trường</b>
+					<b>${user.name}</b>
 				</p>
 				<p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
 			</div>
@@ -102,9 +99,11 @@
 					<div class="tile-body">
 						<div class="row element-button">
 							<div class="col-sm-2">
+							<%-- <c:if test="${sessionScope.role == 'ADMIN'}">
 								<a class="btn btn-add btn-sm"
 									href="<%=request.getContextPath()%>/add_inventory_view"
 									title="Thêm"><i class="fas fa-plus"></i> Thêm sản phẩm</a>
+							</c:if> --%>
 							</div>
 							<c:if test="${not empty error}">
 								<div class="alert alert-danger" role="alert">${error}</div>
@@ -132,6 +131,7 @@
 										<td>${inventory.price }</td>
 										<td>${inventory.stock }</td>
 										<td>
+										<c:if test="${sessionScope.role == 'ADMIN'}">
 											<form
 												action="${pageContext.request.contextPath}/delete_inventory"
 												method="POST">
@@ -148,6 +148,7 @@
 													<i class="fas fa-edit"></i>
 												</button>
 										</a>
+										</c:if>
 										</td>
 									</tr>
 								</c:forEach>

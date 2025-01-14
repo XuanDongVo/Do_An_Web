@@ -16,7 +16,7 @@ public class DBConnection {
 		config.setUsername("root");
 		config.setPassword("dong14052004");
 
-		config.setMaximumPoolSize(50); // Giảm để phù hợp với `max_connections`
+		config.setMaximumPoolSize(50); // Giảm để phù hợp với `max_connections`	
 		config.setMinimumIdle(5); // Tăng số kết nối nhàn rỗi tối thiểu
 		config.setIdleTimeout(60000); // Giữ kết nối nhàn rỗi lâu hơn
 		config.setMaxLifetime(1800000); // Không thay đổi, nhưng đảm bảo `wait_timeout` đủ lớn

@@ -27,22 +27,28 @@ public class ProfileController extends HttpServlet {
 		String idUser = req.getParameter("userId");
 		try {
 			long idUser_convert = Long.parseLong(idUser);
-			
+
 			if (phone != null && !phone.startsWith("84")) {
 				phone = "84" + phone; // Thêm mã vùng 84
+				session.setAttribute("userId", idUser);
+				session.setAttribute("name", name);
+				session.setAttribute("phone", phone);
+				session.setAttribute("email", email);
+				session.setAttribute("address", address);
+			} else {
+				session.setAttribute("userId", idUser);
+				session.setAttribute("name", name);
+				session.setAttribute("phone", phone);
+				session.setAttribute("email", email);
+				session.setAttribute("address", address);
 			}
+
+			req.getRequestDispatcher("/sendOtpProfile").forward(req, resp);
 			System.out.println(idUser);
 			System.out.println(phone);
-			
 
-			userRepo.changeInformationUserById(name, email, phone, address, idUser_convert);
-
-			User user = userRepo.getUserById(idUser_convert);
-			session.setAttribute("user", user);
-			
-			resp.sendRedirect(req.getContextPath() + "/profile");
 //			req.getRequestDispatcher(req.getContextPath() + "/profile").forward(req, resp);
-		}catch(NumberFormatException nfe) {
+		} catch (NumberFormatException nfe) {
 			nfe.printStackTrace();
 		}
 	}

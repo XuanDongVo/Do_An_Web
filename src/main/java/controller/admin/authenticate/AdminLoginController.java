@@ -36,7 +36,7 @@ public class AdminLoginController extends HttpServlet {
 		req.getSession().setAttribute("user", user);
 
 		// Forward đến trang admin
-		resp.sendRedirect(req.getContextPath() + "/view/admin/admin.jsp");
+		resp.sendRedirect(req.getContextPath() + "/adminController");
 	}
 
 }

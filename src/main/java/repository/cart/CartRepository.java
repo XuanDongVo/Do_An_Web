@@ -15,11 +15,12 @@ public class CartRepository {
 	private Connection connection = null;
 	private PreparedStatement pst = null;
 
-	public Optional<Cart> getUserCartByPhoneOrEmail(String phone , String email) {
+	public Optional<Cart> getUserCartByPhoneOrEmail(String phone, String email) {
 		connection = DBConnection.getConection();
 		String sql = "";
 		try {
-			sql = "SELECT cart.* FROM cart " + "JOIN user ON user.id = cart.user_id " + "WHERE user.phone = ? OR user.email = ?";
+			sql = "SELECT cart.* FROM cart " + "JOIN user ON user.id = cart.user_id "
+					+ "WHERE user.phone = ? OR user.email = ?";
 			pst = connection.prepareStatement(sql);
 			pst.setString(1, phone);
 			pst.setString(2, email);
@@ -29,6 +30,7 @@ public class CartRepository {
 				return Optional.of(cart);
 			}
 		} catch (Exception e) {
+			DBConnection.closeConnection(connection);
 			e.printStackTrace();
 		} finally {
 			if (pst != null) {
@@ -64,12 +66,14 @@ public class CartRepository {
 			}
 
 		} catch (Exception e) {
+			DBConnection.closeConnection(connection);
 			e.printStackTrace();
 		} finally {
 			if (pst != null) {
 				try {
 					pst.close();
 				} catch (Exception e) {
+					DBConnection.closeConnection(connection);
 					e.printStackTrace();
 				}
 			}

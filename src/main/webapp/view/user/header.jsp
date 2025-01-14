@@ -18,7 +18,6 @@
 <script src="adding/bootstrap/bootstrap.bundle.min.js"></script>
 <!-- Thêm link jQuery -->
 
-<script src="js/navbar.js"></script>
 <!-- js  -->
 
 </head>
@@ -56,7 +55,7 @@
 						<c:choose>
 							<c:when test="${not empty user}">
 								<!-- Nút Profile và Logout -->
-								<a href = "<%=request.getContextPath()%>/view/user/profile.jsp"><button
+								<a href = "<%=request.getContextPath()%>/profile"><button
 									style="color: white; width: 100%; height: 40px; margin-bottom: 0.5rem; font-size: 15px; background-color: black;">
 									Profile</button></a>
 								<a href = "<c:url value='/logout' />"><button
@@ -138,21 +137,12 @@
 			}
 		});
 	</script>
+	
+	
+<script src="js/navbar.js"></script>
 
 
-<!-- 	<script>
-		// Hàm này sẽ được gọi khi người dùng nhấn Enter
-		function handleSearch() {
-			const searchInput = document.getElementById('searchInput');
-			const searchTerm = searchInput.value; // Lấy giá trị từ input
-			performSearch(searchTerm);
-		}
 
-		// gọi controller tìm kiếm
-		function performSearch(term) {
-			window.location.href = 'search?search=' + term;
-		}
-	</script> -->
 
 
 </body>

@@ -370,7 +370,43 @@ function renderProducts(response) {
 		// Thêm collection item vào collectionsDiv
 		collectionsDiv.appendChild(collectionItemDiv);
 	});
+		attachPlusEvents();
 }
+
+
+function attachPlusEvents() {
+	const plusIcons = document.querySelectorAll('.collection-item .plus');
+
+	plusIcons.forEach(function (plus) {
+		plus.addEventListener('click', function (event) {
+			event.preventDefault(); // Ngăn chặn hành động mặc định
+
+			const collectionItem = plus.closest('.collection-item');
+			const sizeContainer = collectionItem.querySelector('.size-container');
+
+			document.querySelectorAll('.size-container.active').forEach(function (container) {
+				if (container !== sizeContainer) {
+					container.classList.remove('active');
+				}
+			});
+
+			sizeContainer.classList.toggle('active');
+		});
+	});
+
+	// Đóng size-container khi nhấp ra ngoài
+	document.addEventListener('click', function (event) {
+		plusIcons.forEach(function (plus) {
+			const collectionItem = plus.closest('.collection-item');
+			const sizeContainer = collectionItem.querySelector('.size-container');
+
+			if (!collectionItem.contains(event.target)) {
+				sizeContainer.classList.remove('active');
+			}
+		});
+	});
+}
+
 
 // Hàm format giá tiền
 function formatPrice(price) {

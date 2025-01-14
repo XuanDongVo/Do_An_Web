@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpSession;
 import repository.cart.CartRepository;
 import repository.user.UserRepository;
 import service.cartdetail.CartDetailService;
+import service.stringeeCall.StringeeCallService;
 
 @WebServlet("/verifyPhoneNumber")
 public class LoginByPhoneController extends HttpServlet {
@@ -35,8 +36,8 @@ public class LoginByPhoneController extends HttpServlet {
 
 		// Lấy mã OTP người dùng nhập vào
 		String otpVerify = req.getParameter("otp_verify");
-//		int otpVerifyConvert = Integer.parseInt(otpVerify);
-
+		int otpVerifyConvert = Integer.parseInt(otpVerify);
+		
 		System.out.println(otp);
 		System.out.println(phone);
 		System.out.println(otpVerify);
@@ -47,7 +48,6 @@ public class LoginByPhoneController extends HttpServlet {
 					User user = userRepository.getUserByPhone(phone);
 					session.setAttribute("user", user);
 					session.setAttribute("userId", user.getId());
-
 					cartDetailService.mergeCartAfterLogin(req, user, resp);
 					// Xác thực thành công, chuyển hướng sang trang chủ
 					resp.sendRedirect(req.getContextPath() + "/home");
@@ -59,6 +59,7 @@ public class LoginByPhoneController extends HttpServlet {
 					session.setAttribute("userId", user.getId());
 					// tạo cart cho người dùng
 					cartRepository.addCartForNewUser(user.getId());
+					userRepository.setRoleForUser(user.getId());
 					// Xác thực thành công, chuyển hướng sang trang chủ
 					cartDetailService.mergeCartAfterLogin(req, user, resp);
 					resp.sendRedirect(req.getContextPath() + "/home");

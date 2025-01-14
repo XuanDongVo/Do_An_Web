@@ -37,9 +37,9 @@ public class UserRoleRepository {
 			}
 
 		} catch (Exception e) {
+			DBConnection.closeConnection(connection);
 			e.printStackTrace();
-		}
-		finally {
+		} finally {
 			DBConnection.closeConnection(connection);
 		}
 

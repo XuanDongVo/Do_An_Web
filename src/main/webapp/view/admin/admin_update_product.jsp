@@ -75,7 +75,7 @@
 		<div class="app-sidebar__user">
 			<div>
 				<p class="app-sidebar__user-name">
-					<b>Võ Trường</b>
+					<b>${user.name}</b>
 				</p>
 				<p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
 			</div>
@@ -83,7 +83,7 @@
 		<hr>
 		<ul class="app-menu">
 			<li><a class="app-menu__item "
-				href="${pageContext.request.contextPath}/view/admin/admin.jsp"><i
+				href="${pageContext.request.contextPath}/adminController"><i
 					class='app-menu__icon bx bx-tachometer'></i><span
 					class="app-menu__label">Bảng điều khiển</span></a></li>
 			<li><a class="app-menu__item "

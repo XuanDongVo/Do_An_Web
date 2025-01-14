@@ -130,6 +130,9 @@ document.addEventListener('DOMContentLoaded', function() {
 	});
 });
 
+
+
+
 // sử dụng để phân trang cho sản phẩm 
 function navigatePage(pageNumber) {
         // Lấy URL hiện tại

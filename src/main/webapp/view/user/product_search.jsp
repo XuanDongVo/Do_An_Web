@@ -28,9 +28,7 @@
 
 <script src="adding/bootstrap/bootstrap.bundle.min.js"></script>
 
-<script src="js/cate_filter.js"></script>
-<script src="js/product_collection.js"></script>
-<script src="js/navbar.js"></script>
+
 </head>
 
 <body>
@@ -307,13 +305,14 @@
 	<jsp:include page="footer.jsp"></jsp:include>
 
 
+	<script src="js/cate_filter.js"></script>
+	<script src="js/product_collection.js"></script>
 	<script type="text/javascript">
 		$.ajax({
 			url : "filter",
 			method : "GET",
 			success : function(response) {
 				renderFilter(response.colors, response.sizes);
-				registerEvents()
 			},
 			error : function(xhr, status, error) {
 				console.error("Lỗi: ", error);
@@ -322,5 +321,4 @@
 	</script>
 </body>
 
-</html>
 </html>

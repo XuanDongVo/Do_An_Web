@@ -56,8 +56,7 @@
 		<ul class="app-nav">
 
 
-			<!-- User Menu-->
-			<li><a class="app-nav__item" href="${pageContext.request.contextPath}/logout"><i
+		<li><a class="app-nav__item" href="${pageContext.request.contextPath}/logout"><i
 					class='bx bx-log-out bx-rotate-180'></i> </a></li>
 		</ul>
 	</header>
@@ -67,7 +66,7 @@
 		<div class="app-sidebar__user">
 			<div>
 				<p class="app-sidebar__user-name">
-					<b>Võ Trường</b>
+					<b>${user.name}</b>
 				</p>
 				<p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
 			</div>
@@ -75,7 +74,7 @@
 		<hr>
 		<ul class="app-menu">
 			<li><a class="app-menu__item "
-				href="${pageContext.request.contextPath}/view/admin/admin.jsp"><i
+				href="${pageContext.request.contextPath}/adminController"><i
 					class='app-menu__icon bx bx-tachometer'></i><span
 					class="app-menu__label">Bảng điều khiển</span></a></li>
 			<li><a class="app-menu__item "
@@ -117,11 +116,6 @@
 					<button class="nav-link disabled" id="sku-tab" data-bs-toggle="tab"
 						data-bs-target="#sku" type="button" role="tab">Thông Tin
 						Biến Thể (SKU)</button>
-				</li>
-				<li class="nav-item">
-					<button class="nav-link disabled" id="detail-sku-tab"
-						data-bs-toggle="tab" data-bs-target="#detailsku" type="button"
-						role="tab">Chi tiết Biến Thể (SKU)</button>
 				</li>
 			</ul>
 
@@ -227,8 +221,6 @@
 						</div>
 						<button type="button" class="btn btn-success" id="addSku">Thêm
 							SKU</button>
-						<button type="button" class="btn btn-success fade" id="detailSku">Chi
-							tiết SKU</button>
 					</form>
 
 					<!-- Temporary SKU Table -->
@@ -254,65 +246,6 @@
 		</div>
 	</main>
 
-	<%-- <div class="tab-pane fade" id="detailsku" role="tabpanel"
-		aria-labelledby="detail-sku-tab">
-		<div class="container ">
-			<div class="row">
-				<!-- Left Section: Image Gallery -->
-				<div class="col-md-4">
-					<div class="main-image mb-3">
-						<img id="mainImage" src="${product.productSkus[0].img}"
-							alt="${product.name}" class="img-fluid" style="width: 100%;">
-					</div>
-				</div>
-
-				<!-- Right Section: Product Info -->
-				<div class="col-md-8">
-					<h2 id="productTitle">${product.name}</h2>
-					<p>
-						<span class="productPrice"><fmt:formatNumber
-								value="${product.price}" pattern="#,###" /> đ</span>
-					</p>
-
-					<!-- Color Options -->
-					<h6 id="color-name">Màu sắc:
-						${product.productSkus[0].color.toUpperCase()}</h6>
-
-
-					<div class="color-options d-flex mt-3 mb-3">
-						<c:forEach items="${product.productSkus}" var="sku">
-							<button class="btn btn-outline-primary color-btn"
-								style="background-color: ${sku.color};"
-								onclick="selectImage('${sku.img}', '${fn:escapeXml(sku.sizeAndStock)}' , '${sku.color}')" /></button>
-						</c:forEach>
-					</div>
-				</div>
-				<!-- Label cho bảng -->
-				<h5>Bảng Size và Số lượng</h5>
-				<!-- Bảng hiển thị size và quantity -->
-				<div class="table-responsive mt-3">
-					<table class="table table-striped table-hover table-bordered"
-						style="max-width: 600px;">
-						<thead class="table-primary text-center">
-							<tr>
-								<th scope="col">Size</th>
-								<th scope="col">Số lượng</th>
-							</tr>
-						</thead>
-						<tbody id="sizeTableBody">
-							<c:forEach items="${product.productSkus[0].sizeAndStock}"
-								var="entry">
-								<tr class="text-center">
-									<td>${fn:toUpperCase(entry.key)}</td>
-									<td>${entry.value}</td>
-								</tr>
-							</c:forEach>
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</div>
-	</div> --%>
 
 	<c:if test="${not empty message}">
 		<div class="modal fade" id="message" tabindex="-1"
@@ -351,8 +284,7 @@
 	    // Tạo form ẩn và gửi dữ liệu
 	    const form = document.createElement('form');
 	    form.method = 'POST';
-	    form.action = '<%=request.getContextPath()%>
-		/adminAddProduct';
+	    form.action = '<%=request.getContextPath()%>/adminAddProduct';
 
 			const inputJson = document.createElement('input');
 			inputJson.type = 'hidden';
